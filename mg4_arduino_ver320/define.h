@@ -34,8 +34,11 @@ typedef struct {
 // 動作周期 [ms]
 #define T_CTRL 10 
 
+//直進走行距離ゲイン
+#define K_STR_LR 1.003
+
 // タイヤ半径 [cm] 3.2
-#define R_TIRE     4.387 
+#define R_TIRE     4.269 
 
 // タイヤ間隔 [cm] 25.0
 #define D_TIRE    32.0
