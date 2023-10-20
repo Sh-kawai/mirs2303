@@ -113,3 +113,26 @@ void test_decode() {
     delay(1000);
   }
 }
+
+void test_arc_move(double l_x, double a_z){
+  run_ctrl_set_arc(ARC, l_x, a_z);
+  while(1){
+    run_ctrl_execute();
+    //vel_ctrl_execute();
+  }
+}
+void test_arc_move_sim(double l_x){
+  int a_z = 0;
+  while(1){
+    Serial.print("arg_vel_ref:" + String(a_z) + ", ");
+    run_ctrl_set_arc(ARC, l_x, a_z);
+    run_ctrl_execute();
+    //vel_ctrl_execute();
+
+    a_z++;
+    if(a_z > 180){
+      a_z = -179;
+    }
+    delay(10000/360);
+  }
+}

@@ -2,7 +2,8 @@
 typedef enum {
   STP = 0,
   STR,
-  ROT
+  ROT,
+  ARC,
 } run_state_t;
 
 typedef struct {
