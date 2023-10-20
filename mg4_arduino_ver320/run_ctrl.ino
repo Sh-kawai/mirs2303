@@ -15,9 +15,9 @@ void run_ctrl_execute() {
   const double angle_vel_down = 0.0;
 
   // 直進制御における左右のタイヤの距離差の補正ゲイン
-  const double Ks_p = 10.0 ; // 40.0
-  const double Ks_i =  0.0 ; // 0.2  1.0  
-  const double Ks_d = 100.0 ; // 50.0  20.0  5.0
+  const double Ks_p = 5.5 ; // 40.0
+  const double Ks_i =  0.6 ; // 0.2  1.0  
+  const double Ks_d = 7.0 ; // 50.0  20.0  5.0
 
   // 回転制御における左右のタイヤの距離差の補正ゲイン
   const double Kr = 0.0;
@@ -40,6 +40,9 @@ void run_ctrl_execute() {
       vel_ctrl_set(0.0, 0.0);
       break;
     case STR:
+      //直線走行距離調整
+      d_r *= K_STR_LR;
+    
       // 直進距離
       dist_curr  = (d_l + d_r) / 2.0;
       speed_curr = (v_l + v_r) / 2.0 * sign;
@@ -68,6 +71,7 @@ void run_ctrl_execute() {
 
       break;
     case ROT:
+      
       // 回転角度
       dist_curr  = -(d_l - d_r) / D_TIRE * 180.0 / PI;
       speed_curr = -(v_l - v_r) / D_TIRE * 180.0 / PI * sign;
