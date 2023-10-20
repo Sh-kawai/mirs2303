@@ -1,5 +1,8 @@
 mg4_pi_ver4.1.0/*
-!mg4_pi_ver4.1.0/*/
+!mg4_pi_ver4.1.0/build/
+!mg4_pi_ver4.1.0/img/
+!mg4_pi_ver4.1.0/src/
 !mg4_pi_ver4.1.0/src/*
+!mg4_pi_ver4.1.0/include/
 !mg4_pi_ver4.1.0/include/*
 !mg4_pi_ver4.1.0/Makefile
