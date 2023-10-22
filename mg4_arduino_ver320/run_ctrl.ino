@@ -139,25 +139,30 @@ void run_ctrl_set(run_state_t state, double speed, double dist) {
   run_state = state;
   speed_ref = abs(speed);
   dist_ref = dist;
+  ang_vel_ref = 0.0;
+  ang_dist_ref = 0.0;
   vel_ctrl_reset();
   er = 0;
   er_prev = 0;
   er_sum = 0;
 }
 
-void run_ctrl_set_arc(run_state_t state, double speed, double arg_vel){
-  run_state = state;
-  speed_ref = abs(speed);
-  ang_vel_ref = arg_vel;
-  dist_ref = 100;
-  vel_ctrl_reset();
-  er = 0;
-  er_prev = 0;
-  er_sum = 0;
+void run_ctrl_set_arc(run_state_t state, double speed, double dist, double ang_vel, double ang_dist) {
+  run_ctrl_set(state, speed, dist);
+  ang_vel_ref = ang_vel;
+  ang_dist_ref = ang_dist;
 }
 
 void run_ctrl_get(run_state_t *state, double *speed, double *dist) {
   *state = run_state;
   *speed = speed_curr;
   *dist = dist_curr;
+}
+
+void run_ctrl_get_arc(run_state_t *state, double *speed, double *dist, double *ang_vel, double *ang_dist) {
+  *state = run_state;
+  *speed = speed_curr;
+  *dist = dist_curr;
+  *ang_vel = ang_vel_curr;
+  *ang_dist = ang_dist_curr;
 }
