@@ -27,7 +27,7 @@ typedef struct {
 #define PIN_PWM_R    9
 #define PIN_DIR_L   12
 #define PIN_PWM_L   11
-#define PIN_SERVO   20 // 仮
+#define PIN_SERVO    6 // 仮
 #define PIN_SW      10
 #define PIN_LED     13
 #define PIN_BATT    19

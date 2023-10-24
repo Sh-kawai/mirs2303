@@ -1,4 +1,4 @@
-/*
+ /*
   Ver1.0からの変更点　　　RaspberryPi と２バイトデータのシリアル通信をできるようにした 
   Ver2.0からの変更点　　　RaspberryPi とのシリアル通信の速度を9600bps から 115200bpsに変更した
  */
@@ -49,7 +49,11 @@ void loop() {
 
   /*円弧運動テスト 引数：直進速度[cm/s]、回転速度[deg/s] */
   //test_arc_move(3,0);
-  test_arc_move_sim(100);
+  //test_arc_move_sim(100);
+
+  /* サーボモーター 引数:角度 */
+  //test_servo();
+  //test_servo_rot();
 
   /* バッテリー値の確認 */
   //test_batt();

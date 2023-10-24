@@ -138,3 +138,34 @@ void test_arc_move_sim(double speed){
     delay(10000/360);
   }
 }
+
+void test_servo(){
+  servo_ctrl_set(0);
+  Serial.println(String(servo_ctrl_get()));
+  delay(1000);
+  servo_ctrl_set(180);
+  Serial.println(String(servo_ctrl_get()));
+  delay(1000);
+  servo_ctrl_set(75);
+  Serial.println(String(servo_ctrl_get()));
+  delay(1000);
+  servo_ctrl_set(90);
+  Serial.println(String(servo_ctrl_get()));
+  delay(1000);
+  servo_ctrl_set(180);
+  Serial.println(String(servo_ctrl_get()));
+  delay(1000);
+}
+
+void test_servo_rot(){
+  int angle = 0;
+  int a = 1;
+  while(1){
+    servo_ctrl_set(angle);
+    Serial.println(String(servo_ctrl_get()));
+    delay(2);
+    angle += a;
+    if(angle >= 180) a = -1;
+    if(angle == 0) a = 1;
+  }
+}

@@ -9,6 +9,6 @@ void servo_ctrl_set(int angle){
   servo.write(angle);
 }
 
-void servo_ctrl_get(int *angle){
-  *angle = servo.read();
+int servo_ctrl_get(){
+  return servo.read();
 }
