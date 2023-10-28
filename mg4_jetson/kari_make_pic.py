@@ -1,8 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
-import csv
 import os
 
+import csv_handle
 from define import *
 
 def make_time_pic():
@@ -44,11 +44,7 @@ def make_time_pic():
   #データの保存
   place = "仮体育館"
   data = [time_str, place]
-  pic_json = os.path.join(JETSON_PATH, f"test/picture_data.csv")
-  with open(pic_json, mode='a', newline='') as f:
-      # JSONデータをバイト列にエンコードして書き込む
-      writer = csv.writer(f)
-      writer.writerow(data)
+  csv_handle.write(data)
   
   return save_path
   
