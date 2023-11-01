@@ -34,6 +34,8 @@ def save_clf(X, y, model_save_path=None, n_neighbors=None, knn_algo='ball_tree',
   if model_save_path is not None:
     with open(model_save_path, 'wb') as f:
       pickle.dump(knn_clf, f)
+  
+  return knn_clf
       
 # メイン動作
 if __name__ == "__main__":
@@ -45,6 +47,6 @@ if __name__ == "__main__":
     knn_name = class_name + "_knn_model.json"
     clf_files.append(os.path.join(knn_path, knn_name))  
   
-  X, y = data_read(clf_files, debug=True)
+  X, y = data_read(clf_files)
   save_clf(X, y, model_save_path=model_save_path, n_neighbors=3, debug=True)
   

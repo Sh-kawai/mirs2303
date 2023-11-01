@@ -18,7 +18,7 @@ def recognize_person(image_path, known_names, prohibit_names, show=False):
     clf_files.append(os.path.join(knn_path, knn_name))
   
   X, y = face_combine.data_read(clf_files)
-  face_combine.save_clf(X, y, model_save_path=model_save_path, n_neighbors=3)
+  knn_clf = face_combine.save_clf(X, y, model_save_path=model_save_path, n_neighbors=3)
   
   print(f"{image_file} で顔を検出中...")
   
@@ -40,8 +40,8 @@ def recognize_person(image_path, known_names, prohibit_names, show=False):
 
 if __name__ == "__main__":
   #引数
-  #image_path = "001_ed.jpg"
-  image_path = kari_make_pic.make_time_pic()
+  image_path = "/home/mirs2303/program/mirs2303/mg4_jetson/test/13_abs227-jpp01055407.jpg"
+  #image_path = kari_make_pic.make_time_pic()
   known_names = ["abe", "asou"]
   prohibit_names = ["abe"]
   #関数

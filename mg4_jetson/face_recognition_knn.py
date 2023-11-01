@@ -93,9 +93,6 @@ def show_prediction_labels_on_image(img_path, predictions):
         # 顔を囲む四角をPillowモジュールを使用して描画
         draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 255))
 
-        # Pillowのデフォルトのビットマップフォントを使用すると、非UTF-8テキストでエラーが発生するバグがあります
-        name = name.encode("UTF-8")
-
         # 顔の下に名前を表示
         text_bbox = draw.textbbox((left, bottom - 10), name)
         text_width = text_bbox[2] - text_bbox[0]
@@ -116,6 +113,8 @@ if __name__ == "__main__":
 
     # トレーニング済み分類器を使用して未知の画像に対して予測を行う
     for image_file in os.listdir(test_path):
+        if image_file == "picture_data.csv":
+            continue
         full_file_path = os.path.join(test_path, image_file)
 
         print("{} で顔を検出中...".format(image_file))

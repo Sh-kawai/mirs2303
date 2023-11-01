@@ -20,7 +20,7 @@ def make_time_pic():
 
   # テキストを追加するためのフォントとサイズを指定
   font_size = 150
-  font = ImageFont.truetype("arial.ttf", font_size)  # フォントファイルのパスを指定
+  font = ImageFont.truetype("FreeMono.ttf", font_size)  # フォントファイルのパスを指定
 
   # テキストを画像に追加
   draw = ImageDraw.Draw(image)
