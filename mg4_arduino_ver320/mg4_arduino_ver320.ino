@@ -1,14 +1,16 @@
-/*
+ /*
   Ver1.0からの変更点　　　RaspberryPi と２バイトデータのシリアル通信をできるようにした 
   Ver2.0からの変更点　　　RaspberryPi とのシリアル通信の速度を9600bps から 115200bpsに変更した
  */
 
 #include "define.h"
+#include <Servo.h>
 
 void setup() {
   io_open();
   encoder_open();
   motor_open();
+  servo_open();
   raspi_open();
 }
 
@@ -20,7 +22,7 @@ void loop() {
   */
 
   /* RasPi からの指令で動作させるとき、slave を有効にする。*/
-  slave();
+  //slave();
   
   /* --------------機能のテスト---------------------------------------------
     テスト関数 test_*() のいずれかを有効にする。
@@ -45,6 +47,14 @@ void loop() {
   //test_run_ctrl(STR, 25, 75);
   //test_run_ctrl(ROT, 45, 90);
 
+  /*円弧運動テスト 引数：直進速度[cm/s]、回転速度[deg/s] */
+  //test_arc_move(3,0);
+  //test_arc_move_sim(100);
+
+  /* サーボモーター 引数:角度 */
+  //test_servo();
+  //test_servo_rot();
+
   /* バッテリー値の確認 */
   //test_batt();
 
@@ -53,4 +63,3 @@ void loop() {
   //test_decode();
 
 }
-

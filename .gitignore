@@ -1,0 +1,13 @@
+mg4_pi_ver4.1.0/*
+!mg4_pi_ver4.1.0/src/
+!mg4_pi_ver4.1.0/src/*
+!mg4_pi_ver4.1.0/include/
+!mg4_pi_ver4.1.0/include/*
+!mg4_pi_ver4.1.0/Makefile
+
+mg4_jetson/train/*
+mg4_jetson/test/*
+mg4_jetson/knn_clf/*
+mg4_jetson/__pycache__
+mg4_jetson/photo-test-393509-a09fbab1df81.json
+mg4_jetson/trained_knn_model.clf
