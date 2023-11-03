@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "get_img.h"
+
+int get_img(const char *filename, int device, int width, int height){
+	const int quality    = 100; // 圧縮レベル
+	const int brightness =  -3; // 輝度
+	const int contrast   =  14; // コントラスト
+	const int saturation =  50; // 彩度
+	const int gain       =  14; // ゲイン
+	
+	char command[256];
+	
+	sprintf(command, "uvccapture -o%s -d/dev/video%d -x%d -y%d -q%d -B%d -C%d -S%d -G%d",
+		filename, device, width, height, quality, brightness, contrast, saturation, gain);
+	
+	strcat(command, " -m"); // YUYVキャプチャモード
+	//strcat(command, " -v"); // 撮影オプションの表示
+	
+	return system(command);
+}
