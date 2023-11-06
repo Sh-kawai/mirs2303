@@ -1,15 +1,14 @@
 import os
 
-import face_main, gdrive_class, csv_handle, get_img
+import face_main, faceCV_recognition
+import gdrive_class, csv_handle, get_img
 from define import *
-
-import kari_make_pic
 
 def main():
   Drive = gdrive_class.GDrive()
   SpSheet = gdrive_class.GSpeadSheet(SHEET_ID)
 
-  test_dir = os.path.join(JETSON_PATH, f"test")
+  test_dir = os.path.join(JETSON_PATH, "test")
   for image_file in os.listdir(test_dir):
     if image_file.split(".")[1] == "csv":
       continue
@@ -20,7 +19,13 @@ def main():
     # 顔認証
     known_names = ["abe", "asou"]
     prohibit_names = ["abe"]
-    names, delete_flag = face_main.recognize_person(image_path, known_names, prohibit_names, show=True)
+    #names, delete_flag = face_main.recognize_person(image_path, known_names, prohibit_names, show=True)
+    
+    delete_users = ["riki"]
+    dictionary, detector, recognizer = faceCV_recognition.init()
+    res = faceCV_recognition.recognition(image_path, dictionary, detector, recognizer)
+    delete_flag = faceCV_recognition.check_prohibit()
+    faceCV_recognition.show_recognition_image(image_path, res)
 
     if delete_flag:
       # 画像削除
@@ -44,6 +49,5 @@ def main():
         print(f"{image_file}を削除しました。")
 
 if __name__ == "__main__":
-  #kari_make_pic.make_time_pic()
   get_img.get_img()
   main()

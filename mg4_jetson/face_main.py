@@ -3,8 +3,6 @@ import os
 import face_combine, face_recognition_knn
 from define import *
 
-import kari_make_pic
-
 def recognize_person(image_path, known_names, prohibit_names, show=False):
   #絶対パス
   model_save_path = os.path.join(JETSON_PATH, "trained_knn_model.clf")
