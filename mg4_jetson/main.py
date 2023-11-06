@@ -1,6 +1,6 @@
 import os
 
-import face_main, gdrive_class, csv_handle
+import face_main, gdrive_class, csv_handle, get_img
 from define import *
 
 import kari_make_pic
@@ -44,5 +44,6 @@ def main():
         print(f"{image_file}を削除しました。")
 
 if __name__ == "__main__":
-  kari_make_pic.make_time_pic()
+  #kari_make_pic.make_time_pic()
+  get_img.get_img()
   main()
