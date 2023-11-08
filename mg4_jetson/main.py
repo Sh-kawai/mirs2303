@@ -24,7 +24,7 @@ def main():
     delete_users = ["riki"]
     dictionary, detector, recognizer = faceCV_recognition.init()
     res = faceCV_recognition.recognition(image_path, dictionary, detector, recognizer)
-    delete_flag = faceCV_recognition.check_prohibit()
+    delete_flag = faceCV_recognition.check_prohibit(delete_users, res)
     faceCV_recognition.show_recognition_image(image_path, res)
 
     if delete_flag:
