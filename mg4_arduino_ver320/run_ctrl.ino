@@ -121,14 +121,16 @@ void run_ctrl_execute() {
         run_state = STP;
         vel_ctrl_set(0.0, 0.0);
       } else {
-        // 直線目標速度(&減速の実行)
+        // 直線目標速度設定(&減速の実行)
         vel_ref = sign * speed_ref * ratio; //[cm/s]
-        // 回転目標速度(左:-,右:+)(&減速の実行)
+        // 回転目標速度設定(左:-,右:+)(&減速の実行)
         vel_diff_ref = sign * ang_vel_ref * ratio * D_TIRE / 2.0 * PI / 180; // [rad/s]
 
+        //誤差の補正
+
         vel_ctrl_set((vel_ref - vel_diff_ref), (vel_ref + vel_diff_ref));
-        Serial.print("vel_l:" + String(vel_ref - vel_diff_ref) + ", vel_r:" + String(vel_ref + vel_diff_ref));
-        Serial.println(", vel_rel:" + String(vel_ref) + ", vel_diff_ref:" + String(vel_diff_ref));
+        //Serial.print("vel_l:" + String(vel_ref - vel_diff_ref) + ", vel_r:" + String(vel_ref + vel_diff_ref));
+        //Serial.println(", vel_rel:" + String(vel_ref) + ", vel_diff_ref:" + String(vel_diff_ref));
       }
       
       break;

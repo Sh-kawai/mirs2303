@@ -47,7 +47,7 @@ void loop() {
   //test_run_ctrl(STR, 25, 75);
   //test_run_ctrl(ROT, 45, 90);
 
-  /*円弧運動テスト 引数：直進速度[cm/s]、回転速度[deg/s] */
+  /*円弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
   //test_arc_move(3,0);
   //test_arc_move_sim(100);
 
