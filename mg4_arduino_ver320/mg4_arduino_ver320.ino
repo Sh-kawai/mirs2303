@@ -4,13 +4,11 @@
  */
 
 #include "define.h"
-#include <Servo.h>
 
 void setup() {
   io_open();
   encoder_open();
   motor_open();
-  servo_open();
   raspi_open();
 }
 
@@ -30,7 +28,7 @@ void loop() {
   ------------------------------------------------------------------------- */
 
   /* モータ動作テスト 引数：左モータのPWM値、右モータのPWM値　（範囲は -255～255）*/
-  //test_motor(0, 0);
+  //test_motor(0, 50);
 
   /* エンコーダテスト（モータを回転させて行う）*/
   //motor_set(50, 50) ; test_encoder();
@@ -38,7 +36,7 @@ void loop() {
   //motor_set(50, 50) ; test_distance();
 
   /* 速度制御のテスト　引数：左モータの速度[cm/s]、右モータの速度[cm/s] */
-  //test_vel_ctrl(25, 25);
+  //test_vel_ctrl(0, 25);
   /* 走行制御のテスト　
     引数：モード（直進：STR or 回転：ROT)、速度[cm/s] or 角速度[deg/s]、距離[cm] or 角度 の速度[deg] 
     距離 > 0 ：前進、角度 < 0 ：後退　（速度は常に > 0）
@@ -50,10 +48,6 @@ void loop() {
   /*円弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
   //test_arc_move(3,0);
   //test_arc_move_sim(100);
-
-  /* サーボモーター 引数:角度 */
-  //test_servo();
-  //test_servo_rot();
 
   /* バッテリー値の確認 */
   //test_batt();
