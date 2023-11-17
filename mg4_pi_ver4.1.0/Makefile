@@ -8,7 +8,7 @@ DIR_IMG  := ./img
 PRGS := 
 PRGS += test_io test_uss test_request test_direction
 PRGS += test_capture test_number test_dir_num test_camera
-PRGS += test_server test_position
+PRGS += test_server test_position test_lidar
 PRGS += pilot
 
 # オブジェクト
@@ -80,3 +80,6 @@ test_position: $(OBJS_POS) $(DIR_OBJ)/test_position.o
 
 test_camera: $(DIR_OBJ)/test_camera.o
 	$(CC) $^ -o $@ $(LDFLAGS)
+
+test_lidar: $(DIR_OBJ)/test_lidar.o
+	$(CC) $^ -o $@ $(LDFLAGS) -lpthread
