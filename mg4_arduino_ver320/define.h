@@ -19,6 +19,7 @@ typedef struct {
 } command_data_t;
 
 /* ピン配置 */
+/*
 #define PIN_ENC_A_R 20
 #define PIN_ENC_B_R 28
 #define PIN_ENC_A_L 21
@@ -31,6 +32,19 @@ typedef struct {
 #define PIN_SW      10
 #define PIN_LED     13
 #define PIN_BATT    A5
+*/
+
+#define PIN_ENC_A_L  2
+#define PIN_ENC_B_L  4
+#define PIN_ENC_A_R  3
+#define PIN_ENC_B_R  7
+#define PIN_DIR_R    8
+#define PIN_PWM_R    9
+#define PIN_DIR_L   12
+#define PIN_PWM_L   11
+#define PIN_SW      10
+#define PIN_LED     13
+#define PIN_BATT    19
 
 /* パラメータ */
 // 動作周期 [ms]
