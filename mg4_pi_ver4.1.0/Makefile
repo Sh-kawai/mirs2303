@@ -82,4 +82,4 @@ test_camera: $(DIR_OBJ)/test_camera.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 test_lidar: $(DIR_OBJ)/test_lidar.o
-	$(CC) $^ -o $@ $(LDFLAGS) -lpthread
+	$(CC) $^ -o $@ $(LDFLAGS)
