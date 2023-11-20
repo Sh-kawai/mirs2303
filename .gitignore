@@ -4,6 +4,8 @@ mg4_pi_ver4.1.0/*
 !mg4_pi_ver4.1.0/include/
 !mg4_pi_ver4.1.0/include/*
 !mg4_pi_ver4.1.0/Makefile
+!mg4_pi_ver4.1.0/python/
+mg4_pi_ver4.1.0/python/__pycache__
 
 mg4_jetson/train/*
 mg4_jetson/test/*
