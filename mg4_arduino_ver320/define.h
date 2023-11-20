@@ -19,14 +19,14 @@ typedef struct {
 } command_data_t;
 
 /* ピン配置 */
-#define PIN_ENC_A_L 20
-#define PIN_ENC_B_L 28
-#define PIN_ENC_A_R 21
-#define PIN_ENC_B_R 34
-#define PIN_DIR_R   46
-#define PIN_PWM_R    3
-#define PIN_DIR_L   44
-#define PIN_PWM_L    2
+#define PIN_ENC_A_R 20
+#define PIN_ENC_B_R 28
+#define PIN_ENC_A_L 21
+#define PIN_ENC_B_L 34
+#define PIN_DIR_L   46
+#define PIN_PWM_L    3
+#define PIN_DIR_R   44
+#define PIN_PWM_R    2
 #define PIN_SERVO    6 // 仮
 #define PIN_SW      10
 #define PIN_LED     13
