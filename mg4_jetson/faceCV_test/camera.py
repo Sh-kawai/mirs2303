@@ -33,7 +33,6 @@ def get_img():
               print(f"保存しました:{save_path}")
             else:
               print(f"保存に失敗しました:{save_path}")
-            break
 
         # qを押されたら停止
         if keyInp & 0xFF == ord('q'):
