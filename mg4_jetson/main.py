@@ -1,13 +1,15 @@
 import os
-
-import face_main, faceCV_recognition
+#import face_main
+import faceCV_recognition
 import gdrive_class, csv_handle, get_img
 from define import *
 
 def main():
+  # google drive
   Drive = gdrive_class.GDrive()
   SpSheet = gdrive_class.GSpeadSheet(SHEET_ID)
 
+  # 認証写真の取得
   test_dir = os.path.join(JETSON_PATH, "test")
   for image_file in os.listdir(test_dir):
     if image_file.split(".")[1] == "csv":
@@ -16,15 +18,19 @@ def main():
     # 画像の絶対パス
     image_path = os.path.join(test_dir, image_file)
     
-    # 顔認証
-    known_names = ["abe", "asou"]
-    prohibit_names = ["abe"]
+    # 顔認証(face_recognition)
+    #known_names = ["abe", "asou"] # 識別対象者
+    #prohibit_names = ["abe"] # 公開禁止者
     #names, delete_flag = face_main.recognize_person(image_path, known_names, prohibit_names, show=True)
     
-    delete_users = ["riki"]
+    # 顔認証(opencv)
+    delete_users = ["riki"] # 公開禁止者
     dictionary, detector, recognizer = faceCV_recognition.init()
+    # 顔認証の実行
     res = faceCV_recognition.recognition(image_path, dictionary, detector, recognizer)
+    # 公開有無の判別
     delete_flag = faceCV_recognition.check_prohibit(delete_users, res)
+    # 撮影画像の表示
     faceCV_recognition.show_recognition_image(image_path, res)
 
     if delete_flag:

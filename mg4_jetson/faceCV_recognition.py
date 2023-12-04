@@ -10,6 +10,7 @@ COSINE_THRESHOLD = 0.363
 NORML2_THRESHOLD = 1.128
 
 def init():
+  # 学習モデルの取得
   train_dir = os.path.join(JETSON_PATH, "train")
   
   # 特徴を読み込む
