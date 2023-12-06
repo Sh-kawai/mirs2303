@@ -4,8 +4,8 @@ void test_encoder() {
 
   while (1) {
     encoder_get(&enc_l, &enc_r);
-    sprintf(str, "enc_l = %6ld, enc_r = %6ld\n", enc_l, enc_r);
-    Serial.print(str);
+    sprintf(str, "enc_l = %6ld, enc_r = %6ld, hi:%f", enc_l, enc_r, (float)enc_l/(float)enc_r);
+    Serial.println(str);
     delay(T_CTRL);
   }
 }
@@ -119,6 +119,9 @@ void test_arc_move(double speed, double dist, double ang_vel, double ang_dist){
   while(1){
     run_ctrl_execute();
     vel_ctrl_execute();
+    delay(T_CTRL);
+    //test_encoder();
+    
   }
 }
 void test_arc_move_sim(double speed){

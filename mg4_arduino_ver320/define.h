@@ -46,6 +46,7 @@ typedef struct {
 #define PIN_LED     13
 #define PIN_BATT    19
 
+
 /* パラメータ */
 // 動作周期 [ms]
 #define T_CTRL 10 
