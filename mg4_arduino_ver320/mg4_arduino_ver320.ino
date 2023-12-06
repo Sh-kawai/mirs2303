@@ -31,7 +31,7 @@ void loop() {
   //test_motor(0, 50);
 
   /* エンコーダテスト（モータを回転させて行う）*/
-  //motor_set(-50, -50) ;test_encoder();
+  motor_set(-50, -50) ;test_encoder();
   /* 距離計のテスト（モータを回転させて行う）*/
   //motor_set(50, 50) ; test_distance();
 
