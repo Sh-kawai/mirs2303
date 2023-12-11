@@ -32,9 +32,10 @@ def face_cut():
         image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
 
       # モデルを読み込む
-      weights = os.path.join(JETSON_PATH, "yunet_n_640_640.onnx")
+      model_folder = os.path.join(JETSON_PATH, "faceCV_models")
+      weights = os.path.join(model_folder, "yunet_n_640_640.onnx")
       face_detector = cv2.FaceDetectorYN_create(weights, "", (0, 0))
-      weights = os.path.join(JETSON_PATH, "face_recognizer_fast.onnx")
+      weights = os.path.join(model_folder, "face_recognizer_fast.onnx")
       face_recognizer = cv2.FaceRecognizerSF_create(weights, "")
 
       # 入力サイズを指定する
@@ -78,7 +79,8 @@ def train():
           continue
         
         # モデルを読み込む
-        weights = os.path.join(JETSON_PATH, "face_recognizer_fast.onnx")
+        model_folder = os.path.join(JETSON_PATH, "faceCV_models")
+        weights = os.path.join(model_folder, "face_recognizer_fast.onnx")
         face_recognizer = cv2.FaceRecognizerSF_create(weights, "")
         
         # 特徴を抽出する

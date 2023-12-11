@@ -22,9 +22,10 @@ def init():
     dictionary.append((user_id, feature))
     
   # モデルを読み込む
-  weights = os.path.join(JETSON_PATH, "yunet_n_640_640.onnx")
+  model_folder = os.path.join(JETSON_PATH, "faceCV_models")
+  weights = os.path.join(model_folder, "yunet_n_640_640.onnx")
   face_detector = cv2.FaceDetectorYN_create(weights, "", (0, 0))
-  weights = os.path.join(JETSON_PATH, "face_recognizer_fast.onnx")
+  weights = os.path.join(model_folder, "face_recognizer_fast.onnx")
   face_recognizer = cv2.FaceRecognizerSF_create(weights, "")
   
   return dictionary, face_detector, face_recognizer
