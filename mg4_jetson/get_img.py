@@ -1,7 +1,6 @@
 import cv2
 from datetime import datetime
 import os
-
 from define import *
 
 def get_img():
@@ -24,8 +23,8 @@ def get_img():
             time_str = current_time.strftime('%Y-%m-%d_%H-%M-%S')  # 時刻のフォーマットを指定
             # 画像を保存
             ret, frame = capture.read()
-            test_dir = os.path.join(JETSON_PATH, "test")
-            save_path = os.path.join(test_dir, f"{time_str}.png")
+            pic_dir = os.path.join(JETSON_PATH, "pictures")
+            save_path = os.path.join(pic_dir, f"{time_str}.png")
             cv2.imwrite(save_path, frame)
             print(f"保存しました:{time_str}.png")
             break

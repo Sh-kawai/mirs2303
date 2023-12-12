@@ -3,7 +3,7 @@ import csv
 
 from define import *
 
-CSV_PATH = os.path.join(JETSON_PATH, f"test/picture_data.csv")
+CSV_PATH = os.path.join(JETSON_PATH, f"pictures/picture_data.csv")
 
 def write(data):
   with open(CSV_PATH, mode='a', newline='') as f:

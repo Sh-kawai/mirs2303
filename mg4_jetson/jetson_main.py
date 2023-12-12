@@ -10,13 +10,13 @@ def main():
   SpSheet = google_drive.GSpeadSheet(SHEET_ID)
 
   # 認証写真の取得
-  test_dir = os.path.join(JETSON_PATH, "test")
-  for image_file in os.listdir(test_dir):
+  pic_dir = os.path.join(JETSON_PATH, "pictures")
+  for image_file in os.listdir(pic_dir):
     if image_file.split(".")[1] == "csv":
       continue
     
     # 画像の絶対パス
-    image_path = os.path.join(test_dir, image_file)
+    image_path = os.path.join(pic_dir, image_file)
     
     # 顔認証(face_recognition)
     #known_names = ["abe", "asou"] # 識別対象者
