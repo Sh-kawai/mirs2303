@@ -1,27 +1,35 @@
 import socket
 
-import mg4_jetson.jetson_main as jetson_main, get_img
+import upload, get_img
 
-host = "172.25.19.3"
-port = 8080
-letter_coding = "UTF-8"
+from define import *
 
-# オブジェクトの作成をします
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def client(host=HOST, port=PORT):
+  letter_coding = "UTF-8"
 
-client.connect((host, port)) #これでサーバーに接続します
+  # オブジェクトの作成をします
+  client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-print("success connection")
+  client.connect((host, port)) #これでサーバーに接続します
 
-print("Waiting server response...")
-response = client.recv(4096).decode(letter_coding)
-print('Received: %s' % response)
+  print("success connection")
+  while True:
+    print("Waiting server response...")
+    response = client.recv(4096).decode()
+    print('Received: %s' % response)
 
-print(response == "True")
-if response == "True":
-  get_img.get_img
-  jetson_main.main()
+    if response == "q":
+      break
+    elif response == "1":
+      get_img.get_img(place="kari")
+    elif response == "2":
+      upload.main()
 
-message = "client wait"
-print('Send : %s' % message)
-client.send(message.encode(letter_coding))
+    message = "client wait"
+    print('Send : %s' % message)
+    client.send(message.encode(letter_coding))
+
+if __name__ == "__main__":
+  host = "127.0.0.1"
+  port = 8080
+  client(host=host, port=port)

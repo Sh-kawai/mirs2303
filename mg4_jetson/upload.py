@@ -1,10 +1,9 @@
 import os
-#import face_main
 import faceCV_recognition
-import mg4_jetson.google_drive as google_drive, csv_handle, get_img
+import google_drive, csv_handle, get_img
 from define import *
 
-def main():
+def main(debug=False):
   # google drive
   Drive = google_drive.GDrive()
   SpSheet = google_drive.GSpeadSheet(SHEET_ID)
@@ -31,7 +30,8 @@ def main():
     # 公開有無の判別
     delete_flag = faceCV_recognition.check_prohibit(delete_users, res)
     # 撮影画像の表示
-    faceCV_recognition.show_recognition_image(image_path, res)
+    if debug:
+      faceCV_recognition.show_recognition_image(image_path, res)
 
     if delete_flag:
       # 画像削除
@@ -56,4 +56,4 @@ def main():
 
 if __name__ == "__main__":
   get_img.get_img()
-  main()
+  main(debug=False)

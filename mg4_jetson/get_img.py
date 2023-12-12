@@ -1,9 +1,10 @@
 import cv2
 from datetime import datetime
 import os
+import csv_handle
 from define import *
 
-def get_img():
+def get_img(place="", loop=False):
     # カメラを起動
     capture = cv2.VideoCapture(0)
     if not capture.isOpened():
@@ -26,8 +27,10 @@ def get_img():
             pic_dir = os.path.join(JETSON_PATH, "pictures")
             save_path = os.path.join(pic_dir, f"{time_str}.png")
             cv2.imwrite(save_path, frame)
+            csv_handle.write(time=time_str, place=place)
             print(f"保存しました:{time_str}.png")
-            break
+            if not loop:
+                break
 
         # qを押されたら停止
         if keyInp & 0xFF == ord('q'):
@@ -38,4 +41,4 @@ def get_img():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    get_img()
+    get_img(place="kari", loop=True)
