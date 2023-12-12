@@ -1,6 +1,6 @@
 import socket
 
-import main, get_img
+import mg4_jetson.jetson_main as jetson_main, get_img
 
 host = "172.25.19.3"
 port = 8080
@@ -20,7 +20,7 @@ print('Received: %s' % response)
 print(response == "True")
 if response == "True":
   get_img.get_img
-  main.main()
+  jetson_main.main()
 
 message = "client wait"
 print('Send : %s' % message)

@@ -1,13 +1,13 @@
 import os
 #import face_main
 import faceCV_recognition
-import gdrive_class, csv_handle, get_img
+import mg4_jetson.google_drive as google_drive, csv_handle, get_img
 from define import *
 
 def main():
   # google drive
-  Drive = gdrive_class.GDrive()
-  SpSheet = gdrive_class.GSpeadSheet(SHEET_ID)
+  Drive = google_drive.GDrive()
+  SpSheet = google_drive.GSpeadSheet(SHEET_ID)
 
   # 認証写真の取得
   test_dir = os.path.join(JETSON_PATH, "test")
