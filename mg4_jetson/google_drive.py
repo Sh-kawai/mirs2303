@@ -46,17 +46,28 @@ class GDrive:
     except HttpError as e:
       if e.resp.status == 404:
         print("ファイルが見つかりませんでした。")
-        return True
+        return False
       else:
         print(f"エラーが発生しました: {e}")
         return False
     else: #正常に動作した場合
       print(f"ファイルが削除されました: {file_id}")
       return True
+  
+  def delete_folder(self, folder_id):
+    # Get the list of files in the folder
+    files_list = self.service.files().list(q=f"'{folder_id}' in parents",
+                                            fields='files(id)').execute()
+    print(files_list)
+    # Delete each file in the folder
+    for file_info in files_list.get('files', []):
+        file_id = file_info['id']
+        self.service.files().delete(fileId=file_id).execute()
+        #print(f"File '{file_id}' deleted.")
     
 class GSpeadSheet:
   def __init__(self, sheet_id):
-    SERVICE_KEY_FILE = os.path.join(JETSON_PATH, "photo-test-393509-a09fbab1df81.json")
+    SERVICE_KEY_FILE = os.path.join(JETSON_PATH, SERVICE_JSON)
     
     #サービスアカウントキーを指定して認証を作成
     creds = service_account.Credentials.from_service_account_file(SERVICE_KEY_FILE, scopes=['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets'])
@@ -99,18 +110,36 @@ class GSpeadSheet:
       for r in macth_rows:
         worksheet.delete_rows(r)
       print(f"スプレッドシートの{macth_rows}行目のデータを削除しました")
+
+  def delete_all(self, sheet_name=""):
+    if sheet_name == None:
+      print("ワークシート名(sheet_name)を指定してください")
+      return False
     
+    #ワークシートを選択
+    worksheet = self.spreadsheet.worksheet(sheet_name)
+    
+    #列データを取得
+    col_values = worksheet.col_values(2)
+    
+    #データの存在する行番号を取得
+    macth_rows = [i+1 for i, value in enumerate(col_values) if value in "ファイル"]
+    
+    #行の削除
+    if len(macth_rows) != 0:
+      for r in macth_rows:
+        worksheet.delete_rows(r)
+      print(f"スプレッドシートの{macth_rows}行目のデータを削除しました")
+
 if __name__ == "__main__":
-  file_path = "C:/Users/kawai/Visual Studio Code/My_python/learn_python/gdrive_learn/Google.png"
+  file_path = "/home/mirs2303/mirs2303/mg4_jetson/PuNITロゴ‗.png"
   file_name = os.path.basename(file_path)
-  gdrive_folder_id = "1CONPdtwSL4rP9xj4kQDjPVK7Fi-I8GkE"
-  sheet_id = "1e6MzBqjgl8S1QtGBeQOWqrg8rwIqeiarAl570BGflG0"
   
   Drive = GDrive()
-  SpSheet = GSpeadSheet(sheet_id)
+  SpSheet = GSpeadSheet(SHEET_ID)
   
   while True:
-    print("写真アップロード:0, 写真削除:1")
+    print("写真アップロード:0, 写真削除:1, all-delete:2")
     inp_int = int(input())
     
     if inp_int == 0:
@@ -119,7 +148,7 @@ if __name__ == "__main__":
       shoot_date = datetime.now()
       shoot_date = shoot_date.strftime('%Y-%m-%d_%H-%M-%S')
       
-      file_id = Drive.upload(file_path, gdrive_folder_id)
+      file_id = Drive.upload(file_path, GDRIVE_FOLDER_ID)
       
       data = [file_name, file_id, "公開", shoot_date, shoot_place]
       SpSheet.insert(data, "メインデータ")
@@ -131,3 +160,23 @@ if __name__ == "__main__":
       res = Drive.delete(delete_file_id)
       if res:
         SpSheet.delete(delete_file_id, "メインデータ")
+    elif inp_int == 2:
+      print("all delete. Are you OK?[yes/no]")
+      while True:
+        flag = input()
+        if flag == "yes":
+          print("do delete all pictures")
+          #col_values = SpSheet.spreadsheet.worksheet("メインデータ").col_values(2)
+          #for delete_file_id in col_values:
+          #  #ファイル削除
+          #  print(f"del: {delete_file_id}")
+          #  res = Drive.delete(delete_file_id)
+          #  if res:
+          #    SpSheet.delete(delete_file_id, "メインデータ")
+          Drive.delete_folder(GDRIVE_FOLDER_ID)
+          SpSheet.delete_all("メインデータ")
+          break
+        elif flag == "no":
+          break
+        else:
+          print("please fill out [yes] or [no] all!")
