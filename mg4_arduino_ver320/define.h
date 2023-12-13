@@ -38,8 +38,8 @@ typedef struct {
 #define PIN_PWM_R    2
 #define PIN_DIR_E   48
 #define PIN_PWM_E    5
-#define PIN_SER_PIT  4 // 縦 y軸
-#define PIN_SER_YAW  6 // 横 z軸
+#define PIN_SER_Y  4 // 縦 y軸
+#define PIN_SER_Z  6 // 横 z軸
 #define PIN_SW      10
 #define PIN_LED     13
 #define PIN_BATT    A5
