@@ -10,6 +10,7 @@ void setup() {
   io_open();
   encoder_open();
   motor_open();
+  servo_open();
   raspi_open();
 }
 
@@ -51,7 +52,8 @@ void loop() {
   //test_arc_move_sim(100);
   
   /*サーボモーターテスト*/
-  //test_servo(10, 10);
+  //test_servo(50, 50);
+  //test_servo_rot();
 
   /* バッテリー値の確認 */
   //test_batt();

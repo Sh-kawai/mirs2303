@@ -145,3 +145,30 @@ void test_arc_move_sim(double speed){
 void test_servo(int y, int z){
   servo_set(y, z);
 }
+
+void test_servo_get(){
+  int y, z;
+  char str[100], str_y[10], str_z[19];
+  servo_get(&y, &z);
+  sprintf(str, "pit_y = %s, yaw_z = %s\n",
+              dtostrf(y, 6, 1, str_y),
+              dtostrf(z, 6, 1, str_z));
+  Serial.print(str);
+}
+
+void test_servo_rot(){
+  int y = 0;
+  int z = 0;
+  int angle = 0;
+  while(1){
+    y = angle;
+    z = angle;
+    servo_set(y ,z);
+    Serial.println(angle);
+    test_servo_get();
+    
+    angle += 10;
+    if(angle > 180) angle = 0;
+    delay(1000);
+  }
+}
