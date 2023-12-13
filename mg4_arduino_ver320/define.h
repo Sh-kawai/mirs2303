@@ -4,6 +4,7 @@ typedef enum {
   STR,
   ROT,
   ARC,
+  LINE,
 } run_state_t;
 
 typedef struct {
@@ -19,22 +20,33 @@ typedef struct {
 } command_data_t;
 
 /* ピン配置 */
-
+// mega interrupt pin(num)
+// 2(0) 3(1) 21(2) 20(3) 19(4) 18(5)
 #define INTERRUPT_R  3
 #define INTERRUPT_L  2
+#define INTERRUPT_E  4
 
 #define PIN_ENC_A_R 20
 #define PIN_ENC_B_R 28
 #define PIN_ENC_A_L 21
 #define PIN_ENC_B_L 34
+#define PIN_ENC_A_E 19
+#define PIN_ENC_B_E 40
 #define PIN_DIR_L   46
 #define PIN_PWM_L    3
 #define PIN_DIR_R   44
 #define PIN_PWM_R    2
-#define PIN_SERVO    6 // 仮
+#define PIN_DIR_E   48
+#define PIN_PWM_E    5
+#define PIN_SER_PIT  4 // 縦 y軸
+#define PIN_SER_YAW  6 // 横 z軸
 #define PIN_SW      10
 #define PIN_LED     13
 #define PIN_BATT    A5
+#define PIN_LIGHT_0 A0
+#define PIN_LIGHT_1 A1
+#define PIN_LIGHT_2 A2
+#define PIN_LIGHT_3 A3 
 
 /*
 #define INTERRUPT_L  0
@@ -82,3 +94,7 @@ typedef struct {
 
 // バッテリ入力の分圧比
 #define V_RATIO 0.5 
+
+// ライントレース白黒
+#define BLACK  500
+#define WHITE  700

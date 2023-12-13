@@ -26,6 +26,11 @@ void run_ctrl_execute() {
   // 回転制御における左右のタイヤの距離差の補正ゲイン
   const double Kr = 0.0;
 
+  // ライントレース用PIDゲイン
+  const double Kl_p = 0.4;
+  const double Kl_i = 0.0;
+  const double Kl_d = 1.6;
+
   int sign;
   double d_l, d_r, v_l, v_r, ratio, vel_ref, vel_mod;
   double vel_diff_ref; // 円弧運動のタイヤ速度差 ARC
@@ -133,6 +138,25 @@ void run_ctrl_execute() {
         //Serial.println(", vel_rel:" + String(vel_ref) + ", vel_diff_ref:" + String(vel_diff_ref));
       }
       
+      break;
+    case LINE: // ライントレース
+      int gray, light0, light1, light2, light3;
+
+      gray = (BLACK + WHITE)/2;
+      io_get_light(&light0, &light1, &light2, &light3);
+      er = light1 - light2;
+      er_prev = er;
+
+      vel_ref = sign * speed_ref * ratio;
+
+      if(light1 != WHITE && light2 != WHITE){
+        //左右の値が両方ともwhiteじゃないなら
+        vel_mod = Kl_p * er + Kl_d * (er - er_prev);
+        vel_ctrl_set((vel_ref - vel_mod), (vel_ref + vel_mod));
+      }else{
+        vel_ctrl_set(0.0, 0.0);
+      }
+
       break;
   }
 }

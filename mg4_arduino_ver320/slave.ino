@@ -21,7 +21,8 @@ void slave() {
           ang_dist = 1000.0;
           run_ctrl_set_arc(ARC, command_data.val[1], dist, command_data.val[2], ang_dist);
           break;
-        case 5: // 昇降用モーター
+        case 5: // ライントレース
+          run_ctrl_set(LINE, command_data.val[1], command_data.val[2]);
           break;
         case 6: // サーボモーター
           break;

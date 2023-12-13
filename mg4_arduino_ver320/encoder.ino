@@ -7,12 +7,17 @@ void encoder_open() {
   pinMode(PIN_ENC_B_L, INPUT);
   pinMode(PIN_ENC_A_R, INPUT);
   pinMode(PIN_ENC_B_R, INPUT);
+  pinMode(PIN_ENC_A_E, INPUT);
+  pinMode(PIN_ENC_B_E, INPUT);
   digitalWrite(PIN_ENC_A_L, HIGH);
   digitalWrite(PIN_ENC_B_L, HIGH);
   digitalWrite(PIN_ENC_A_R, HIGH);
   digitalWrite(PIN_ENC_B_R, HIGH);
+  digitalWrite(PIN_ENC_A_E, HIGH);
+  digitalWrite(PIN_ENC_B_E, HIGH);
   attachInterrupt(INTERRUPT_L, enc_change_l, CHANGE);
   attachInterrupt(INTERRUPT_R, enc_change_r, CHANGE);
+  attachInterrupt(INTERRUPT_E, enc_change_e, CHANGE);
 }
 
 void encoder_get(long *cnt_l, long *cnt_r) {
@@ -54,6 +59,25 @@ static void enc_change_r() {
 
   a_curr = digitalRead(PIN_ENC_A_R);
   b_curr = digitalRead(PIN_ENC_B_R);
+
+  // 正転 : [L, H]→(L, L)→[H, L]→(H, H)→[L, H]
+  if (a_prev ==  LOW && b_prev == HIGH && a_curr == HIGH && b_curr ==  LOW) count_r++;
+  if (a_prev == HIGH && b_prev ==  LOW && a_curr ==  LOW && b_curr == HIGH) count_r++;
+
+  // 逆転 : [L, L]→(L, H)→[H, H]→(H, L)→[L, L]
+  if (a_prev ==  LOW && b_prev ==  LOW && a_curr == HIGH && b_curr == HIGH) count_r--;
+  if (a_prev == HIGH && b_prev == HIGH && a_curr ==  LOW && b_curr ==  LOW) count_r--;
+
+  a_prev = a_curr;
+  b_prev = b_curr;
+}
+
+static void enc_change_e() {
+  int a_curr, b_curr;
+  static int a_prev = LOW, b_prev = LOW;
+
+  a_curr = digitalRead(PIN_ENC_A_E);
+  b_curr = digitalRead(PIN_ENC_B_E);
 
   // 正転 : [L, H]→(L, L)→[H, L]→(H, H)→[L, H]
   if (a_prev ==  LOW && b_prev == HIGH && a_curr == HIGH && b_curr ==  LOW) count_r++;
