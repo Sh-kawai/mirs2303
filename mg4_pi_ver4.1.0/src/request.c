@@ -7,7 +7,8 @@
 void request_set_runmode(run_state_t state, int speed, int dist){
 	command_data_t command_data;
 	
-	command_data.val[0] = ((state == STR) ? 2 : (state == ROT) ? 3 : 1);
+	//command_data.val[0] = ((state == STR) ? 2 : (state == ROT) ? 3 : 1);
+	command_data.val[0] = state + 1;
 	command_data.val[1] = speed;
 	command_data.val[2] = dist;
 	
