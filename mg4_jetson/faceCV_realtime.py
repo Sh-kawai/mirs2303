@@ -2,17 +2,18 @@ import os
 import glob
 import numpy as np
 import cv2
+import time
 
 from define import *
 
 COSINE_THRESHOLD = 0.363
 NORML2_THRESHOLD = 1.128
 
-def init():
+def init(cap_path=0):
   train_dir = os.path.join(JETSON_PATH, "train")
   
   # キャプチャを開く
-  capture = cv2.VideoCapture(0) # カメラ
+  capture = cv2.VideoCapture(cap_path) # カメラ
   if not capture.isOpened():
     exit()
   
@@ -51,6 +52,12 @@ def take_picture(capture):
   print(f"画像を撮影しました。path:{save_path}")
 
 def recognition(capture, dictionary, face_detector, face_recognizer):
+  
+  # FPS計測用の変数
+  start_time = time.time()
+  frame_count = 0
+  fps_text = ""
+  
   while True:
     # フレームをキャプチャして画像を読み込む
     result, image = capture.read()
@@ -101,18 +108,27 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
       cv2.putText(image, text, position, font, scale, color, thickness, cv2.LINE_AA)
       print(id, score)
     cv2.namedWindow("faceCV_realtime", cv2.WINDOW_GUI_NORMAL)
+    cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
     cv2.imshow("faceCV_realtime", image)
     
     # Escキーでプログラムを終了
     key = cv2.waitKey(1)
     if key == 27:
       break
-    #Enterキーで写真撮影
+    # Enterキーで写真撮影
     if key & 0xFF == 13:
       take_picture(capture)
-
+      
+    # fps計算
+    frame_count += 1
+    if frame_count >= 30:  # 30フレームごとにFPSを計算し、表示
+      elapsed_time = time.time() - start_time
+      fps = frame_count / elapsed_time
+      fps_text = f"FPS: {fps:.2f}"
+      frame_count = 0
+      start_time = time.time()
   
 if __name__ == "__main__":
-  cap, dict, detector, recognizer = init()
+  cap, dict, detector, recognizer = init("./test/d4顔認証試験.mp4")
   recognition(cap, dict, detector, recognizer)
   
