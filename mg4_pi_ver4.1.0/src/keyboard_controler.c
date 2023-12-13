@@ -39,6 +39,7 @@ int main() {
     int dist_str = speed_str/2;
     int speed_rot = 45;
     int dist_rot = speed_rot/2;
+    int sv_angle = 90;
 
     printf("program start\n");
 
@@ -69,6 +70,18 @@ int main() {
             case ' ':
                 printf("[key_ctrl]stop\n");
                 request_set_runmode(STP, 0, 0);
+                break;
+            case 'u':
+                sv_angle++;
+                if(sv_angle > 180) sv_angle = 180;
+                printf("[key_ctrl]servo:%d[deg]\n", sv_angle);
+                request_set_runmode(SER, sv_angle, sv_angle);
+                break;
+            case 'j':
+                sv_angle--;
+                if(sv_angle < 0) sv_angle = 0;
+                printf("[key_ctrl]servo:%d[deg]\n", sv_angle);
+                request_set_runmode(SER, sv_angle, sv_angle);
                 break;
             case 27: // escapeキー
                 request_set_runmode(STP, 0, 0);
