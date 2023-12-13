@@ -8,7 +8,8 @@ DIR_IMG  := ./img
 PRGS := 
 PRGS += test_io test_uss test_request test_direction
 PRGS += test_capture test_number test_dir_num test_camera
-PRGS += test_server test_position test_lidar
+PRGS += test_server test_position
+PRGS += keyboard_controler
 PRGS += pilot
 
 # オブジェクト
@@ -22,7 +23,7 @@ OBJS_POS := $(addprefix $(DIR_OBJ)/, position.o)
 CC      := g++
 G++      := g++
 CFLAGS  := -O2 -Wall -MMD -MP `pkg-config --cflags opencv`
-LDFLAGS := -lm -lpthread -lwiringPi `pkg-config --libs opencv`
+LDFLAGS := -lm -lpthread -lwiringPi `pkg-config --libs opencv` -lncurses
 INCLUDE := -I $(DIR_HEAD)
 
 # 全コンパイル・ファイル削除用ターゲット
@@ -81,5 +82,5 @@ test_position: $(OBJS_POS) $(DIR_OBJ)/test_position.o
 test_camera: $(DIR_OBJ)/test_camera.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-test_lidar: $(DIR_OBJ)/test_lidar.o
+keyboard_controler: $(OBJS_RUN) $(DIR_OBJ)/keyboard_controler.o
 	$(CC) $^ -o $@ $(LDFLAGS)
