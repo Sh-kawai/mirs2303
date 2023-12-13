@@ -162,6 +162,22 @@ void run_ctrl_execute() {
 }
 
 void run_ctrl_set(run_state_t state, double speed, double dist) {
+  if(run_state == state && speed_ref == abs(speed)){
+    dist_ref = dist + dist_curr;
+  } else if(run_state == state && dist_ref == dist){
+    speed_ref = abs(speed);
+  } else {
+    run_state = state;
+    speed_ref = abs(speed);
+    dist_ref = dist;
+    ang_vel_ref = 0.0;
+    ang_dist_ref = 0.0;
+    vel_ctrl_reset();
+    er = 0;
+    er_prev = 0;
+    er_sum = 0;
+  }
+  /*
   run_state = state;
   speed_ref = abs(speed);
   dist_ref = dist;
@@ -171,6 +187,7 @@ void run_ctrl_set(run_state_t state, double speed, double dist) {
   er = 0;
   er_prev = 0;
   er_sum = 0;
+  */
 }
 
 void run_ctrl_set_arc(run_state_t state, double speed, double dist, double ang_vel, double ang_dist) {

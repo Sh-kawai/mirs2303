@@ -142,6 +142,6 @@ void test_arc_move_sim(double speed){
   }
 }
 
-test_servo(int y, int z){
+void test_servo(int y, int z){
   servo_set(y, z);
 }
