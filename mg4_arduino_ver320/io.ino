@@ -2,13 +2,13 @@ void io_open() {
   pinMode(PIN_LED, OUTPUT);
   pinMode(PIN_SW, INPUT);
   pinMode(PIN_BATT, INPUT);
+  pinMode(PIN_LIGHT_0, INPUT);
+  pinMode(PIN_LIGHT_1, INPUT);
+  pinMode(PIN_LIGHT_2, INPUT);
+  pinMode(PIN_LIGHT_3, INPUT);
   digitalWrite(PIN_LED, LOW);
   digitalWrite(PIN_SW, HIGH);
   digitalWrite(PIN_BATT, LOW);
-  digitalWrite(PIN_LIGHT_0, LOW);
-  digitalWrite(PIN_LIGHT_1, LOW);
-  digitalWrite(PIN_LIGHT_2, LOW);
-  digitalWrite(PIN_LIGHT_3, LOW);
 }
 
 void io_set_led(int val) {

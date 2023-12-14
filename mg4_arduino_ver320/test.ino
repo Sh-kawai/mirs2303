@@ -172,3 +172,15 @@ void test_servo_rot(){
     delay(1000);
   }
 }
+
+void test_get_light(){
+  int l[4];
+  while(1){
+    io_get_light(&l[0], &l[1], &l[2], &l[3]);
+    for(int i=0; i<4; i++){
+      Serial.print(l[i]);
+      Serial.print(", ");
+    }
+    Serial.println();
+  }
+}
