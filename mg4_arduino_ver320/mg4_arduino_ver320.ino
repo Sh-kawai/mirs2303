@@ -11,6 +11,7 @@ void setup() {
   encoder_open();
   motor_open();
   servo_open();
+  camera_ctrl_open();
   raspi_open();
 }
 
