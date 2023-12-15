@@ -8,7 +8,7 @@ DIR_IMG  := ./img
 PRGS := 
 PRGS += test_io test_uss test_request test_direction
 PRGS += test_capture test_number test_dir_num test_camera
-PRGS += test_server test_position
+PRGS += test_server test_position test_socket
 PRGS += keyboard_controler
 PRGS += pilot
 
@@ -18,6 +18,7 @@ OBJS_CAP := $(addprefix $(DIR_OBJ)/, get_img.o)
 OBJS_NUM := $(addprefix $(DIR_OBJ)/, number_search.o number_detect.o)
 OBJS_SVR := $(addprefix $(DIR_OBJ)/, server.o)
 OBJS_POS := $(addprefix $(DIR_OBJ)/, position.o)
+OBJS_SOC := $(addprefix $(DIR_OBJ)/, jetson_socket.o)
 
 # コンパイルオプション
 CC      := g++
@@ -80,6 +81,9 @@ test_position: $(OBJS_POS) $(DIR_OBJ)/test_position.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 test_camera: $(DIR_OBJ)/test_camera.o
+	$(CC) $^ -o $@ $(LDFLAGS)
+
+test_socket: $(OBJS_SOC) $(DIR_OBJ)/test_socket.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 keyboard_controler: $(OBJS_RUN) $(DIR_OBJ)/keyboard_controler.o
