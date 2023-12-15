@@ -184,3 +184,27 @@ void test_get_light(){
     Serial.println();
   }
 }
+
+void test_camera_ctrl_motor(int p){
+  int i = 0;
+  int count = 0;
+  const int count_max = 1000; //10秒
+  double height = 0.0;
+  char str[100], str_h[10];
+  
+  camera_ctrl_set_motor(p);
+
+  while(1){
+    camera_ctrl_execute();
+    if (count % 10 == 0) {
+      height = camera_get_height();
+      sprintf(str, "heihgt_curr = %s, pwm = %d\n",
+              dtostrf(height, 6, 1, str_h),
+              p);
+              Serial.print(str);
+    }
+    delay(T_CTRL);
+    count++;
+    if(count > count_max) break;
+  }
+}

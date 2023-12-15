@@ -1,17 +1,14 @@
 static double height_ref = 0.0;
-static double height_curr = 0.0;
-static double h_err_curr = 0.0;
 static double h_err_prev = 0.0;
 static double h_err_sum = 0.0;
 static double pwm = 0.0;
 static double pwm_prev = 0.0;
-static double err_curr = 0.0;
-static double err_prev = 0.0;
-static double vel_ref = 0.0;
-static double vel_curr = 0.0;
 
 static volatile long count_e = 0;
 
+bool camera_ctrl_exec_height = true;
+
+// カメラオープン
 void camera_ctrl_open(){
   pinMode(PIN_DIR_E, OUTPUT);
   pinMode(PIN_PWM_E, OUTPUT);
@@ -20,33 +17,39 @@ void camera_ctrl_open(){
   attachInterrupt(INTERRUPT_E, camera_enc_change, CHANGE);
 }
 
+// 定期実行関数
 void camera_ctrl_execute(){
-  // 高さ用PID
-  const double Kp = 1.0;
-  const double Ki = 1.0;
-  const double Kd = 0.0;
+  double height_curr = camera_get_height();
   
-  h_err_curr = height_ref - height_curr;
-  h_err_sum += h_err_curr;
+  if(camera_ctrl_exec_height){
+    // 高さ用PID
+    const double Kp = 1.0;
+    const double Ki = 1.0;
+    const double Kd = 0.0;
+    double h_err_curr;
+    
+    h_err_curr = height_ref - height_curr;
+    h_err_sum += h_err_curr;
+    
+    pwm = Kp * h_err_curr + Ki * h_err_sum + Kd * (h_err_curr - h_err_prev);
   
-  pwm = Kp * h_err_curr + Ki * h_err_sum + Kd * (h_err_curr - h_err_prev);
-
-  int accel_pwm = 500; //[value/s]
-
-  if(pwm - pwm_prev > accel_pwm * (T_CTRL / 1000.0)){
-    pwm = pwm_prev + accel_pwm * (T_CTRL / 1000.0);
-  } else if(pwm - pwm_prev > -accel_pwm * (T_CTRL / 1000.0)){
-    pwm = pwm_prev - accel_pwm * (T_CTRL / 1000.0);
+    int accel_pwm = 500; //[value/s]
+  
+    if(pwm - pwm_prev > accel_pwm * (T_CTRL / 1000.0)){
+      pwm = pwm_prev + accel_pwm * (T_CTRL / 1000.0);
+    } else if(pwm - pwm_prev > -accel_pwm * (T_CTRL / 1000.0)){
+      pwm = pwm_prev - accel_pwm * (T_CTRL / 1000.0);
+    }
+    
+    h_err_prev = h_err_curr;
   }
-  
-  h_err_prev = h_err_curr;
   pwm_prev = pwm;
 
-  camera_motor_set(int(pwm));
+  _camera_motor_set(int(pwm));
 }
 
-
-void camera_motor_set(int pwm){
+// 昇降用モーター指令関数
+void _camera_motor_set(int pwm){
   //モータ回転方向の補正
   //pwm *= -1;
   
@@ -62,7 +65,40 @@ void camera_motor_set(int pwm){
   }
 }
 
+// 昇降高さ指定関数
+void camera_ctrl_set_height(double h){
+  camera_ctrl_exec_height = true;
+  height_ref = h;
+}
 
+// 昇降モータ(pwm)指定関数
+void camera_ctrl_set_motor(int p){
+  camera_ctrl_exec_height = false;
+  height_ref = 0.0;
+  h_err_prev = 0.0;
+  h_err_sum = 0.0;
+  pwm = p;
+}
+
+// 昇降機構リセット関数
+void camera_ctrl_reset(){
+  height_ref = 0.0;
+  h_err_prev = 0.0;
+  h_err_sum = 0.0;
+  pwm = 0.0;
+  pwm_prev = 0.0;
+
+  _camera_motor_set(0);
+  count_e = 0;
+}
+
+// カメラの高さ取得関数
+double camera_get_height(){
+  //return count_e * ELEV_PIT / ENC_RANGE_E;
+  return 0.0;
+}
+
+// 昇降用モータエンコーダ関数
 static void camera_enc_change() {
   int a_curr, b_curr;
   static int a_prev = LOW, b_prev = LOW;

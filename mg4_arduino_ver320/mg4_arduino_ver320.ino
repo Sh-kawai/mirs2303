@@ -57,7 +57,13 @@ void loop() {
   //test_servo_rot();
   
   /*フォトリフレクタ*/
-  test_get_light();
+  //test_get_light();
+
+  /*昇降用モータ*/
+  /*pwm指定制御　引数:pwm値(int)*/
+  //test_camera_ctrl_motor(100);
+  /*高さ指定制御　引数:目標高さ[cm](0以上)*/
+  //test_camera_ctrl_
 
   /* バッテリー値の確認 */
   //test_batt();

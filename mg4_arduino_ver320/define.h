@@ -98,3 +98,9 @@ typedef struct {
 // ライントレース白黒
 #define BLACK  500
 #define WHITE  700
+
+// 昇降用モーター
+// ねじピッチ(隣り合うねじ山の幅)
+#define ELEV_PIT
+// エンコーダ分解能
+#define ENC_RANGE_E
