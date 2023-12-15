@@ -84,7 +84,7 @@ test_camera: $(DIR_OBJ)/test_camera.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 test_socket: $(OBJS_SOC) $(DIR_OBJ)/test_socket.o
-	$(CC) $^ -o $@ $(LDFLAGS)
+	$(CC) $^ -o $@
 
 keyboard_controler: $(OBJS_RUN) $(DIR_OBJ)/keyboard_controler.o
 	$(CC) $^ -o $@ $(LDFLAGS)
