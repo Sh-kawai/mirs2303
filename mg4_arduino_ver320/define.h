@@ -5,6 +5,8 @@ typedef enum {
   ROT,
   ARC,
   LINE,
+  SER,
+  CAM,
 } run_state_t;
 
 typedef struct {

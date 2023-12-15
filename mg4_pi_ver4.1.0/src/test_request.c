@@ -3,7 +3,7 @@
 #include "request.h"
 
 int main(){
-	int mode, speed, dist, pit_y, yaw_z;
+	int mode, speed, dist, pit_y, yaw_z, pwm;
 	double volt;
 	//char buf[256];
 	run_state_t state;
@@ -12,7 +12,7 @@ int main(){
 
 
 	while(1){
-		printf("0:stop  1:straight  2:rotate  3:get_mode  4:get_volt 5:servo -1:quit\n");
+		printf("0:stop  1:straight  2:rotate  3:get_mode  4:get_volt 5:servo 6:camera -1:quit\n");
 		scanf("%d",&mode);
 		
 		switch(mode){
@@ -59,9 +59,16 @@ int main(){
 			
 			printf("yaw_z? [deg]\n");
 			scanf("%d",&yaw_z);
-			request_set_runmode(STR, 10, 10);
+			//request_set_runmode(STR, 10, 10);
 			request_set_runmode(SER, pit_y, yaw_z);
 			break;
+		case 6:
+			printf("pwm? (0~255)\n");
+			scanf("%d", &pwm);
+			//state, height, pwm
+			//height=0: pwm値でずっと動作(2秒)
+			//pwm=0: 目標高さに制御
+			request_set_runmode(CAM, 0, pwm);
 		case -1:
 			return 0;
 		default:
