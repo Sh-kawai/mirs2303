@@ -29,6 +29,9 @@ def client(host=HOST, port=PORT):
     print('Send : %s' % message)
     client.send(message.encode(letter_coding))
   
+  message = "client close"
+  print('Send : %s' % message)
+  client.send(message.encode(letter_coding))
   client.close()
 
 if __name__ == "__main__":
