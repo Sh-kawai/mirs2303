@@ -28,6 +28,8 @@ def client(host=HOST, port=PORT):
     message = "client wait"
     print('Send : %s' % message)
     client.send(message.encode(letter_coding))
+  
+  client.close()
 
 if __name__ == "__main__":
   host = "127.0.0.1"
