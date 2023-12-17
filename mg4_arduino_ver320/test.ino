@@ -4,7 +4,7 @@ void test_encoder() {
 
   while (1) {
     encoder_get(&enc_l, &enc_r);
-    sprintf(str, "enc_l = %6ld, enc_r = %6ld, hi:%f", enc_l, enc_r, (float)enc_l/(float)enc_r);
+    sprintf(str, "enc_l = %6ld, enc_r = %6ld, enc_diff:%d", enc_l, enc_r, enc_l - enc_r);
     Serial.println(str);
     delay(T_CTRL);
   }
@@ -12,13 +12,14 @@ void test_encoder() {
 
 void test_distance() {
   double dist_l, dist_r;
-  char str[100], str_l[10], str_r[10];
+  char str[100], str_l[10], str_r[10], str_diff[10];
 
   while (1) {
     distance_get(&dist_l, &dist_r);
-    sprintf(str, "dist_l = %s, dist_r = %s\n",
+    sprintf(str, "dist_l = %s, dist_r = %s, dist_diff = %d\n",
             dtostrf(dist_l, 6, 1, str_l),
-            dtostrf(dist_r, 6, 1, str_r));
+            dtostrf(dist_r, 6, 1, str_r),
+            dtostrf(dist_l - dist_r, 6, 1, str_diff));
     Serial.print(str);
     delay(T_CTRL);
   }
@@ -190,6 +191,7 @@ void test_camera_ctrl_motor(int p){
   int count = 0;
   const int count_max = 1000; //10秒
   double height = 0.0;
+  int pwm = 0;
   char str[100], str_h[10];
   
   camera_ctrl_set_motor(p);
@@ -198,13 +200,55 @@ void test_camera_ctrl_motor(int p){
     camera_ctrl_execute();
     if (count % 10 == 0) {
       height = camera_get_height();
+      pwm = camera_get_pwm();
       sprintf(str, "heihgt_curr = %s, pwm = %d\n",
               dtostrf(height, 6, 1, str_h),
-              p);
+              pwm);
+      Serial.print(str);
+    }
+    //_test_enc_e();
+    delay(T_CTRL);
+    count++;
+    if(count > count_max) break;
+  }
+}
+
+void test_camera_ctrl_height(double h){
+  int i = 0;
+  int count = 0;
+  const int count_max = 1000; //10秒
+  double height = 0.0;
+  int pwm = 0;
+  char str[100], str_h[10];
+  
+  camera_ctrl_set_height(h);
+
+  while(1){
+    camera_ctrl_execute();
+    if (count % 10 == 0) {
+      height = camera_get_height();
+      pwm = camera_get_pwm();
+      sprintf(str, "heihgt_curr = %s, pwm = %d\n",
+              dtostrf(height, 6, 1, str_h),
+              pwm);
               Serial.print(str);
     }
     delay(T_CTRL);
     count++;
     if(count > count_max) break;
+  }
+}
+
+void test_enc_l(){
+  while(1){
+    _test_enc_l();
+    delay(T_CTRL);
+  }
+}
+
+void test_enc_e(){
+  while(1){
+    _test_enc_e();
+    delay(T_CTRL);
   }
 }

@@ -75,9 +75,11 @@ typedef struct {
 #define K_STR_LR 1.003
 
 // タイヤ半径 [cm] 3.2
-#define R_TIRE     4.269 
+//#define R_TIRE     4.269
+#define R_TIRE    7.4
 
 // タイヤ間隔 [cm] 25.0
+//#define D_TIRE    32.0
 #define D_TIRE    32.0
 
 // エンコーダ分解能 (A相立上り/立下りを利用するため2倍)

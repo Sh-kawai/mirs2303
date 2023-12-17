@@ -2,6 +2,8 @@
 static volatile long count_l = 0;
 static volatile long count_r = 0;
 
+static int a_curr_l, b_curr_l;
+
 void encoder_open() {
   pinMode(PIN_ENC_A_L, INPUT);
   pinMode(PIN_ENC_B_L, INPUT);
@@ -46,6 +48,9 @@ static void enc_change_l() {
 
   a_prev = a_curr;
   b_prev = b_curr;
+  
+  a_curr_l = a_curr;
+  b_curr_l = b_curr;
 }
 
 static void enc_change_r() {
@@ -65,4 +70,11 @@ static void enc_change_r() {
 
   a_prev = a_curr;
   b_prev = b_curr;
+}
+
+void _test_enc_l(){
+  Serial.print("a_curr_l = ");
+  Serial.print(a_curr_l);
+  Serial.print(" b_curr_l = ");
+  Serial.println(b_curr_l);
 }

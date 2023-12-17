@@ -32,6 +32,10 @@ void loop() {
 
   /* モータ動作テスト 引数：左モータのPWM値、右モータのPWM値　（範囲は -255～255）*/
   //test_motor(50, 50);
+  
+  //エンコーダ(AB相)
+  test_enc_l();
+  //test_enc_e();
 
   /* エンコーダテスト（モータを回転させて行う）*/
   //motor_set(-50, -50) ;test_encoder();
@@ -61,9 +65,9 @@ void loop() {
 
   /*昇降用モータ*/
   /*pwm指定制御　引数:pwm値(int)*/
-  //test_camera_ctrl_motor(100);
+  //test_camera_ctrl_motor(-1);
   /*高さ指定制御　引数:目標高さ[cm](0以上)*/
-  //test_camera_ctrl_
+  //test_camera_ctrl_height(-50000.0);
 
   /* バッテリー値の確認 */
   //test_batt();
