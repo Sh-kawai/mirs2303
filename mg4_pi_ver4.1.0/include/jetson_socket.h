@@ -19,7 +19,7 @@ public:
   // メッセージ送受信
   char* round_trip(const char s_msg[MAX_BUFFER_SIZE]);
   // サーバーを閉じる
-  void s_close();
+  int s_close();
 
 private:
   const char* host_;
@@ -30,11 +30,11 @@ private:
   char rcvmsg_[MAX_BUFFER_SIZE];
 
   // サーバーソケットの作成
-  void createServerSocket();
+  int createServerSocket();
   // サーバーソケットのバインドと接続待ちの設定
-  void bindAndListen();
+  int bindAndListen();
   // クライアントからの接続待ち
-  void acceptConnection();
+  int acceptConnection();
 };
 
 
