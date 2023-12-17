@@ -6,10 +6,15 @@
 #include "jetson_socket.h"
 
 // サーバーの接続
-void Server::s_open(){
-    createServerSocket();  // サーバーソケットの作成
-    bindAndListen();       // バインドと接続待ちの設定
-    acceptConnection();     // クライアントからの接続
+int Server::s_open(){
+    // サーバーソケットの作成
+    if(createServerSocket() == -1) return -1;
+    // バインドと接続待ちの設定
+    if(bindAndListen() == -1) return -1;
+    // クライアントからの接続
+    if(acceptConnection() == -1) return -1;
+
+    return 0;
 }
 
 // メッセージ送受信
@@ -44,16 +49,18 @@ void Server::s_close() {
 
 
 // サーバーソケットの作成
-void Server::createServerSocket() {
+int Server::createServerSocket() {
     serversock_ = socket(AF_INET, SOCK_STREAM, 0);
     if (serversock_ == -1) {
         perror("サーバーソケットの作成に失敗しました");
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
+        return -1;
     }
+    return 0;
 }
 
 // サーバーソケットのバインドと接続待ちの設定
-void Server::bindAndListen() {
+int Server::bindAndListen() {
     struct sockaddr_in server_addr;
     std::memset(&server_addr, 0, sizeof(server_addr));
 
@@ -65,20 +72,23 @@ void Server::bindAndListen() {
     // サーバーソケットのバインド
     if (bind(serversock_, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1) {
         perror("サーバーソケットのバインドに失敗しました");
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
+        return -1;
     }
 
     // 接続待ちの設定
     if (listen(serversock_, 10) == -1) {
         perror("接続待ちの設定に失敗しました");
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
+        return -1;
     }
 
     std::cout << "クライアントの接続を待っています...\n";
+    return 0;
 }
 
 // クライアントからの接続待ち
-void Server::acceptConnection() {
+int Server::acceptConnection() {
     struct sockaddr_in client_addr;
     socklen_t addr_size = sizeof(struct sockaddr_in);
 
@@ -86,8 +96,10 @@ void Server::acceptConnection() {
     clientsock_ = accept(serversock_, (struct sockaddr*)&client_addr, &addr_size);
     if (clientsock_ == -1) {
         perror("クライアントの接続受付に失敗しました");
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
+        return -1;
     }
 
     std::cout << "クライアントとの接続が確立されました\n";
+    return 0;
 }
