@@ -36,11 +36,16 @@ def init(cap_path=0):
 
 # 特徴を辞書と比較してマッチしたユーザーとスコアを返す関数
 def match(recognizer, feature1, dictionary):
+  high_user = ""
+  high_score = 0
   for element in dictionary:
     user_id, feature2 = element
     score = recognizer.match(feature1, feature2, cv2.FaceRecognizerSF_FR_COSINE)
-    if score > COSINE_THRESHOLD:
-      return True, (user_id, score)
+    if score > high_score:
+      high_score = score
+      high_user = user_id
+  if high_score > COSINE_THRESHOLD:
+    return True, (high_user, high_score)
   return False, ("", 0.0)
 
 def take_picture(capture):
@@ -75,7 +80,7 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
     # 入力サイズを指定する
     height, width, _ = image.shape
     face_detector.setInputSize((width, height))
-    print(height, width)
+    #print(height, width)
 
     # 顔を検出する
     result, faces = face_detector.detect(image)
@@ -106,7 +111,8 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
       font = cv2.FONT_HERSHEY_SIMPLEX
       scale = 0.6
       cv2.putText(image, text, position, font, scale, color, thickness, cv2.LINE_AA)
-      print(id, score)
+      if id is not "unknown":
+        print(id, score)
     cv2.namedWindow("faceCV_realtime", cv2.WINDOW_GUI_NORMAL)
     cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
     cv2.imshow("faceCV_realtime", image)
@@ -121,12 +127,13 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
       
     # fps計算
     frame_count += 1
-    if frame_count >= 30:  # 30フレームごとにFPSを計算し、表示
-      elapsed_time = time.time() - start_time
-      fps = frame_count / elapsed_time
-      fps_text = f"FPS: {fps:.2f}"
-      frame_count = 0
-      start_time = time.time()
+    #if frame_count >= 30:  # 30フレームごとにFPSを計算し、表示
+    elapsed_time = time.time() - start_time
+    fps = frame_count / elapsed_time
+    fps_text = f"FPS: {fps:.2f}"
+    print(fps_text)
+    frame_count = 0
+    start_time = time.time()
   
 if __name__ == "__main__":
   path = os.path.join(JETSON_PATH, "test/d4顔認証試験.mp4")
