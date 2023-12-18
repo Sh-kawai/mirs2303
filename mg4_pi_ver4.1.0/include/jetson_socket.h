@@ -15,11 +15,11 @@ public:
   Server(const char* host, int port) : host_(host), port_(port) {}
 
   // サーバーの接続
-  void s_open();
+  int s_open();
   // メッセージ送受信
   char* round_trip(const char s_msg[MAX_BUFFER_SIZE]);
   // サーバーを閉じる
-  int s_close();
+  void s_close();
 
 private:
   const char* host_;

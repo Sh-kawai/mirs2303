@@ -9,12 +9,12 @@
 
 int main(){
 	double volt;
-	Server Jetson;
+	Server Jetson(HOST, PORT);
 	
 	if(io_open() != 0) return -1;
 	if(arduino_open() != 0) return -1;
-	if(uss_open_l() != 0) return -1;
-	if(uss_open_r() != 0) return -1;
+	//if(uss_open_l() != 0) return -1;
+	//if(uss_open_r() != 0) return -1;
 	if(Jetson.s_open() != 0) return -1;
 	
 	printf("press enter to start\n");

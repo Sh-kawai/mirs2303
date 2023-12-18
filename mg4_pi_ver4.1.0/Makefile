@@ -9,7 +9,7 @@ PRGS :=
 PRGS += test_io test_uss test_request test_direction
 PRGS += test_capture test_number test_dir_num test_camera
 PRGS += test_server test_position test_socket
-PRGS += keyboard_controler
+PRGS += test_keyboard
 PRGS += pilot
 
 # オブジェクト
@@ -19,6 +19,7 @@ OBJS_NUM := $(addprefix $(DIR_OBJ)/, number_search.o number_detect.o)
 OBJS_SVR := $(addprefix $(DIR_OBJ)/, server.o)
 OBJS_POS := $(addprefix $(DIR_OBJ)/, position.o)
 OBJS_SOC := $(addprefix $(DIR_OBJ)/, jetson_socket.o)
+OBJS_KEY := $(addprefix $(DIR_OBJ)/, keyboard.o)
 
 # コンパイルオプション
 CC      := g++
@@ -50,7 +51,7 @@ $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp
 -include $(DIR_OBJ)/*.d
 
 # プログラム毎に生成ルールを記述
-pilot: $(OBJS_RUN) $(OBJS_CAP) $(OBJS_NUM) $(OBJS_CIR) $(OBJS_SVR) $(OBJS_POS) $(DIR_OBJ)/pilot.o
+pilot: $(OBJS_RUN) $(OBJS_CAP) $(OBJS_NUM) $(OBJS_SVR) $(OBJS_POS) $(OBJS_SOC) $(DIR_OBJ)/pilot.o
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 test_io: $(OBJS_RUN) $(DIR_OBJ)/test_io.o
@@ -86,5 +87,5 @@ test_camera: $(DIR_OBJ)/test_camera.o
 test_socket: $(OBJS_SOC) $(DIR_OBJ)/test_socket.o
 	$(CC) $^ -o $@
 
-keyboard_controler: $(OBJS_RUN) $(DIR_OBJ)/keyboard_controler.o
+test_keyboard: $(OBJS_RUN) $(OBJS_KEY) $(DIR_OBJ)/test_keyboard.o
 	$(CC) $^ -o $@ $(LDFLAGS)
