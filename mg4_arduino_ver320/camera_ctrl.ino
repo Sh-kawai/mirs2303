@@ -74,14 +74,19 @@ void _camera_motor_set(int pwm){
   }
 }
 
+void camera_ctrl_set(double h, int p){
+  if(h == 0.0) _camera_ctrl_set_motor(p);
+  else _camera_ctrl_set_height(h);
+}
+
 // 昇降高さ指定関数
-void camera_ctrl_set_height(double h){
+void _camera_ctrl_set_height(double h){
   camera_ctrl_exec_height = true;
   height_ref = h;
 }
 
 // 昇降モータ(pwm)指定関数
-void camera_ctrl_set_motor(int p){
+void _camera_ctrl_set_motor(int p){
   camera_ctrl_exec_height = false;
   height_ref = 0.0;
   h_err_prev = 0.0;

@@ -33,6 +33,10 @@ void slave() {
           Serial.println("SER");
           servo_set(command_data.val[1], command_data.val[2]);
           break;
+        case 7: // 昇降用モーター
+          Serial.println("CAM");
+          camera_ctrl_set(command_data.val[1], command_data.val[2]);
+          break;
         case 10:
           run_ctrl_get(&state, &speed, &dist);
           command_data.val[0] = ((state == STR) ? 2 : (state == ROT) ? 3 : 1);
@@ -56,6 +60,7 @@ void slave() {
     }
     run_ctrl_execute();
     vel_ctrl_execute();
+    camera_ctrl_execute();
     delay(T_CTRL);
   }
 }

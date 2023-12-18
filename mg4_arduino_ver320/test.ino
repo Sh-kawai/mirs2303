@@ -194,7 +194,7 @@ void test_camera_ctrl_motor(int p){
   int pwm = 0;
   char str[100], str_h[10];
   
-  camera_ctrl_set_motor(p);
+  _camera_ctrl_set_motor(p);
 
   while(1){
     camera_ctrl_execute();
@@ -221,7 +221,7 @@ void test_camera_ctrl_height(double h){
   int pwm = 0;
   char str[100], str_h[10];
   
-  camera_ctrl_set_height(h);
+  _camera_ctrl_set_height(h);
 
   while(1){
     camera_ctrl_execute();
