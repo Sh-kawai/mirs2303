@@ -5,6 +5,14 @@ void slave() {
   command_data_t command_data;
 
   while (1) {
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+      continue;
+    }
     if (raspi_receive(&command_data) == 0) {
       Serial.println(command_data.val[0]);
       switch (command_data.val[0]) {

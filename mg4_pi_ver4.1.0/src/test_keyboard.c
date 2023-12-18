@@ -61,8 +61,8 @@ int main() {
                 printf("[key_ctrl]setting\n");
                 printf("change speed: [str] [rot]\n");
                 scanf("%d %d",&speed_str, &speed_rot);
-                dist_str = speed_str/2;
-                dist_rot = speed_rot/2;
+                dist_str = speed_str*1.5;
+                dist_rot = speed_rot*1.5;
                 printf("setted str:%d, rot:%d\n", speed_str, speed_rot);
                 break;
             case 'q':

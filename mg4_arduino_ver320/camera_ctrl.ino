@@ -14,8 +14,8 @@ bool camera_ctrl_exec_height = true;
 void camera_ctrl_open(){
   pinMode(PIN_ENC_A_E, INPUT);
   pinMode(PIN_ENC_B_E, INPUT);
-  /*digitalWrite(PIN_ENC_A_E, HIGH);
-  digitalWrite(PIN_ENC_B_E, HIGH);*/
+  digitalWrite(PIN_ENC_A_E, HIGH);
+  digitalWrite(PIN_ENC_B_E, HIGH);
   
   pinMode(PIN_DIR_E, OUTPUT);
   pinMode(PIN_PWM_E, OUTPUT);
@@ -35,7 +35,7 @@ void camera_ctrl_execute(){
     const double Kd = 0.0;
     double h_err_curr;
     
-    Serial.println(height_ref - height_curr);
+    //Serial.println(height_ref - height_curr);
     
     h_err_curr = height_ref - height_curr;
     h_err_sum += h_err_curr;
@@ -46,7 +46,7 @@ void camera_ctrl_execute(){
   
     if(pwm - pwm_prev > accel_pwm * (T_CTRL / 1000.0)){
       pwm = pwm_prev + accel_pwm * (T_CTRL / 1000.0);
-    } else if(pwm - pwm_prev > -accel_pwm * (T_CTRL / 1000.0)){
+    } else if(pwm - pwm_prev < -accel_pwm * (T_CTRL / 1000.0)){
       pwm = pwm_prev - accel_pwm * (T_CTRL / 1000.0);
     }
     
@@ -148,6 +148,8 @@ static void camera_enc_change() {
 void _test_enc_e(){
   Serial.print("a_curr = ");
   Serial.print(a_curr_e);
-  Serial.print(" b_curr = ");
-  Serial.println(b_curr_e);
+  Serial.print(", b_curr = ");
+  Serial.print(b_curr_e);
+  Serial.print(", count_e = ");
+  Serial.println(count_e);
 }

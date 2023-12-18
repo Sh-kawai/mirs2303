@@ -3,6 +3,13 @@ void test_encoder() {
   char str[100];
 
   while (1) {
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }
     encoder_get(&enc_l, &enc_r);
     sprintf(str, "enc_l = %6ld, enc_r = %6ld, enc_diff:%d", enc_l, enc_r, enc_l - enc_r);
     Serial.println(str);
@@ -15,6 +22,13 @@ void test_distance() {
   char str[100], str_l[10], str_r[10], str_diff[10];
 
   while (1) {
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }
     distance_get(&dist_l, &dist_r);
     sprintf(str, "dist_l = %s, dist_r = %s, dist_diff = %d\n",
             dtostrf(dist_l, 6, 1, str_l),
@@ -28,7 +42,14 @@ void test_distance() {
 void test_motor(int pwm_l, int pwm_r) {
   motor_set(pwm_l, pwm_r);
   while (1) {
-        delay(T_CTRL);
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }
+    delay(T_CTRL);
   }
 }
 
@@ -43,11 +64,18 @@ void test_vel_ctrl(double vel_l, double vel_r) {
   vel_ctrl_set(vel_l, vel_r);
 
   while (1) {
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }
     vel_ctrl_execute();
     if (i >= 10) {
       vel_ctrl_get(&vel_l, &vel_r);
       vel_ctrl_get_vari(&variance);
-     sprintf(str, "vel_l = %s, vel_r = %s   variance= %s \n", 
+      sprintf(str, "vel_l = %s, vel_r = %s   variance= %s \n", 
               dtostrf(vel_l, 6, 1, str_l),
               dtostrf(vel_r, 6, 1, str_r),
               dtostrf(variance, 6, 1, str_v));
@@ -69,6 +97,13 @@ void test_run_ctrl(run_state_t state, double speed, double dist) {
   run_ctrl_set(state, speed, dist);
 
   while (1) {
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }
     run_ctrl_execute();
     vel_ctrl_execute();
     if (i >= 10) {
@@ -118,6 +153,13 @@ void test_decode() {
 void test_arc_move(double speed, double dist, double ang_vel, double ang_dist){
   run_ctrl_set_arc(ARC, speed, dist, ang_vel, ang_dist);
   while(1){
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }
     run_ctrl_execute();
     vel_ctrl_execute();
     delay(T_CTRL);
@@ -130,6 +172,13 @@ void test_arc_move_sim(double speed){
   double dist = 1000.0;
   double ang_dist = 1000.0;
   while(1){
+    /*double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }*/
     Serial.print("ang_vel_ref:" + String(ang_vel) + ", ");
     run_ctrl_set_arc(ARC, speed, dist, ang_vel, ang_dist);
     run_ctrl_execute();
@@ -197,6 +246,13 @@ void test_camera_ctrl_motor(int p){
   _camera_ctrl_set_motor(p);
 
   while(1){
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+    }
     camera_ctrl_execute();
     if (count % 10 == 0) {
       height = camera_get_height();
@@ -224,6 +280,14 @@ void test_camera_ctrl_height(double h){
   _camera_ctrl_set_height(h);
 
   while(1){
+    double batt = io_get_batt();
+    if (batt < 7.0) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+      break;
+    }
     camera_ctrl_execute();
     if (count % 10 == 0) {
       height = camera_get_height();
