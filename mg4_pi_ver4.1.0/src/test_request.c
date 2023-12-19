@@ -69,6 +69,7 @@ int main(){
 			//height=0: pwm値でずっと動作(2秒)
 			//pwm=0: 目標高さに制御
 			request_set_runmode(CAM, 0, pwm);
+			break;
 		case -1:
 			return 0;
 		default:

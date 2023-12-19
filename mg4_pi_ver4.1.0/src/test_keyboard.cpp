@@ -1,11 +1,17 @@
 #include <stdio.h>
-
+#include <thread>
+#include <chrono>
 #include "arduino.h"
 #include "request.h"
 #include "keyboard.h"
+#include "jetson_socket.h"
 
 int main() {
+    Server Jetson(HOST, PORT);
+    int loop=0;
+
     if(arduino_open() != 0) return -1;
+    if(Jetson.s_open() != 0) return -1;
 
     int input;
     int speed_str = 30;
@@ -71,6 +77,12 @@ int main() {
                 return 1;
             default:
                 break;
+        }
+
+        loop++;
+        if(loop > 1000000){
+            Jetson.round_trip("1");
+            loop = 0;
         }
     }
     return 0;
