@@ -16,7 +16,7 @@ def server(host=HOST, port=PORT):
     print("success connection")
 
     while True:
-        print("end-socket:q, get_img:1, upload:2")
+        print("end-socket:q, get_img:1, upload:2 auto_img:3")
         s_msg = input()
 
         print("send:%s" % s_msg)

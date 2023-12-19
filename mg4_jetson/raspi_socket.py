@@ -24,6 +24,8 @@ def client(host=HOST, port=PORT):
       get_img.get_img(place="kari")
     elif response == "2":
       upload.main()
+    elif response == "3":
+      get_img.get_img(place="Dlab", time_auto=True)
 
     message = "client wait"
     print('Send : %s' % message)
@@ -37,4 +39,4 @@ def client(host=HOST, port=PORT):
 if __name__ == "__main__":
   host = "127.0.0.1"
   port = 8080
-  client(host=host, port=port)
+  client()
