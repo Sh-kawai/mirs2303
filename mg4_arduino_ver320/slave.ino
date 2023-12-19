@@ -6,7 +6,7 @@ void slave() {
 
   while (1) {
     double batt = io_get_batt();
-    if (batt < 7.0) {
+    if (batt < 6.5) {
       Serial.print("low battery = ");
       Serial.println(batt);
       run_ctrl_set(STP, 0, 0);
