@@ -63,7 +63,7 @@ class GDrive:
     for file_info in files_list.get('files', []):
         file_id = file_info['id']
         self.service.files().delete(fileId=file_id).execute()
-        #print(f"File '{file_id}' deleted.")
+        print(f"File '{file_id}' deleted.")
     
 class GSpeadSheet:
   def __init__(self, sheet_id):
@@ -123,12 +123,16 @@ class GSpeadSheet:
     col_values = worksheet.col_values(2)
     
     #データの存在する行番号を取得
-    macth_rows = [i+1 for i, value in enumerate(col_values) if value in "ファイル"]
+    macth_rows = [i+1 for i, value in enumerate(col_values) if "ファイル" not in value]
+    print(macth_rows)
+    macth_rows.reverse()
+    print(macth_rows)
     
     #行の削除
     if len(macth_rows) != 0:
       for r in macth_rows:
-        worksheet.delete_rows(r)
+        if r != 1:
+          worksheet.delete_rows(r)
       print(f"スプレッドシートの{macth_rows}行目のデータを削除しました")
 
 if __name__ == "__main__":
