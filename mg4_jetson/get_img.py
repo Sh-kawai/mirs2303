@@ -14,7 +14,7 @@ def save_img(capture, place=""):
     pic_dir = os.path.join(JETSON_PATH, "pictures")
     save_path = os.path.join(pic_dir, f"{time_str}.png")
     cv2.imwrite(save_path, frame)
-    csv_handle.write(time=time_str, place=place)
+    csv_handle.write(path=PIC_CSV_PATH ,time=time_str, place=place)
     print(f"保存しました:{time_str}.png")
 
 def get_img(place="", time_auto=False):
@@ -57,7 +57,7 @@ def get_img(place="", time_auto=False):
     capture.release()
     cv2.destroyAllWindows()
 
-def save_movie():
+def save_movie(place=""):
     cap = cv2.VideoCapture(0)
 
     if not cap.isOpened():
@@ -78,6 +78,7 @@ def save_movie():
     start_time = time.time()
 
     print("Recording for {} seconds...".format(record_duration))
+    csv_handle.write(path=VID_CSV_PATH, time=start_time, place=place)
 
     while (time.time() - start_time) < record_duration:
         ret, frame = cap.read()

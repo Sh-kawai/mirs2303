@@ -7,6 +7,8 @@ def main(debug=False):
   # google drive
   Drive = google_drive.GDrive()
   SpSheet = google_drive.GSpeadSheet(SHEET_ID)
+  pic_csv = csv_handle.Handler(PIC_CSV_PATH)
+  vid_csv = csv_handle.Handler(VID_CSV_PATH)
 
   # 認証写真の取得
   pic_dir = os.path.join(JETSON_PATH, "pictures")
@@ -42,12 +44,12 @@ def main(debug=False):
     else:
       # 画像&データ アップロード
       file_id = Drive.upload(image_path, GDRIVE_FOLDER_ID)
-      shoot_date, shoot_place = csv_handle.read(image_file)
+      shoot_date, shoot_place = pic_csv.read(image_name=image_file)
       data = [image_file, file_id, "公開", shoot_date, shoot_place]
       SpSheet.insert(data, "メインデータ")
       
       # csvデータ行削除
-      csv_handle.delete_row(image_file)
+      pic_csv.delete_row(path=PIC_CSV_PATH, image_name=image_file)
       
       # 画像削除
       if os.path.exists(image_path):
