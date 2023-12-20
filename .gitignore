@@ -8,6 +8,7 @@ mg4_pi_ver4.1.0/*
 mg4_jetson/train/*
 mg4_jetson/pictures/*
 mg4_jetson/videos/*
+mg4_jetson/schedule.csv
 mg4_jetson/test/*
 mg4_jetson/knn_clf/*
 mg4_jetson/__pycache__
