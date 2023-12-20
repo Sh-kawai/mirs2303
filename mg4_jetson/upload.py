@@ -57,5 +57,5 @@ def main(debug=False):
         print(f"{image_file}を削除しました。")
 
 if __name__ == "__main__":
-  get_img.get_img()
+  #get_img.get_img()
   main(debug=False)
