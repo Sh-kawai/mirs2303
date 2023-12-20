@@ -32,7 +32,8 @@ class Handler:
       for r in reader:
         time = r["time"]
         place = r["place"]
-        if time in image_name:
+        #if time in image_name:
+        if image_name in time:
           return time, place
     return None, None
   
@@ -68,9 +69,13 @@ class Handler:
 if __name__ == "__main__":
   pic_csv = Handler(path=PIC_CSV_PATH)
   vid_csv = Handler(path=VID_CSV_PATH)
+  sch_csv = Handler(path=SCH_CSV_PATH)
   
   pic_csv.write(time="test", place="test")
   print(pic_csv.read(image_name="test"))
   
   vid_csv.write(time="test", place="test")
   print(vid_csv.read(image_name="test"))
+  
+  sch_csv.write(time="test", place="test")
+  print(sch_csv.read(image_name="test"))
