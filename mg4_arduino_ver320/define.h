@@ -100,8 +100,8 @@ typedef struct {
 #define V_RATIO 0.5 
 
 // ライントレース白黒
-#define BLACK  500
-#define WHITE  700
+#define BLACK  1010
+#define WHITE   980
 
 // 昇降用モーター
 // ねじピッチ(隣り合うねじ山の幅)

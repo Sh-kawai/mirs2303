@@ -23,7 +23,7 @@ void loop() {
   */
 
   /* RasPi からの指令で動作させるとき、slave を有効にする。*/
-  //slave();
+ // slave();
   
   /* --------------機能のテスト---------------------------------------------
     テスト関数 test_*() のいずれかを有効にする。
@@ -50,10 +50,10 @@ void loop() {
     角度 > 0 ：反時計回り、角度 < 0 ：時計回り　（角速度は常に > 0）
   */
   //test_run_ctrl(STR, 25, 1000);
-  test_run_ctrl(ROT, 45, -90);
-  //test_run_ctrl(LINE, 20, 0);
+  //test_run_ctrl(ROT, 45, -90);
+ test_run_ctrl(LINE, 10,  100);
 
-  /*円弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
+  /*弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
   //test_arc_move(10, 100, 45 ,90);
   //test_arc_move_sim(100);
   
@@ -66,7 +66,7 @@ void loop() {
 
   /*昇降用モータ*/
   /*pwm指定制御　引数:pwm値(int)*/
-  //test_camera_ctrl_motor(255);
+//test_camera_ctrl_motor(255);
   /*高さ指定制御　引数:目標高さ[cm](0以上)*/
   //test_camera_ctrl_height(-10000.0);
 

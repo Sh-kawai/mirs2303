@@ -27,9 +27,7 @@ void run_ctrl_execute() {
   const double Kr = 0.0;
 
   // ライントレース用PIDゲイン
-  const double Kl_p = 0.4;
-  const double Kl_i = 0.0;
-  const double Kl_d = 1.6;
+  
 
   int sign;
   double d_l, d_r, v_l, v_r, ratio, vel_ref, vel_mod;
@@ -140,19 +138,29 @@ void run_ctrl_execute() {
       
       break;
     case LINE: // ライントレース
+      const double Kl_p = 0.4;
+      const double Kl_i = 0.0;
+      const double Kl_d = 2.5;
       int gray, light0, light1, light2, light3;
 
       gray = (BLACK + WHITE)/2;
       io_get_light(&light0, &light1, &light2, &light3);
       er = light1 - light2;
       er_prev = er;
-
-      vel_ref = sign * speed_ref * ratio;
+      ratio = 1;
+      if(light0 < 1005 || light1 < 1000 || light2 < 1000){
+          vel_ref =sign * 1 *ratio; 
+      }else{
+          vel_ref = sign * speed_ref * ratio;
+      }
+      
+   
 
       if(light1 != WHITE && light2 != WHITE){
         //左右の値が両方ともwhiteじゃないなら
         vel_mod = Kl_p * er + Kl_d * (er - er_prev);
         vel_ctrl_set((vel_ref - vel_mod), (vel_ref + vel_mod));
+        Serial.println(vel_ref);
       }else{
         vel_ctrl_set(0.0, 0.0);
       }
@@ -162,11 +170,11 @@ void run_ctrl_execute() {
 }
 
 void run_ctrl_set(run_state_t state, double speed, double dist) {
-  if(run_state == state && speed_ref == abs(speed)){
+ /* if(run_state == state && speed_ref == abs(speed)){
     dist_ref = dist + dist_curr;
   } else if(run_state == state && dist_ref == dist){
     speed_ref = abs(speed);
-  } else {
+  } else {*/
     run_state = state;
     speed_ref = abs(speed);
     dist_ref = dist;
@@ -176,7 +184,7 @@ void run_ctrl_set(run_state_t state, double speed, double dist) {
     er = 0;
     er_prev = 0;
     er_sum = 0;
-  }
+  //}
   /*
   run_state = state;
   speed_ref = abs(speed);
