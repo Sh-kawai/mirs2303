@@ -5,6 +5,9 @@ import upload, get_img
 from define import *
 
 def client(host=HOST, port=PORT):
+  
+  state = 0
+  # エンコード
   letter_coding = "UTF-8"
 
   # オブジェクトの作成
@@ -25,10 +28,13 @@ def client(host=HOST, port=PORT):
       elif response == "1":
         get_img.get_img(place="kari")
       elif response == "2":
-        upload.main()
-      elif response == "3":
-        thread = threading.Thread(target=get_img.get_img, kwargs={"place": "Dlab", "time_auto": True}, daemon=True)
+        thread = threading.Thread(target=get_img.get_img, kwargs={"time_auto": True}, daemon=True)
         thread.start()
+      elif response == "22":
+        # thread end process
+        pass
+      elif response == "3":
+        upload.main()
 
     except FileNotFoundError as e:
       message = f"[jetson] FileNotFoundError: {e}"

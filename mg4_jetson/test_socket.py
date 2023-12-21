@@ -1,8 +1,26 @@
 import socket
 import threading
 import time
+import paramiko
+
 import raspi_socket
 from define import *
+
+def ssh_remote():
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    
+    # client side setting ip address
+    IP = HOST
+    USER = "pi"
+    PASS = "raspberry"
+    client.connect(IP, username=USER, password=PASS)
+    
+    EXEC_CMD = "cd ~/mirs2303/mirs2303/mg4_pi_ver4.1.0; ./main"
+    
+    stdin, stdout, stderr = client.exec_command(EXEC_CMD)
+    
+    print
 
 def server(host=HOST, port=PORT):
     serversock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
