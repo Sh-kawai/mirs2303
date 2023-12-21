@@ -5,7 +5,8 @@ import time
 import csv_handle
 from define import *
 
-def save_img(capture, place=""):
+def save_img(capture, place="", subject=""):
+    pic_csv = csv_handle.Handler(path=PIC_CSV_PATH)
     # 現在の時刻を取得
     current_time = datetime.now()
     time_str = current_time.strftime('%Y-%m-%d_%H-%M-%S')  # 時刻のフォーマットを指定
@@ -14,10 +15,13 @@ def save_img(capture, place=""):
     pic_dir = os.path.join(JETSON_PATH, "pictures")
     save_path = os.path.join(pic_dir, f"{time_str}.png")
     cv2.imwrite(save_path, frame)
-    csv_handle.write(path=PIC_CSV_PATH ,time=time_str, place=place)
+    pic_csv.write(time=time_str, place=place, subject=subject)
     print(f"保存しました:{time_str}.png")
+    print(f"保存先:{save_path}")
+    if os.path.isfile(save_path):
+        print("treu")
 
-def get_img(place="", time_auto=False):
+def get_img(place="", time_auto=False, click=False):
     # カメラを起動
     capture = cv2.VideoCapture(0)
     if not capture.isOpened():
@@ -46,8 +50,12 @@ def get_img(place="", time_auto=False):
                 save_img(capture=capture, place=place)
                 start_time = time.time()
         #elif keyInp & 0xFF == 13:
+        if click:
+            if keyInp & 0xFF == 13:
+                save_img(capture=capture)
+                break
         else:
-            save_img(capture=capture, place=place)
+            save_img(capture=capture)
             break
         
         # 画像をウィンドウに表示
@@ -57,7 +65,8 @@ def get_img(place="", time_auto=False):
     capture.release()
     cv2.destroyAllWindows()
 
-def save_movie(place=""):
+def save_movie(place="", subject=""):
+    vid_csv = csv_handle.Handler(path=VID_CSV_PATH)
     cap = cv2.VideoCapture(0)
 
     if not cap.isOpened():
@@ -78,7 +87,7 @@ def save_movie(place=""):
     start_time = time.time()
 
     print("Recording for {} seconds...".format(record_duration))
-    csv_handle.write(path=VID_CSV_PATH, time=start_time, place=place)
+    vid_csv.write(time=start_time, place=place, subject=subject)
 
     while (time.time() - start_time) < record_duration:
         ret, frame = cap.read()
@@ -106,5 +115,5 @@ def save_movie(place=""):
     print("Recording completed. Video saved as", output_file)
 
 if __name__ == "__main__":
-    #get_img(place="Dlab", time_auto=True) 
-    save_movie()
+    get_img(place="Dlab", time_auto=False, click=True) 
+    #save_movie()
