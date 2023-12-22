@@ -24,6 +24,10 @@ def face_cut():
       if image is None:
         continue
 
+      # resize
+      size = (1280, 720) # (w, h)
+      image = cv2.resize(image, size)
+
       # 画像が3チャンネル以外の場合は3チャンネルに変換する
       channels = 1 if len(image.shape) == 2 else image.shape[2]
       if channels == 1:

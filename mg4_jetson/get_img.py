@@ -5,6 +5,18 @@ import time
 import csv_handle
 from define import *
 
+def cap_init(cap_path=0):
+    cap = cv2.VideoCapture(cap_path)
+    if not cap.isOpened():
+        print("エラー: カメラを開けませんでした。")
+        return None
+    
+    height = 720
+    width = 1280
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    return cap
+
 def save_img(capture, place="", subject=""):
     pic_csv = csv_handle.Handler(path=PIC_CSV_PATH)
     # 現在の時刻を取得
@@ -23,10 +35,7 @@ def save_img(capture, place="", subject=""):
 
 def get_img(place="", time_auto=False, click=False):
     # カメラを起動
-    capture = cv2.VideoCapture(0)
-    if not capture.isOpened():
-        print("エラー: カメラを開けませんでした。")
-        return False
+    capture = cap_init()
 
     auto_time = 30
     start_time = time.time()
@@ -59,6 +68,9 @@ def get_img(place="", time_auto=False, click=False):
             break
         
         # 画像をウィンドウに表示
+        height, width, _ = frame.shape
+        txt = f"h:{height} w:{width}"
+        cv2.putText(frame, txt, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
         cv2.imshow("frame", frame)
 
     # 解放
@@ -67,11 +79,7 @@ def get_img(place="", time_auto=False, click=False):
 
 def save_movie(place="", subject=""):
     vid_csv = csv_handle.Handler(path=VID_CSV_PATH)
-    cap = cv2.VideoCapture(0)
-
-    if not cap.isOpened():
-        print("Error: Could not open camera")
-        exit()
+    cap = cap_init()
     
     frame_width = int(cap.get(3))
     frame_height = int(cap.get(4))

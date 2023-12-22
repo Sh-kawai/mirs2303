@@ -3,6 +3,7 @@ import glob
 import numpy as np
 import cv2
 import time
+import get_img
 
 from define import *
 
@@ -13,9 +14,7 @@ def init(cap_path=0):
   train_dir = os.path.join(JETSON_PATH, "train")
   
   # キャプチャを開く
-  capture = cv2.VideoCapture(cap_path) # カメラ
-  if not capture.isOpened():
-    exit()
+  capture = get_img.cap_init(cap_path=cap_path)
   
   # 特徴を読み込む
   dictionary = []
@@ -46,7 +45,8 @@ def match(recognizer, feature1, dictionary):
       high_user = user_id
   if high_score > COSINE_THRESHOLD:
     return True, (high_user, high_score)
-  return False, ("", 0.0)
+  return False, (high_user, high_score)
+  #return False, ("", 0.0)
 
 def take_picture(capture):
   train_dir = os.path.join(JETSON_PATH, "train")
@@ -137,6 +137,6 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
   
 if __name__ == "__main__":
   path = os.path.join(JETSON_PATH, "test/d4顔認証試験.mp4")
-  cap, dict, detector, recognizer = init(path)
+  cap, dict, detector, recognizer = init()
   recognition(cap, dict, detector, recognizer)
   

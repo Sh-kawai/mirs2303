@@ -30,7 +30,7 @@ def server(host=HOST, port=PORT):
     serversock.listen(10)
     timeout = 10 #[s]
     serversock.settimeout(timeout)  # timeout setting
-    print("waiting for connection...")
+    print(f"waiting for connection...(timeout {timeout}sec)")
 
     try:
         clientsock, client_address = serversock.accept()
@@ -44,7 +44,7 @@ def server(host=HOST, port=PORT):
     print("success connection")
 
     while True:
-        print("end-socket:q, get_img:1, upload:2 auto_img:3")
+        print("end-socket:q, get_img:1, get_auto_img:2 upload:3")
         s_msg = input()
 
         print("send:%s" % s_msg)
