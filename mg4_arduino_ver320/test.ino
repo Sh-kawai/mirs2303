@@ -98,7 +98,7 @@ void test_run_ctrl(run_state_t state, double speed, double dist) {
 
   while (1) {
     double batt = io_get_batt();
-    if (batt < 7.0) {
+    if (batt < 3.0) {
       Serial.print("low battery = ");
       Serial.println(batt);
       run_ctrl_set(STP, 0, 0);
@@ -108,8 +108,8 @@ void test_run_ctrl(run_state_t state, double speed, double dist) {
     vel_ctrl_execute();
     if (i >= 10) {
       run_ctrl_get(&state, &speed, &dist);
-      sprintf(str, "state = %s, speed = %s, dist = %s\n",
-              ((state == STR) ? "STR" : (state == ROT) ? "ROT" : "STP"),
+      sprintf(str, "state = %d, speed = %s, dist = %s\n",
+              state,
               dtostrf(speed, 6, 1, str_speed),
               dtostrf(dist, 6, 1, str_dist));
       Serial.print(str);
