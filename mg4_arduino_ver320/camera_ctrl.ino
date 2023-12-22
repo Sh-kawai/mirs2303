@@ -55,6 +55,9 @@ void camera_ctrl_execute(){
   pwm_prev = pwm;
 
   _camera_motor_set(int(pwm));
+  
+  Serial.print("count_e=");
+  Serial.println(count_e);
 }
 
 // 昇降用モーター指令関数

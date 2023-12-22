@@ -101,7 +101,7 @@ typedef struct {
 
 // ライントレース白黒
 #define BLACK  1010
-#define WHITE   980
+#define WHITE   975
 
 // 昇降用モーター
 // ねじピッチ(隣り合うねじ山の幅)
