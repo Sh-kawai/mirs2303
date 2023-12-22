@@ -1,6 +1,5 @@
 import csv_handle
 from datetime import datetime
-import re
 from define import *
 
 subject_time = {

@@ -2,6 +2,7 @@ import cv2
 from datetime import datetime
 import os
 import time
+import queue
 import csv_handle
 from define import *
 
@@ -26,6 +27,7 @@ def save_img(capture, place="", subject=""):
     ret, frame = capture.read()
     pic_dir = os.path.join(JETSON_PATH, "pictures")
     save_path = os.path.join(pic_dir, f"{time_str}.png")
+
     cv2.imwrite(save_path, frame)
     pic_csv.write(time=time_str, place=place, subject=subject)
     print(f"保存しました:{time_str}.png")
@@ -33,12 +35,10 @@ def save_img(capture, place="", subject=""):
     if os.path.isfile(save_path):
         print("treu")
 
-def get_img(place="", time_auto=False, click=False):
+def get_img(click=False):
     # カメラを起動
     capture = cap_init()
 
-    auto_time = 30
-    start_time = time.time()
     while(True):
         # 1フレームの画像を取得
         ret, frame = capture.read()
@@ -50,14 +50,6 @@ def get_img(place="", time_auto=False, click=False):
             print("KeyInput q: finish get_img()")
             break
 
-        if time_auto:
-            elapsed_time = time.time() - start_time
-            remaining_time = int(auto_time - elapsed_time)
-            text = f"{remaining_time}"
-            cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
-            if remaining_time <= 0:
-                save_img(capture=capture, place=place)
-                start_time = time.time()
         #elif keyInp & 0xFF == 13:
         if click:
             if keyInp & 0xFF == 13:
@@ -76,6 +68,46 @@ def get_img(place="", time_auto=False, click=False):
     # 解放
     capture.release()
     cv2.destroyAllWindows()
+
+def get_auto_img(q_stop, show=False):
+    # カメラを起動
+    capture = cap_init()
+
+    auto_time = 30
+    start_time = time.time()
+
+    while True:
+        # 1フレームの画像を取得
+        ret, frame = capture.read()
+
+        keyInp = cv2.waitKey(1)
+
+        if not q_stop.empty():
+            if q_stop.get():
+                print("[get_auto_img] stop request")
+                break
+        
+        # qを押されたら停止
+        if keyInp & 0xFF == ord('q'):
+            print("KeyInput q: finish get_img()")
+            break
+
+        elapsed_time = time.time() - start_time
+        remaining_time = int(auto_time - elapsed_time)
+        if remaining_time <= 0:
+            save_img(capture=capture)
+            start_time = time.time()
+        
+        if show:
+            # 画像をウィンドウに表示
+            text = f"{remaining_time}"
+            cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+            cv2.imshow("frame", frame)
+    
+    # 解放
+    capture.release()
+    cv2.destroyAllWindows()
+
 
 def save_movie(place="", subject=""):
     vid_csv = csv_handle.Handler(path=VID_CSV_PATH)
@@ -123,5 +155,5 @@ def save_movie(place="", subject=""):
     print("Recording completed. Video saved as", output_file)
 
 if __name__ == "__main__":
-    get_img(place="Dlab", time_auto=False, click=True) 
+    get_img(place="Dlab", click=True) 
     #save_movie()

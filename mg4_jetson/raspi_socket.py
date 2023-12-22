@@ -1,5 +1,6 @@
 import socket
 import threading
+import queue
 import upload, get_img
 
 from define import *
@@ -14,7 +15,10 @@ def client(host=HOST, port=PORT):
   client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   # サーバーに接続
   client.connect((host, port))
-  
+
+  # thread share data(get_auto_img)
+  q_stop = queue.Queue(1)
+  auto_run = False
 
   print("success connection")
   while True:
@@ -22,17 +26,30 @@ def client(host=HOST, port=PORT):
     response = client.recv(4096).decode()
     print('Received: %s' % response)
 
+    message = "client wait"
+
     try:
       if response == "q":
         break
       elif response == "1":
         get_img.get_img(place="kari")
       elif response == "2":
-        thread = threading.Thread(target=get_img.get_img, kwargs={"time_auto": True}, daemon=True)
-        thread.start()
+        if not auto_run:
+          thread_get_auto_img = threading.Thread(target=get_img.get_auto_img, kwargs={"q_stop": q_stop, "show":True}, daemon=True)
+          thread_get_auto_img.start()
+          message = "Start get_auto_img()"
+        else:
+          message = "already start get_auto_img()"
+        auto_run = True
       elif response == "22":
-        # thread end process
-        pass
+        if auto_run:
+          # thread end process
+          q_stop.put(True)
+          thread_get_auto_img.join()
+          message = "Finish get_auto_img()"
+        else:
+          message = "don't run get_auto_img()"
+        auto_run = False
       elif response == "3":
         upload.main()
 
@@ -51,7 +68,6 @@ def client(host=HOST, port=PORT):
       client.close()
       exit()
 
-    message = "client wait"
     print('Send : %s' % message)
     client.send(message.encode(letter_coding))
   
