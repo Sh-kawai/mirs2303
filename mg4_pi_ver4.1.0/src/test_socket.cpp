@@ -13,7 +13,7 @@ int main() {
     server.s_open();
 
     while (true) {
-        std::cout << "end-socket:q, get_img:1, upload:2, message:[string]\n";
+        std::cout << "end-socket:q, get_img:1, get_img[auto]:2, upload:3, message:[string]\n";
         std::cin.getline(s_msg, MAX_BUFFER_SIZE);
 
         // メッセージの送受信

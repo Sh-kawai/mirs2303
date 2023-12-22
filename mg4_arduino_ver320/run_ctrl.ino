@@ -149,12 +149,15 @@ void run_ctrl_execute() {
 
       vel_ref = sign * speed_ref * ratio;
 
-      if(light1 != WHITE && light2 != WHITE){
+      dist_curr  = (d_l + d_r) / 2.0;
+      if ((dist_ref - dist_curr) < 0 || light1 == WHITE && light2 == WHITE){
+        run_state = STP;
+        vel_ctrl_set(0.0, 0.0);
+      //} else if (light1 != WHITE && light2 != WHITE){
+      } else {
         //左右の値が両方ともwhiteじゃないなら
         vel_mod = Kl_p * er + Kl_d * (er - er_prev);
         vel_ctrl_set((vel_ref - vel_mod), (vel_ref + vel_mod));
-      }else{
-        vel_ctrl_set(0.0, 0.0);
       }
 
       break;
