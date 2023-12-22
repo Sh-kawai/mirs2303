@@ -55,6 +55,8 @@ def main(debug=False):
       if os.path.exists(image_path):
         os.remove(image_path)
         print(f"{image_file}を削除しました。")
+  
+  pic_csv.delete_all()
 
 if __name__ == "__main__":
   #get_img.get_img()

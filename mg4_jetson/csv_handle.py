@@ -68,6 +68,16 @@ class Handler:
       writer.writeheader()
       for d in data:
         writer.writerow(d)
+  
+  def delete_all(self):
+    with open(self.path, "r", newline="") as f:
+      reader = csv.DictReader(f)
+      fieldnames = reader.fieldnames
+          
+    with open(self.path, "w", newline="") as f:
+      writer = csv.DictWriter(f, fieldnames=fieldnames)
+      writer.writeheader()
+
 
 if __name__ == "__main__":
   pic_csv = Handler(path=PIC_CSV_PATH)
