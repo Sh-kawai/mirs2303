@@ -85,7 +85,7 @@ class GSpeadSheet:
     
     #ワークシートを選択
     worksheet = self.spreadsheet.worksheet(sheet_name)
-    
+    print(data)
     #データの挿入
     worksheet.append_row(data)
     

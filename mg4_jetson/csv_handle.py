@@ -34,9 +34,9 @@ class Handler:
         place = r["place"]
         subject = r["subject"]
         #if time in image_name:
-        if name in r[label]:
+        if r[label] in name:
           return time, place, subject
-    return None, None, None
+      return None, None, None
   
   def read_all(self):
     data = []
@@ -58,7 +58,7 @@ class Handler:
       for r in reader:
         #time = r["time"]
         #if time in image_name:
-        if name == r[label]:
+        if r[label] in name:
           continue
         else:
           data.append(r)

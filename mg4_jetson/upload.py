@@ -44,18 +44,19 @@ def main(debug=False):
     else:
       # 画像&データ アップロード
       file_id = Drive.upload(image_path, GDRIVE_FOLDER_ID)
-      shoot_date, shoot_place = pic_csv.read(image_name=image_file)
-      data = [image_file, file_id, "公開", shoot_date, shoot_place]
+      shoot_date, shoot_place, shoot_subject = pic_csv.read(name=image_file)
+      data = [image_file, file_id, "公開", shoot_date, shoot_place, shoot_subject]
       SpSheet.insert(data, "メインデータ")
       
       # csvデータ行削除
-      pic_csv.delete_row(path=PIC_CSV_PATH, image_name=image_file)
+      pic_csv.delete_row(name=image_file)
       
       # 画像削除
       if os.path.exists(image_path):
         os.remove(image_path)
         print(f"{image_file}を削除しました。")
   
+  print("clean csv file data")
   pic_csv.delete_all()
 
 if __name__ == "__main__":
