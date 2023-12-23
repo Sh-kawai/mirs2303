@@ -3,7 +3,6 @@ import threading
 import time
 import paramiko
 
-import raspi_socket
 from define import *
 
 def ssh_remote():
@@ -20,7 +19,7 @@ def ssh_remote():
     
     stdin, stdout, stderr = client.exec_command(EXEC_CMD)
     
-    print
+    print(stdout)
 
 def server(host=HOST, port=PORT):
     serversock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
