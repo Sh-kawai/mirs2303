@@ -4,7 +4,7 @@ import os
 JETSON_PATH = os.path.relpath(os.path.dirname(__file__))
 PIC_CSV_PATH = os.path.join(JETSON_PATH, "pictures/picture_data.csv")
 VID_CSV_PATH = os.path.join(JETSON_PATH, "videos/video_data.csv")
-SCH_CSV_PATH = os.path.join(JETSON_PATH, "schedule.csv")
+SCH_CSV_PATH = os.path.join(JETSON_PATH, "schedule_app/schedule.csv")
 GDRIVE_FOLDER_ID = "1CONPdtwSL4rP9xj4kQDjPVK7Fi-I8GkE"
 SHEET_ID = "1e6MzBqjgl8S1QtGBeQOWqrg8rwIqeiarAl570BGflG0"
 SERVICE_JSON = "photo-test-393509-a09fbab1df81.json"

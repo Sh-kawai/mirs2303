@@ -4,6 +4,7 @@ import os
 import time
 import queue
 import csv_handle
+import schedule
 from define import *
 
 def cap_init(cap_path=0):
@@ -18,22 +19,28 @@ def cap_init(cap_path=0):
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     return cap
 
-def save_img(capture, place="", subject=""):
+def save_img(capture=None, dir_path=None):
     pic_csv = csv_handle.Handler(path=PIC_CSV_PATH)
     # 現在の時刻を取得
     current_time = datetime.now()
     time_str = current_time.strftime('%Y-%m-%d_%H-%M-%S')  # 時刻のフォーマットを指定
-    # 画像を保存
+    
+    # 画像取得
     ret, frame = capture.read()
-    pic_dir = os.path.join(JETSON_PATH, "pictures")
-    save_path = os.path.join(pic_dir, f"{time_str}.png")
-
+    
+    # 画像を保存
+    #pic_dir = os.path.join(JETSON_PATH, "pictures")
+    save_path = os.path.join(dir_path, f"{time_str}.png")
     cv2.imwrite(save_path, frame)
-    pic_csv.write(time=time_str, place=place, subject=subject)
-    print(f"保存しました:{time_str}.png")
-    print(f"保存先:{save_path}")
     if os.path.isfile(save_path):
-        print("treu")
+        print(f"保存しました:{time_str}.png")
+        print(f"保存先:{save_path}")
+    
+        # add csv data
+        place =schedule.now_schedule()["place"]
+        subject = schedule.now_schedule()["subject"]
+        pic_csv.write(time=time_str, place=place, subject=subject)
+        print(f"csv recode:{time_str}, {place}, {subject}")
 
 def get_img(click=False):
     # カメラを起動
@@ -155,5 +162,8 @@ def save_movie(place="", subject=""):
     print("Recording completed. Video saved as", output_file)
 
 if __name__ == "__main__":
-    get_img(place="Dlab", click=True) 
+    cap = cap_init()
+    pic_dir = os.path.join(JETSON_PATH, "pictures")
+    #get_img(click=True)
+    save_img(cap, pic_dir)
     #save_movie()

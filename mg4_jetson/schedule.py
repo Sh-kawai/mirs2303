@@ -24,16 +24,14 @@ def get_schedule():
   schedule = schedule_csv.read_all()
   return schedule
 
-def set_schedule(year=None, month=None, day=None, weekday=None, start=None, finish=None, place=""):
-  args = [year, month, day, weekday, start, finish]
+def set_schedule(year=None, month=None, day=None, start=None, finish=None, place="", subject=""):
+  args = [year, month, day, start, finish]
   if None not in args:
-    time = f"{year}-{month}-{day}_{weekday}_{start}_{finish}"
+    time = f"{year}-{month}-{day}_{start}_{finish}"
     schedule_csv = csv_handle.Handler(path=SCH_CSV_PATH)
-    schedule_csv.write(time, place)
+    schedule_csv.write(time, place, subject)
   else:
-    print("not match format : 'YYYY-mm-dd_WEK_(num)_(num)'")
-
-set_schedule(2023, 12, 21, "TUE", 1, 2)
+    print("not match format : 'YYYY-mm-dd_(num)_(num)'")
 
 def now_schedule():
   schedule = get_schedule()
@@ -45,7 +43,9 @@ def now_schedule():
   now_time = now.time()
   
   for sch in schedule:
-    date, wk_day, start, finish = sch[0].split("_")
+    date, start, finish = sch[0].split("_")
+    place = sch[1]
+    subject = sch[2]
     if date == str(now_date):
       start_str = get_start_time(start)
       finish_str = get_finish_time(finish)
@@ -55,7 +55,18 @@ def now_schedule():
       finish_time = datetime.strptime(finish_str, "%H:%M:%S").time()
       
       if start_time < now_time and now_time < finish_time:
-        return sch
+        res = {
+          "date":date,
+          "start":start_str,
+          "finish":finish_str,
+          "place":place,
+          "subject":subject
+        }
+        return res
   return None
 
-print(now_schedule())
+if __name__ == "__main__":
+  set_schedule(2023, 12, 23, 1, 8)
+  get_schedule()
+  print(now_schedule())
+  print(now_schedule()["start"])
