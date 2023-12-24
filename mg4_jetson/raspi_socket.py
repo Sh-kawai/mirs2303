@@ -19,7 +19,13 @@ def client(host=HOST, port=PORT):
   # thread share data(get_auto_img)
   q_stop = queue.Queue(1)
   auto_run = False
-
+  
+  # thread share data(upload soon)
+  q_save_e = queue.Queue(1)
+  
+  #capture flag
+  cap_open_state = False
+  
   print("success connection")
   while True:
     print("Waiting server response...")
@@ -32,15 +38,19 @@ def client(host=HOST, port=PORT):
       if response == "q":
         break
       elif response == "1": # get_img once
-        get_img.save_img()
+        if not cap_open_state:
+          get_img.save_img()
+        else:
+          message = "already open capture\nDon't save_img()"
       elif response == "2": # start get_auto_img
-        if not auto_run:
+        if not auto_run or not cap_open_state:
           thread_get_auto_img = threading.Thread(target=get_img.save_auto_img, kwargs={"q_stop": q_stop, "show":True}, daemon=True)
           thread_get_auto_img.start()
           message = "Start get_auto_img()"
         else:
           message = "already start get_auto_img()"
         auto_run = True
+        cap_open_state = True
       elif response == "22": # stop get_auto_img
         if auto_run:
           # thread end process
@@ -50,8 +60,11 @@ def client(host=HOST, port=PORT):
         else:
           message = "don't run get_auto_img()"
         auto_run = False
+        cap_open_state = False
       elif response == "3": # upload for gdrive
         upload.main(gdrive_main=True)
+      elif response == "4": # upload soon
+        pass
 
     except FileNotFoundError as e:
       message = f"[jetson] FileNotFoundError: {e}"
