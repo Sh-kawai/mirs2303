@@ -3,9 +3,12 @@ import glob
 import numpy as np
 import cv2
 import time
-import get_img
 
-from define import *
+#import mg4_jetson.src.get_img as get_img
+#from mg4_jetson.src.modules.define import *
+
+import get_img
+from modules.define import *
 
 COSINE_THRESHOLD = 0.363
 NORML2_THRESHOLD = 1.128

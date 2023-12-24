@@ -43,4 +43,4 @@ def get_train_img():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    get_img()
+    get_train_img()

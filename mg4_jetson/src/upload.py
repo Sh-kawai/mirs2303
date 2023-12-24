@@ -1,7 +1,9 @@
 import os
-import faceCV_recognition
-import google_drive, csv_handle, get_img
-from define import *
+
+from modules import faceCV_recognition
+from modules import google_drive
+from modules import csv_handle
+from modules.define import *
 
 def upload(image_file, debug=False, gdrive_main=False):
   Drive = google_drive.GDrive()

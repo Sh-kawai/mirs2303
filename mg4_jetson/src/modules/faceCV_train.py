@@ -2,6 +2,7 @@ import os
 import numpy as np
 import cv2
 
+#from mg4_jetson.src.modules.define import *
 from define import *
 
 def face_cut():

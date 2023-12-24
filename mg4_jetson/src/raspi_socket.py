@@ -1,9 +1,10 @@
 import socket
 import threading
 import queue
-import upload, get_img
 
-from define import *
+import upload
+import get_img
+from modules.define import *
 
 def client(host=HOST, port=PORT):
   

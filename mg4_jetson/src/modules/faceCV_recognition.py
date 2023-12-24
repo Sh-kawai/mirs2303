@@ -4,11 +4,13 @@ import numpy as np
 import cv2
 from PIL import Image, ImageDraw
 
+#from mg4_jetson.src.modules.define import *
 from define import *
 
 COSINE_THRESHOLD = 0.363
 NORML2_THRESHOLD = 1.128
 
+# 特徴&顔認証モデルの取得
 def init():
   # 学習モデルの取得
   train_dir = os.path.join(JETSON_PATH, "train")
@@ -30,6 +32,7 @@ def init():
   
   return dictionary, face_detector, face_recognizer
 
+# 公開可能か判断
 def check_prohibit(delete_users, recognition_data):
   for face, match_flag, user in recognition_data:
     if user in delete_users:
@@ -45,6 +48,7 @@ def match(recognizer, feature1, dictionary):
       return True, (user_id, score)
   return False, ("unknown", 0.0)
 
+# 顔認証の実行
 def recognition(img_path, dictionary, face_detector, face_recognizer):
   recognition_data = []
   
@@ -85,6 +89,7 @@ def recognition(img_path, dictionary, face_detector, face_recognizer):
     
   return recognition_data
 
+# 顔認証結果の画像表示
 def show_recognition_image(img_path, recognition_data):
   pil_image = Image.open(img_path).convert("RGB")
   draw = ImageDraw.Draw(pil_image)

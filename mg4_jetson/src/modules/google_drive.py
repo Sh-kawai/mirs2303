@@ -6,12 +6,11 @@ from googleapiclient.errors import HttpError
 import gspread
 from datetime import datetime
 
+#from mg4_jetson.src.modules.define import *
 from define import *
 
 class GDrive:
-  def __init__(self):
-    SERVICE_KEY_FILE = os.path.join(JETSON_PATH, SERVICE_JSON)
-    
+  def __init__(self):    
     #サービスアカウントキーを指定して認証を作成
     creds = service_account.Credentials.from_service_account_file(SERVICE_KEY_FILE, scopes=['https://www.googleapis.com/auth/drive'])
     
@@ -66,9 +65,7 @@ class GDrive:
         print(f"File '{file_id}' deleted.")
     
 class GSpeadSheet:
-  def __init__(self, sheet_id):
-    SERVICE_KEY_FILE = os.path.join(JETSON_PATH, SERVICE_JSON)
-    
+  def __init__(self, sheet_id):    
     #サービスアカウントキーを指定して認証を作成
     creds = service_account.Credentials.from_service_account_file(SERVICE_KEY_FILE, scopes=['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets'])
     
