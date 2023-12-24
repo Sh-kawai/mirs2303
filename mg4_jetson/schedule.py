@@ -63,7 +63,14 @@ def now_schedule():
           "subject":subject
         }
         return res
-  return None
+  res = {
+          "date":None,
+          "start":None,
+          "finish":None,
+          "place":None,
+          "subject":None
+        }
+  return res
 
 if __name__ == "__main__":
   set_schedule(2023, 12, 23, 1, 8)
