@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from modules import csv_handle
-from modules.define import *
+import csv_handle
+from define import *
 
 subject_time = {
   "1":["8:50:00", "9:35:00"],

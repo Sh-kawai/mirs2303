@@ -3,7 +3,7 @@ import threading
 import time
 import paramiko
 
-from modules.define import *
+from define import *
 
 def ssh_remote():
     client = paramiko.SSHClient()

@@ -8,7 +8,7 @@ import time
 #from mg4_jetson.src.modules.define import *
 
 import get_img
-from modules.define import *
+from define import *
 
 COSINE_THRESHOLD = 0.363
 NORML2_THRESHOLD = 1.128

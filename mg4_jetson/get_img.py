@@ -4,9 +4,9 @@ import os
 import time
 import queue
 
-from modules import csv_handle
+import csv_handle
 import schedule
-from modules.define import *
+from define import *
 
 # カメラオープン
 def cap_init(cap_path=0):

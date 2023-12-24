@@ -2,9 +2,9 @@ import socket
 import threading
 import queue
 
-import upload
+import mg4_jetson.upload as upload
 import get_img
-from modules.define import *
+from define import *
 
 def client(host=HOST, port=PORT):
   

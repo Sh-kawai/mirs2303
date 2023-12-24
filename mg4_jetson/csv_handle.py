@@ -1,6 +1,5 @@
 import csv
 
-#from mg4_jetson.src.modules.define import *
 from define import *
 
 class Handler:

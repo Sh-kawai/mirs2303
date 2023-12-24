@@ -9,10 +9,6 @@ mg4_jetson/train/*
 mg4_jetson/pictures/*
 mg4_jetson/videos/*
 mg4_jetson/test/*
-mg4_jetson/knn_clf/*
 mg4_jetson/__pycache__
 mg4_jetson/*/__pycache__
 mg4_jetson/photo-test-393509-a09fbab1df81.json
-mg4_jetson/trained_knn_model.clf
-
-mg4_jetson/faceCV_test/train/*
