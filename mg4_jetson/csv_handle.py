@@ -7,8 +7,8 @@ class Handler:
   def __init__(self, path):
     self.path = path
   
-  def write(self, time, place, subject):
-    fieldnames = ["time", "place", "subject"]
+  def write(self, time, place, subject, class_name):
+    fieldnames = ["time", "place", "subject", "class"]
     file_exists = False
     try:
       with open(self.path, "r"):
@@ -24,7 +24,7 @@ class Handler:
         writer.writeheader()
 
       # Write the new data
-      writer.writerow({"time": time, "place": place, "subject":subject})
+      writer.writerow({"time": time, "place": place, "subject":subject, "class":class_name})
 
   def read(self, name, label="time"):
     with open(self.path, "r", newline="") as f:
@@ -33,10 +33,11 @@ class Handler:
         time = r["time"]
         place = r["place"]
         subject = r["subject"]
+        class_name = r["class"]
         #if time in image_name:
         if r[label] in name:
-          return time, place, subject
-      return None, None, None
+          return time, place, subject, class_name
+      return None, None, None, None
   
   def read_all(self):
     data = []
@@ -46,7 +47,13 @@ class Handler:
         time = r["time"]
         place = r["place"]
         subject = r["subject"]
-        data.append([time, place, subject])
+        class_name = r["class"]
+        data.append({
+          "time":time,
+          "place":place,
+          "subject":subject,
+          "class":class_name,
+        })
     return data
 
 
@@ -84,11 +91,13 @@ if __name__ == "__main__":
   vid_csv = Handler(path=VID_CSV_PATH)
   sch_csv = Handler(path=SCH_CSV_PATH)
   
-  pic_csv.write(time="test", place="test", subject="test")
-  print(pic_csv.read(name="test"))
+  pic_csv.write(time='1900-12-31_1_8', place="test", subject="test", class_name="test")
+  print(pic_csv.read(name='1900-12-31_1_8'))
   
-  vid_csv.write(time="test", place="test", subject="test")
-  print(vid_csv.read(name="test"))
+  vid_csv.write(time='1900-12-31_1_8', place="test", subject="test", class_name="test")
+  print(vid_csv.read(name='1900-12-31_1_8'))
   
-  sch_csv.write(time="test", place="test", subject="test")
-  print(sch_csv.read(name="test"))
+  sch_csv.write(time='1900-12-31_1_8', place="test", subject="test", class_name="test")
+  print(sch_csv.read(name='1900-12-31_1_8'))
+  
+  print(sch_csv.read_all())

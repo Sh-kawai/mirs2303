@@ -37,9 +37,11 @@ def save_img(capture=None, dir_path=None):
         print(f"保存先:{save_path}")
     
         # add csv data
-        place =schedule.now_schedule()["place"]
-        subject = schedule.now_schedule()["subject"]
-        pic_csv.write(time=time_str, place=place, subject=subject)
+        now_sch = schedule.now_schedule()
+        place = now_sch["place"]
+        subject = now_sch["subject"]
+        class_name = now_sch["class"]
+        pic_csv.write(time=time_str, place=place, subject=subject, class_name=class_name)
         print(f"csv recode:{time_str}, {place}, {subject}")
 
 def get_img(click=False):

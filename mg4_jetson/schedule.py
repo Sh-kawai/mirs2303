@@ -24,12 +24,12 @@ def get_schedule():
   schedule = schedule_csv.read_all()
   return schedule
 
-def set_schedule(year=None, month=None, day=None, start=None, finish=None, place="", subject=""):
-  args = [year, month, day, start, finish]
+def set_schedule(year=None, month=None, day=None, start=None, finish=None, place="", subject="", class_name=""):
+  args = [year, month, day, start, finish, class_name]
   if None not in args:
     time = f"{year}-{month}-{day}_{start}_{finish}"
     schedule_csv = csv_handle.Handler(path=SCH_CSV_PATH)
-    schedule_csv.write(time, place, subject)
+    schedule_csv.write(time, place, subject, class_name)
   else:
     print("not match format : 'YYYY-mm-dd_(num)_(num)'")
 
@@ -43,9 +43,11 @@ def now_schedule():
   now_time = now.time()
   
   for sch in schedule:
-    date, start, finish = sch[0].split("_")
-    place = sch[1]
-    subject = sch[2]
+    print(sch)
+    date, start, finish = sch["time"].split("_")
+    place = sch["place"]
+    subject = sch["subject"]
+    class_name = sch["class"]
     if date == str(now_date):
       start_str = get_start_time(start)
       finish_str = get_finish_time(finish)
@@ -60,7 +62,8 @@ def now_schedule():
           "start":start_str,
           "finish":finish_str,
           "place":place,
-          "subject":subject
+          "subject":subject,
+          "class":class_name,
         }
         return res
   res = {
@@ -68,12 +71,13 @@ def now_schedule():
           "start":None,
           "finish":None,
           "place":None,
-          "subject":None
+          "subject":None,
+          "class":None,
         }
   return res
 
 if __name__ == "__main__":
-  set_schedule(2023, 12, 23, 1, 8)
-  get_schedule()
+  set_schedule(1800, 12, 23, 1, 8, "test", "test" ,"d4")
+  print(get_schedule())
   print(now_schedule())
-  print(now_schedule()["start"])
+  print(now_schedule()["class"])
