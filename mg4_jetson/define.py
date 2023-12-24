@@ -2,7 +2,8 @@ import os
 
 #JETSON_PATH = "/home/mirs2303/mirs2303/mg4_jetson"
 JETSON_PATH = os.path.relpath(os.path.dirname(__file__))
-PIC_CSV_PATH = os.path.join(JETSON_PATH, "pictures/picture_data.csv")
+PICTURE_DIR = os.path.join(JETSON_PATH, "pictures")
+PIC_CSV_PATH = os.path.join(PICTURE_DIR, "picture_data.csv")
 VID_CSV_PATH = os.path.join(JETSON_PATH, "videos/video_data.csv")
 SCH_CSV_PATH = os.path.join(JETSON_PATH, "schedule_app/schedule.csv")
 G_FOLDER_MAIN_ID = "1CONPdtwSL4rP9xj4kQDjPVK7Fi-I8GkE"
