@@ -57,6 +57,10 @@ def save_img():
         class_name = now_sch["class"]
         pic_csv.write(time=time_str, place=place, subject=subject, class_name=class_name)
         print(f"csv recode:{time_str}, {place}, {subject}")
+    
+        return save_path
+    
+    return None
 
 # 顔学習用撮影(クリック)
 def get_train_img():
@@ -97,7 +101,7 @@ def get_train_img():
     cap_end(cap=capture)
 
 # 定期撮影
-def save_auto_img(q_stop, show=False):
+def save_auto_img(q_save_e, q_stop, show=False):
     capture = cap_init()
     
     auto_time = 30
@@ -122,7 +126,9 @@ def save_auto_img(q_stop, show=False):
         elapsed_time = time.time() - start_time
         remaining_time = int(auto_time - elapsed_time)
         if remaining_time <= 0:
-            save_img(capture=capture)
+            res = save_img(capture=capture)
+            if res:
+                q_save_e.put(res)
             start_time = time.time()
         
         if show:
