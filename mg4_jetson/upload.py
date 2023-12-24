@@ -11,7 +11,7 @@ def main(debug=False, gdrive_main=False):
   vid_csv = csv_handle.Handler(VID_CSV_PATH)
 
   # 認証写真の取得
-  pic_dir = os.path.join(JETSON_PATH, "pictures")
+  pic_dir = PICTURE_DIR
   for image_file in os.listdir(pic_dir):
     if image_file.split(".")[1] == "csv":
       continue

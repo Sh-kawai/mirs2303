@@ -3,7 +3,7 @@ import os
 
 from define import *
 
-def get_img():
+def get_train_img():
     # カメラを起動
     capture = cv2.VideoCapture(0)
     if not capture.isOpened():

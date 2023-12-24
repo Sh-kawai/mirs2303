@@ -32,10 +32,10 @@ def client(host=HOST, port=PORT):
       if response == "q":
         break
       elif response == "1": # get_img once
-        get_img.get_img(click=False)
+        get_img.save_img()
       elif response == "2": # start get_auto_img
         if not auto_run:
-          thread_get_auto_img = threading.Thread(target=get_img.get_auto_img, kwargs={"q_stop": q_stop, "show":True}, daemon=True)
+          thread_get_auto_img = threading.Thread(target=get_img.save_auto_img, kwargs={"q_stop": q_stop, "show":True}, daemon=True)
           thread_get_auto_img.start()
           message = "Start get_auto_img()"
         else:
