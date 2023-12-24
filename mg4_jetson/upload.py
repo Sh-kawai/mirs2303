@@ -3,7 +3,7 @@ import faceCV_recognition
 import google_drive, csv_handle, get_img
 from define import *
 
-def main(debug=False):
+def main(debug=False, gdrive_main=False):
   # google drive
   Drive = google_drive.GDrive()
   SpSheet = google_drive.GSpeadSheet(SHEET_ID)
@@ -11,7 +11,7 @@ def main(debug=False):
   vid_csv = csv_handle.Handler(VID_CSV_PATH)
 
   # 認証写真の取得
-  pic_dir = os.path.join(JETSON_PATH, "pictures")
+  pic_dir = PICTURE_DIR
   for image_file in os.listdir(pic_dir):
     if image_file.split(".")[1] == "csv":
       continue
@@ -42,11 +42,17 @@ def main(debug=False):
         print("削除対象者を検出しました。")
         print(f"{image_file}を削除しました。")
     else:
+      if gdrive_main:
+        folder_id = G_FOLDER_MAIN_ID
+        sheet_name = SHEET_MAIN_NAME
+      else:
+        folder_id = G_FOLDER_TEST_ID
+        sheet_name = SHEET_TEST_NAME
       # 画像&データ アップロード
-      file_id = Drive.upload(image_path, GDRIVE_FOLDER_ID)
+      file_id = Drive.upload(image_path, folder_id)
       shoot_date, shoot_place, shoot_subject = pic_csv.read(name=image_file)
       data = [image_file, file_id, "公開", shoot_date, shoot_place, shoot_subject]
-      SpSheet.insert(data, "メインデータ")
+      SpSheet.insert(data, sheet_name)
       
       # csvデータ行削除
       pic_csv.delete_row(name=image_file)
@@ -61,4 +67,4 @@ def main(debug=False):
 
 if __name__ == "__main__":
   #get_img.get_img()
-  main(debug=False)
+  main(debug=False, gdrive_main=False)

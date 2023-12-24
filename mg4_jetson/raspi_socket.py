@@ -32,10 +32,10 @@ def client(host=HOST, port=PORT):
       if response == "q":
         break
       elif response == "1": # get_img once
-        get_img.get_img(place="kari")
+        get_img.save_img()
       elif response == "2": # start get_auto_img
         if not auto_run:
-          thread_get_auto_img = threading.Thread(target=get_img.get_auto_img, kwargs={"q_stop": q_stop, "show":True}, daemon=True)
+          thread_get_auto_img = threading.Thread(target=get_img.save_auto_img, kwargs={"q_stop": q_stop, "show":True}, daemon=True)
           thread_get_auto_img.start()
           message = "Start get_auto_img()"
         else:
@@ -51,7 +51,7 @@ def client(host=HOST, port=PORT):
           message = "don't run get_auto_img()"
         auto_run = False
       elif response == "3": # upload for gdrive
-        upload.main()
+        upload.main(gdrive_main=True)
 
     except FileNotFoundError as e:
       message = f"[jetson] FileNotFoundError: {e}"

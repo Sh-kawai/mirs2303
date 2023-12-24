@@ -111,7 +111,7 @@ def show_recognition_image(img_path, recognition_data):
   pil_image.show()
 
 if __name__ == '__main__':
-  img_dir = os.path.join(JETSON_PATH, "img")
+  img_dir = PICTURE_DIR
   dictionary, detector, recognizer = init()
   for image_file in os.listdir(img_dir):
     img_path = os.path.join(img_dir, image_file)

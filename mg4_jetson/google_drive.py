@@ -136,11 +136,13 @@ class GSpeadSheet:
       print(f"スプレッドシートの{macth_rows}行目のデータを削除しました")
 
 if __name__ == "__main__":
-  file_path = "/home/mirs2303/mirs2303/mg4_jetson/PuNITロゴ‗.png"
+  file_path = os.path.join(JETSON_PATH, "PuNITロゴ‗.png")
   file_name = os.path.basename(file_path)
   
   Drive = GDrive()
   SpSheet = GSpeadSheet(SHEET_ID)
+  folder_id = G_FOLDER_TEST_ID
+  sheet_test_name = SHEET_TEST_NAME
   
   while True:
     print("写真アップロード:0, 写真削除:1, all-delete:2")
@@ -152,10 +154,10 @@ if __name__ == "__main__":
       shoot_date = datetime.now()
       shoot_date = shoot_date.strftime('%Y-%m-%d_%H-%M-%S')
       
-      file_id = Drive.upload(file_path, GDRIVE_FOLDER_ID)
+      file_id = Drive.upload(file_path, folder_id)
       
       data = [file_name, file_id, "公開", shoot_date, shoot_place]
-      SpSheet.insert(data, "メインデータ")
+      SpSheet.insert(data, sheet_test_name)
     elif inp_int == 1:
       print("削除するファイルのidを入力してください:")
       delete_file_id = input()
@@ -163,22 +165,24 @@ if __name__ == "__main__":
       #ファイル削除
       res = Drive.delete(delete_file_id)
       if res:
-        SpSheet.delete(delete_file_id, "メインデータ")
+        SpSheet.delete(delete_file_id, sheet_test_name)
     elif inp_int == 2:
       print("all delete. Are you OK?[yes/no]")
       while True:
+        print("now prohibit all_delete")
+        break
         flag = input()
         if flag == "yes":
           print("do delete all pictures")
-          #col_values = SpSheet.spreadsheet.worksheet("メインデータ").col_values(2)
+          #col_values = SpSheet.spreadsheet.worksheet(sheet_test_name).col_values(2)
           #for delete_file_id in col_values:
           #  #ファイル削除
           #  print(f"del: {delete_file_id}")
           #  res = Drive.delete(delete_file_id)
           #  if res:
-          #    SpSheet.delete(delete_file_id, "メインデータ")
-          Drive.delete_folder(GDRIVE_FOLDER_ID)
-          SpSheet.delete_all("メインデータ")
+          #    SpSheet.delete(delete_file_id, sheet_test_name)
+          Drive.delete_folder(folder_id)
+          SpSheet.delete_all(sheet_test_name)
           break
         elif flag == "no":
           break
