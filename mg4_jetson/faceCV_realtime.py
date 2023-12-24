@@ -4,15 +4,13 @@ import numpy as np
 import cv2
 import time
 
-#import mg4_jetson.src.get_img as get_img
-#from mg4_jetson.src.modules.define import *
-
 import get_img
 from define import *
 
 COSINE_THRESHOLD = 0.363
 NORML2_THRESHOLD = 1.128
 
+# 初期化 戻り値(カメラ出力, 特徴辞書, 検出モデル, 認証モデル)
 def init(cap_path=0):
   train_dir = os.path.join(JETSON_PATH, "train")
   
@@ -36,7 +34,7 @@ def init(cap_path=0):
   
   return capture, dictionary, face_detector, face_recognizer
 
-# 特徴を辞書と比較してマッチしたユーザーとスコアを返す関数
+# 特徴辞書と比較しマッチしたユーザーとスコアを返す関数
 def match(recognizer, feature1, dictionary):
   high_user = ""
   high_score = 0
@@ -51,6 +49,7 @@ def match(recognizer, feature1, dictionary):
   return False, (high_user, high_score)
   #return False, ("", 0.0)
 
+# 画像取得関数
 def take_picture(capture):
   train_dir = os.path.join(JETSON_PATH, "train")
   tmp_path = os.path.join(train_dir, "tmp")
@@ -59,6 +58,7 @@ def take_picture(capture):
   cv2.imwrite(save_path, frame)
   print(f"画像を撮影しました。path:{save_path}")
 
+# 顔認証
 def recognition(capture, dictionary, face_detector, face_recognizer):
   
   # FPS計測用の変数

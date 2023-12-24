@@ -5,6 +5,7 @@ import cv2
 #from mg4_jetson.src.modules.define import *
 from define import *
 
+# 顔サイズに画像摘出
 def face_cut():
   # トレーニングセット内の各人物をループ
   train_dir = os.path.join(JETSON_PATH, "train")
@@ -62,6 +63,7 @@ def face_cut():
         #cv2.imshow("aligned_face {:03}".format(i + 1), aligned_face)
         cv2.imwrite(os.path.join(class_dir, "{}{:03}.jpg".format(class_name, i + 1)), aligned_face)
 
+# 顔学習
 def train():
   # トレーニングセット内の各人物をループ
   train_dir = os.path.join(JETSON_PATH, "train")

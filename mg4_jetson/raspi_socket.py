@@ -6,8 +6,8 @@ import mg4_jetson.upload as upload
 import get_img
 from define import *
 
+# socket client
 def client(host=HOST, port=PORT):
-  
   state = 0
   # エンコード
   letter_coding = "UTF-8"

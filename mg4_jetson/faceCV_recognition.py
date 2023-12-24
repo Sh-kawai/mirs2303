@@ -10,7 +10,7 @@ from define import *
 COSINE_THRESHOLD = 0.363
 NORML2_THRESHOLD = 1.128
 
-# 特徴&顔認証モデルの取得
+# 初期化 戻り値(特徴辞書, 検出モデル, 認証モデル)
 def init():
   # 学習モデルの取得
   train_dir = os.path.join(JETSON_PATH, "train")

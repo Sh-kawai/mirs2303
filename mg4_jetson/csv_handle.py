@@ -3,9 +3,11 @@ import csv
 from define import *
 
 class Handler:
+  # コンストラクタ
   def __init__(self, path):
     self.path = path
   
+  # データ入力
   def write(self, time, place, subject, class_name):
     fieldnames = ["time", "place", "subject", "class"]
     file_exists = False
@@ -25,6 +27,7 @@ class Handler:
       # Write the new data
       writer.writerow({"time": time, "place": place, "subject":subject, "class":class_name})
 
+  # ラベルに対するデータ取得
   def read(self, name, label="time"):
     with open(self.path, "r", newline="") as f:
       reader = csv.DictReader(f)
@@ -38,6 +41,7 @@ class Handler:
           return time, place, subject, class_name
       return None, None, None, None
   
+  # 全データ取得
   def read_all(self):
     data = []
     with open(self.path, "r", newline="") as f:
@@ -55,7 +59,7 @@ class Handler:
         })
     return data
 
-
+  # ラベルに対するデータ削除
   def delete_row(self, name, label="time"):
     data = []
     with open(self.path, "r", newline="") as f:
@@ -75,6 +79,7 @@ class Handler:
       for d in data:
         writer.writerow(d)
   
+  # 全データ削除
   def delete_all(self):
     with open(self.path, "r", newline="") as f:
       reader = csv.DictReader(f)

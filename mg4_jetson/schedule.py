@@ -3,6 +3,7 @@ from datetime import datetime
 import csv_handle
 from define import *
 
+# 授業時間
 subject_time = {
   "1":["8:50:00", "9:35:00"],
   "2":["9:35:00", "10:30:00"],
@@ -15,16 +16,20 @@ subject_time = {
   "-1":["00:00:00", "23:59:59"],
 }
 
+# 開始 (時限 to 時間)
 def get_start_time(num):
   return subject_time[num][0]
+# 終了 (時限 to 時間)
 def get_finish_time(num):
   return subject_time[num][1]
-  
+
+# スケジュールそのまま取得
 def get_schedule():
   schedule_csv = csv_handle.Handler(path=SCH_CSV_PATH)
   schedule = schedule_csv.read_all()
   return schedule
 
+# スケジュール挿入
 def set_schedule(year=None, month=None, day=None, start=None, finish=None, place="", subject="", class_name=""):
   args = [year, month, day, start, finish, class_name]
   if None not in args:
@@ -34,6 +39,7 @@ def set_schedule(year=None, month=None, day=None, start=None, finish=None, place
   else:
     print("not match format : 'YYYY-mm-dd_(num)_(num)'")
 
+# 現在のスケジュール取得 (時限 to 時間)
 def now_schedule():
   schedule = get_schedule()
   # YY-mm-ss HH:MM:SS.

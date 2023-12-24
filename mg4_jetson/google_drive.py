@@ -9,14 +9,17 @@ from datetime import datetime
 #from mg4_jetson.src.modules.define import *
 from define import *
 
+# google drive 写真
 class GDrive:
+  # コンストラクタ(サービス認証&取得)
   def __init__(self):    
     #サービスアカウントキーを指定して認証を作成
     creds = service_account.Credentials.from_service_account_file(SERVICE_KEY_FILE, scopes=['https://www.googleapis.com/auth/drive'])
     
     #認証済みのサービスを取得
     self.service = build("drive", "v3", credentials=creds)
-    
+  
+  # 画像アップロード(1枚)
   def upload(self, file_path, parent_folder_id=None):
     #フォルダー指定がない場合
     if parent_folder_id == None:
@@ -38,6 +41,7 @@ class GDrive:
     print(f"ファイルをアップロードしました。\nfile_id:{up_file_id}")
     return up_file_id
   
+  # 画像削除(1枚)
   def delete(self, file_id):
     #ファイル削除
     try:
@@ -53,6 +57,7 @@ class GDrive:
       print(f"ファイルが削除されました: {file_id}")
       return True
   
+  # フォルダー内の全ての画像削除
   def delete_folder(self, folder_id):
     # Get the list of files in the folder
     files_list = self.service.files().list(q=f"'{folder_id}' in parents",
@@ -63,8 +68,10 @@ class GDrive:
         file_id = file_info['id']
         self.service.files().delete(fileId=file_id).execute()
         print(f"File '{file_id}' deleted.")
-    
+
+# spreadsheet データベース
 class GSpeadSheet:
+  # コンストラクタ(サービス取得 & ワークシート取得)
   def __init__(self, sheet_id):    
     #サービスアカウントキーを指定して認証を作成
     creds = service_account.Credentials.from_service_account_file(SERVICE_KEY_FILE, scopes=['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets'])
@@ -75,6 +82,7 @@ class GSpeadSheet:
     #スプレッドシートを開く
     self.spreadsheet = self.service.open_by_key(sheet_id)
   
+  # データ挿入(1行)
   def insert(self, data, sheet_name=None):
     if sheet_name == None:
       print("ワークシート名(sheet_name)を指定してください")
@@ -87,7 +95,8 @@ class GSpeadSheet:
     worksheet.append_row(data)
     
     print(f"スプレッドシートにデータを記録しました。")
-    
+  
+  # データ削除(1行)
   def delete(self, file_id, sheet_name=""):
     if sheet_name == None:
       print("ワークシート名(sheet_name)を指定してください")
@@ -108,6 +117,7 @@ class GSpeadSheet:
         worksheet.delete_rows(r)
       print(f"スプレッドシートの{macth_rows}行目のデータを削除しました")
 
+  # シート内のデータを全て削除
   def delete_all(self, sheet_name=""):
     if sheet_name == None:
       print("ワークシート名(sheet_name)を指定してください")

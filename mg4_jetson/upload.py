@@ -5,6 +5,7 @@ import google_drive
 import csv_handle
 from define import *
 
+# アップロード関数 (1枚)
 def upload(image_file, debug=False, gdrive_main=False):
   Drive = google_drive.GDrive()
   SpSheet = google_drive.GSpeadSheet(SHEET_ID)
@@ -53,6 +54,7 @@ def upload(image_file, debug=False, gdrive_main=False):
       os.remove(image_path)
       print(f"{image_file}を削除しました。")
 
+# アップロード関数 (全て)
 def main(debug=False, gdrive_main=False):
   # 認証写真の取得
   pic_dir = PICTURE_DIR
