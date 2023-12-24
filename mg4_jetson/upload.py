@@ -41,10 +41,11 @@ def upload(image_file, debug=False, gdrive_main=False):
       folder_id = G_FOLDER_TEST_ID
       sheet_name = SHEET_TEST_NAME
     # 画像&データ アップロード
+    print("画像をアップロードします。")
     file_id = Drive.upload(image_path, folder_id)
-    shoot_date, shoot_place, shoot_subject = pic_csv.read(name=image_file)
-    data = [image_file, file_id, "公開", shoot_date, shoot_place, shoot_subject]
-    SpSheet.insert(data, sheet_name)
+    date, place, subject, class_name = pic_csv.read(name=image_file)
+    img_data = [image_file, file_id, "公開", date, place, subject, class_name]
+    SpSheet.insert(img_data, sheet_name)
     
     # csvデータ行削除
     pic_csv.delete_row(name=image_file)

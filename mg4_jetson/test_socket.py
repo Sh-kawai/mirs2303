@@ -1,6 +1,7 @@
 import socket
 import paramiko
 
+import raspi_socket
 from define import *
 
 def ssh_remote():
@@ -39,20 +40,24 @@ def server(host=HOST, port=PORT):
         return
         
     print("success connection")
-
+    print(raspi_socket.S_EXPLAIN)
+    
     while True:
-        print("end-socket:q, get_img:1, get_auto_img:2 upload:3")
+        
+        print("[please input send code]")
         s_msg = input()
+        
+        print(raspi_socket.S_EXPLAIN)
 
-        print("send:%s" % s_msg)
+        print("[server] Send : %s" % s_msg)
         clientsock.sendall(s_msg.encode())
-        print("waiting client response...")
+        print("[server] waiting client response...")
 
         rcvmsg = clientsock.recv(1024).decode()
-        print("Received:%s" % (rcvmsg))
+        print("[server] Recv : %s" % (rcvmsg))
 
         if s_msg == "q" or rcvmsg == "client close":
-            break
+            break        
 
     clientsock.close()
 

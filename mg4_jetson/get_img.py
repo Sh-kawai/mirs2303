@@ -2,7 +2,6 @@ import cv2
 from datetime import datetime
 import os
 import time
-import queue
 
 import csv_handle
 import schedule
@@ -102,7 +101,7 @@ def get_train_img():
     cap_end(cap=capture)
 
 # 定期撮影
-def save_auto_img(q_save_e, q_stop, show=False):
+def save_auto_img(q_stop, q_save_e=None, show=False):
     capture = cap_init()
     
     auto_time = 30
@@ -114,8 +113,8 @@ def save_auto_img(q_save_e, q_stop, show=False):
 
         keyInp = cv2.waitKey(1)
 
-        if not q_stop.empty():
-            if q_stop.get():
+        if len(q_stop) != 0:
+            if q_stop.pop():
                 print("[get_auto_img] stop request")
                 break
         
@@ -128,7 +127,7 @@ def save_auto_img(q_save_e, q_stop, show=False):
         remaining_time = int(auto_time - elapsed_time)
         if remaining_time <= 0:
             res = save_img(capture=capture)
-            if res:
+            if res and not q_save_e:
                 q_save_e.put(res)
             start_time = time.time()
         
@@ -142,13 +141,12 @@ def save_auto_img(q_save_e, q_stop, show=False):
     cap_end(capture)
 
 # 動画撮影
-def save_movie():
+def save_movie(fps=30, rec_time=30):
     vid_csv = csv_handle.Handler(path=VID_CSV_PATH)
     cap = cap_init()
     
     frame_width = int(cap.get(3))
     frame_height = int(cap.get(4))
-    fps = 30
     current_time = datetime.now()
     time_str = current_time.strftime('%Y-%m-%d_%H-%M-%S')
     output_file = os.path.join(JETSON_PATH, f"videos/{time_str}.mp4")
@@ -156,10 +154,9 @@ def save_movie():
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(output_file, fourcc, fps, (frame_width, frame_height))
 
-    record_duration = 30
     start_time = time.time()
 
-    print("Recording for {} seconds...".format(record_duration))
+    print("Recording for {} seconds...".format(rec_time))
     
     current_time = datetime.now()
     time_str = current_time.strftime('%Y-%m-%d_%H-%M-%S')  # 時刻のフォーマットを指定
@@ -169,7 +166,7 @@ def save_movie():
     class_name = now_sch["class"]
     vid_csv.write(time=time_str, place=place, subject=subject, class_name=class_name)
 
-    while (time.time() - start_time) < record_duration:
+    while (time.time() - start_time) < rec_time:
         ret, frame = cap.read()
         frame_cp = frame
 
@@ -183,7 +180,7 @@ def save_movie():
         out.write(frame)
         
         # 表示用
-        text = f"{int(time.time() - start_time)}/{record_duration} recoding..."
+        text = f"{int(time.time() - start_time)}/{rec_time} recoding..."
         cv2.putText(frame_cp, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
         cv2.imshow("Frame", frame_cp)
         
@@ -193,6 +190,7 @@ def save_movie():
     cap_end(cap=cap)
 
     print("Recording completed. Video saved as", output_file)
+    return output_file
 
 if __name__ == "__main__":
     save_img()
