@@ -20,7 +20,8 @@ def cap_init(cap_path=0):
         return None
     
     print(f"open capture {cap_path}")
-    camera_flag = True
+    
+    _camera_flag = True
     
     # capture setting
     height = 720
