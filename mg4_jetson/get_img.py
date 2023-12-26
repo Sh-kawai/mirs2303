@@ -7,8 +7,12 @@ import csv_handle
 import schedule
 from define import *
 
+_camera_flag = False
+
 # カメラオープン
 def cap_init(cap_path=0):
+    global _camera_flag
+    
     # capture open
     cap = cv2.VideoCapture(cap_path)
     if not cap.isOpened():
@@ -16,6 +20,7 @@ def cap_init(cap_path=0):
         return None
     
     print(f"open capture {cap_path}")
+    camera_flag = True
     
     # capture setting
     height = 720
@@ -26,11 +31,18 @@ def cap_init(cap_path=0):
 
 # カメラ　終了
 def cap_end(cap):
+    global _camera_flag
+    
     #capture release
     cap.release()
     cv2.destroyAllWindows()
     
+    _camera_flag = False
+    
     print("capture release")
+
+def cap_flag():
+    return _camera_flag
 
 # 画像取得（即時)
 def save_img():
@@ -193,6 +205,6 @@ def save_movie(fps=30, rec_time=30):
     return output_file
 
 if __name__ == "__main__":
-    save_img()
-    #save_movie()
+    #save_img()
+    save_movie()
     #get_train_img()

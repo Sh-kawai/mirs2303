@@ -55,15 +55,21 @@ def client(host=HOST, port=PORT):
         break
       # p1:   一枚 撮影(即時)
       elif response == "p1":
-        save_path = get_img.save_img()
-        message = f"save picture:{save_path}"
+        if not get_img.cap_flag():
+          save_path = get_img.save_img()
+          message = f"save picture:{save_path}"
+        else:
+          message = "other capture opened"
       # p2_s:   定期 撮影(スレッド開始)
       elif response == "p2_s":
-        start_flag = thread_ctrl.thread_start("p2",get_img.save_auto_img, kwargs={"show":True})
-        if start_flag:
-          message = "start thread save_suto_img()"
+        if not get_img.cap_flag():
+          start_flag = thread_ctrl.thread_start("p2",get_img.save_auto_img, kwargs={"show":True})
+          if start_flag:
+            message = "start thread save_suto_img()"
+          else:
+            message = "already start thread save_suto_img()"
         else:
-          message = "already start thread save_suto_img()"
+          message = "other capture opened"
       # p2_f:  定期 撮影終了(スレッド終了)
       elif response == "p2_f":
         fin_flag = thread_ctrl.thread_finish("p2")
@@ -73,11 +79,14 @@ def client(host=HOST, port=PORT):
           message = "didn't run thread save_suto_img()"
       # v1_t:   一動画 撮影(即時 30秒)(スレッド)
       elif response == "v1_t":
-        thread_flag = thread_ctrl.auto_thread_run("v1", get_img.save_movie)
-        if thread_flag:
-          message = "auto-thread save_movie()"
+        if not get_img.cap_flag():
+          thread_flag = thread_ctrl.auto_thread_run("v1", get_img.save_movie)
+          if thread_flag:
+            message = "auto-thread save_movie()"
+          else:
+            message = "run other save_movie()"
         else:
-          message = "run other save_movie()"
+          message = "didn't run thread save_suto_img()"
       # v1_c:   一動画 撮影 終了チェック
       elif response == "v1_c":
         check_flag = thread_ctrl.auto_thread_check("v1")
