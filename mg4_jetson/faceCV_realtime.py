@@ -140,6 +140,6 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
   
 if __name__ == "__main__":
   path = os.path.join(JETSON_PATH, "test/d4顔認証試験.mp4")
-  cap, dict, detector, recognizer = init()
+  cap, dict, detector, recognizer = init(path)
   recognition(cap, dict, detector, recognizer)
   

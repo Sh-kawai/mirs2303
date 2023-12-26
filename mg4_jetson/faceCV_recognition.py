@@ -119,9 +119,11 @@ if __name__ == '__main__':
   img_dir = PICTURE_DIR
   dictionary, detector, recognizer = init()
   for image_file in os.listdir(img_dir):
-    img_path = os.path.join(img_dir, image_file)
-    recognition_data = recognition(img_path, dictionary, detector, recognizer)
-    delete_flag = check_prohibit()
-    print()
-    show_recognition_image(img_path, recognition_data)
+    if image_file.split(".")[1] in ["png", "jpg", "jpeg"]:
+      img_path = os.path.join(img_dir, image_file)
+      print(img_path)
+      recognition_data = recognition(img_path, dictionary, detector, recognizer)
+      print(recognition_data)
+      delete_flag = check_prohibit(delete_users=[], recognition_data=recognition_data)
+      show_recognition_image(img_path, recognition_data)
     
