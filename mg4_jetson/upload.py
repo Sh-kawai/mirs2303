@@ -54,20 +54,26 @@ def upload(image_file, debug=False, gdrive_main=False):
     if os.path.exists(image_path):
       os.remove(image_path)
       print(f"{image_file}を削除しました。")
+      
+    return file_id
 
 # アップロード関数 (全て)
 def main(debug=False, gdrive_main=False):
-  # 認証写真の取得
-  pic_dir = PICTURE_DIR
-  for image_file in os.listdir(pic_dir):
-    if image_file.split(".")[1] == "csv":
-      continue
-    
-    upload(image_file=image_file, debug=debug, gdrive_main=gdrive_main)
-  
   pic_csv = csv_handle.Handler(PIC_CSV_PATH)
   vid_csv = csv_handle.Handler(VID_CSV_PATH)
-  print("clean csv file data")
+  
+  pic_dir = PICTURE_DIR
+  
+  while len(os.listdir(pic_dir)) >= 2:
+    # 認証写真の取得
+    for image_file in os.listdir(pic_dir):
+      if image_file.split(".")[1] == "csv":
+        continue
+      
+      upload(image_file=image_file, debug=debug, gdrive_main=gdrive_main)
+    
+    print("clean csv file data")
+  
   pic_csv.delete_all()
 
 if __name__ == "__main__":
