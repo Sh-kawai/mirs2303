@@ -6,16 +6,19 @@ void slave() {
 
   while (1) {
     double batt = io_get_batt();
-    if (batt < 6.5) {
+    /*if (batt < 6.5) {
       Serial.print("low battery = ");
       Serial.println(batt);
       run_ctrl_set(STP, 0, 0);
       delay(T_CTRL);
       continue;
-    }
+    }*/
     if (raspi_receive(&command_data) == 0) {
       Serial.println(command_data.val[0]);
       switch (command_data.val[0]) {
+        case -1: // シリアル通信テスト
+          test_serial(command_data.val[1], command_data.val[2]);
+          break;
         case 1: // 停止
           run_ctrl_set(STP, 0, 0);
           break;

@@ -316,3 +316,11 @@ void test_enc_e(){
     delay(T_CTRL);
   }
 }
+
+void test_serial(double data1, double data2){
+  char str[100], str_1[10], str_2[10];
+  sprintf(str, "dist_l = %s, dist_r = %s, dist_diff = %d\n",
+            dtostrf(data1, 6, 1, str_1),
+            dtostrf(data2, 6, 1, str_2));
+  Serial.print(str);
+}
