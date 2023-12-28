@@ -54,12 +54,14 @@ def server(host=HOST, port=PORT):
         print("[server] waiting client response...")
 
         rcvmsg = clientsock.recv(1024).decode()
-        print("[server] Recv : %s" % (rcvmsg))
+        for i, msg in enumerate(rcvmsg.split("\n")):
+            print(f"[server] Recv{i} : {msg}")
 
         if s_msg == "q" or rcvmsg == "client close":
             break        
 
     clientsock.close()
+    serversock.close()
 
 if __name__ == "__main__":
     host = "127.0.0.1"
