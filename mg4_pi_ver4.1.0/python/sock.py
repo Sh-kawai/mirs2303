@@ -4,6 +4,7 @@ import time
 import config
 import sys
 
+# socket
 
 def receive_buffer(socket_class):
     """ 

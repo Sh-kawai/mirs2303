@@ -10,6 +10,9 @@ static double ang_dist_curr = 0.0; // ARC
 static double er  = 0.0 , er_d = 0.0 ;
 static double er_sum  = 0.0;
 static double er_prev  = 0.0;
+static double sp=0;
+static double sp_prev=0;
+static double vel_prev = 10;
 
 void run_ctrl_execute() {
   // 直進制御において減速を開始する距離 [cm]
@@ -27,9 +30,9 @@ void run_ctrl_execute() {
   const double Kr = 0.0;
 
   // ライントレース用PIDゲイン
-  const double Kl_p = 0.4;
+  const double Kl_p = 0.3;
   const double Kl_i = 0.0;
-  const double Kl_d = 1.6;
+  const double Kl_d = 0.8;
 
   int sign;
   double d_l, d_r, v_l, v_r, ratio, vel_ref, vel_mod;
@@ -141,18 +144,36 @@ void run_ctrl_execute() {
       break;
     case LINE: // ライントレース
       int gray, light0, light1, light2, light3;
+      
 
       gray = (BLACK + WHITE)/2;
       io_get_light(&light0, &light1, &light2, &light3);
       er = light1 - light2;
       er_prev = er;
-
-      vel_ref = sign * speed_ref * ratio;
+      ratio = 1;
+      
+      if(light3 < WHITE){
+         vel_ref = sign * 4 *ratio;
+         sp = 4;
+      }else if(vel_prev < 15){
+         sp = sp_prev + 0.2;
+         vel_ref = sign * sp * ratio;
+      }else{
+        vel_ref = sign * speed_ref * ratio;
+      }
+      Serial.print("vel_ref =");
+      Serial.println(vel_ref);
+      
+      vel_prev = vel_ref;
+      sp_prev = sp;
+      
+      
 
       dist_curr  = (d_l + d_r) / 2.0;
-      if ((dist_ref - dist_curr) < 0 || light1 == WHITE && light2 == WHITE){
+      if ((dist_ref - dist_curr) < 0 || (light1 <= WHITE && light2 <= WHITE)){
         run_state = STP;
         vel_ctrl_set(0.0, 0.0);
+        //test_run_ctrl(ROT,10, 90);
       //} else if (light1 != WHITE && light2 != WHITE){
       } else {
         //左右の値が両方ともwhiteじゃないなら

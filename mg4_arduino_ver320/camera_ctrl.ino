@@ -3,13 +3,15 @@ static double h_err_prev = 0.0;
 static double h_err_sum = 0.0;
 static double pwm = 0.0;
 static double pwm_prev = 0.0;
+static int botton_state = 0;
+static int botton_high = 0;
+static double camera_high = 0;
 
 static volatile long count_e = 0;
 
 static int a_curr_e, b_curr_e;
 
 bool camera_ctrl_exec_height = true;
-
 // カメラオープン
 void camera_ctrl_open(){
   pinMode(PIN_ENC_A_E, INPUT);
@@ -53,6 +55,21 @@ void camera_ctrl_execute(){
     h_err_prev = h_err_curr;
   }
   pwm_prev = pwm;
+  
+  camera_high = count_e * ELEV_PIT/ENC_RANGE_E;
+  
+  botton_state = digitalRead(PIN_TOUCH_1);
+  botton_high = digitalRead(PIN_TOUCH_2);
+  if(botton_state == LOW){//タッチセンサに触れているとき
+    pwm = 0;
+    if(botton_high == LOW){//最高点のとき
+      camera_high = HIGH_MAX;
+    }else{//最低点のとき
+      camera_high = 0;
+    }    
+  
+  }
+  
 
   _camera_motor_set(int(pwm));
 }

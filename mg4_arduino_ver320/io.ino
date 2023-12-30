@@ -9,6 +9,9 @@ void io_open() {
   digitalWrite(PIN_LED, LOW);
   digitalWrite(PIN_SW, HIGH);
   digitalWrite(PIN_BATT, LOW);
+  pinMode(PIN_TOUCH_1, INPUT_PULLUP);
+  pinMode(PIN_TOUCH_2, INPUT_PULLUP);
+  
 }
 
 void io_set_led(int val) {

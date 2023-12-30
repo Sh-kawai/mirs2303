@@ -49,6 +49,9 @@ typedef struct {
 #define PIN_LIGHT_1 A1
 #define PIN_LIGHT_2 A2
 #define PIN_LIGHT_3 A3
+#define PIN_TOUCH_1 1
+#define PIN_TOUCH_2 1
+
 
 /*
 #define INTERRUPT_L  0
@@ -101,10 +104,13 @@ typedef struct {
 
 // ライントレース白黒
 #define BLACK  1010
-#define WHITE   980
+#define WHITE   960
 
 // 昇降用モーター
 // ねじピッチ(隣り合うねじ山の幅)
-#define ELEV_PIT
+#define ELEV_PIT 0.2
 // エンコーダ分解能
-#define ENC_RANGE_E
+#define ENC_RANGE_E 5
+
+//昇降部分の最大高さ
+#define HIGH_MAX 30
