@@ -29,7 +29,7 @@ int request_get_runmode(run_state_t *state, int *speed, int *dist){
 	if(arduino_receive(&command_data) == 0){
 		*state = ((command_data.val[0] == 2) ? STR : (command_data.val[0] == 3) ? ROT : STP);
 		*speed = command_data.val[1];
-		*dist  = command_data.val[1];
+		*dist  = command_data.val[2];
 		return 0;
 	}else{
 		return -1;
