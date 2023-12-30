@@ -23,7 +23,7 @@ void loop() {
   */
 
   /* RasPi からの指令で動作させるとき、slave を有効にする。*/
-  //vlave();
+  slave();
   
   /* --------------機能のテスト---------------------------------------------
     テスト関数 test_*() のいずれかを有効にする。
@@ -51,7 +51,7 @@ void loop() {
   */
   //test_run_ctrl(STR, 25, 1000);
   //test_run_ctrl(ROT,-10, -30);
-  test_run_ctrl(LINE,  15, 700);
+  //test_run_ctrl(LINE,  15, 700);
 
   /*円弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
   //test_arc_move(10, 100, 45 ,90);
@@ -77,4 +77,6 @@ void loop() {
   //test_encode();
   //test_decode();
 
+  /* ros slam */
+  //test_ros();
 }

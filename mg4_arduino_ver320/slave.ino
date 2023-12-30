@@ -4,15 +4,28 @@ void slave() {
   run_state_t state;
   command_data_t command_data;
 
+  bool ros_flag = false;
+
   while (1) {
-    double batt = io_get_batt();
-    /*if (batt < 6.5) {
-      Serial.print("low battery = ");
-      Serial.println(batt);
-      run_ctrl_set(STP, 0, 0);
+    // battery
+    if(batt_check() == -1){
       delay(T_CTRL);
       continue;
-    }*/
+    }
+    // ros slam
+    if(PIN_ROS == 1){
+      if(!ros_flag){
+        ros_flag =true;
+        ros_reset();
+      }
+      ros_send_odom();
+      ros_recv_vel();
+      vel_ctrl_execute();
+      delay(T_CTRL);
+      continue;
+    } else {
+      ros_flag = false;
+    }
     if (raspi_receive(&command_data) == 0) {
       Serial.println(command_data.val[0]);
       switch (command_data.val[0]) {

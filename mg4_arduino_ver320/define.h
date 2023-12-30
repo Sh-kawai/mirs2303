@@ -7,6 +7,7 @@ typedef enum {
   LINE,
   SER,
   CAM,
+  ROS,
 } run_state_t;
 
 typedef struct {
@@ -51,6 +52,8 @@ typedef struct {
 #define PIN_LIGHT_3 A3
 #define PIN_TOUCH_1 1
 #define PIN_TOUCH_2 1
+
+#define PIN_ROS     1
 
 
 /*
@@ -112,5 +115,8 @@ typedef struct {
 // エンコーダ分解能
 #define ENC_RANGE_E 5
 
-//昇降部分の最大高さ
+// 昇降部分の最大高さ
 #define HIGH_MAX 30
+
+// battery min
+#define BATT_MIN  3.0
