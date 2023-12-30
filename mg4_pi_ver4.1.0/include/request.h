@@ -8,6 +8,7 @@ typedef enum{
 	ARC,
 	LINE,
 	SER,
+	CAM,
 } run_state_t;
 
 extern void request_set_runmode(run_state_t state, int speed, int dist);

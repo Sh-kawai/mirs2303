@@ -9,8 +9,8 @@
 //static const int pin_sw_f  = 18;
 //static const int pin_sw_l  = 25;
 //static const int pin_sw_r  = 26;
-static const int pin_sw_f  = 4;
-static const int pin_sw_l  = 7;
+static const int pin_sw_f  = 40;
+static const int pin_sw_l  = 26;
 static const int pin_sw_r  = 8;
 
 int io_open(){

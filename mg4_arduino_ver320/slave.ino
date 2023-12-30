@@ -5,9 +5,20 @@ void slave() {
   command_data_t command_data;
 
   while (1) {
+    double batt = io_get_batt();
+    /*if (batt < 6.5) {
+      Serial.print("low battery = ");
+      Serial.println(batt);
+      run_ctrl_set(STP, 0, 0);
+      delay(T_CTRL);
+      continue;
+    }*/
     if (raspi_receive(&command_data) == 0) {
       Serial.println(command_data.val[0]);
       switch (command_data.val[0]) {
+        case -1: // シリアル通信テスト
+          test_serial(command_data.val[1], command_data.val[2]);
+          break;
         case 1: // 停止
           run_ctrl_set(STP, 0, 0);
           break;
@@ -33,6 +44,10 @@ void slave() {
           Serial.println("SER");
           servo_set(command_data.val[1], command_data.val[2]);
           break;
+        case 7: // 昇降用モーター
+          Serial.println("CAM");
+          camera_ctrl_set(command_data.val[1], command_data.val[2]);
+          break;
         case 10:
           run_ctrl_get(&state, &speed, &dist);
           command_data.val[0] = ((state == STR) ? 2 : (state == ROT) ? 3 : 1);
@@ -56,6 +71,7 @@ void slave() {
     }
     run_ctrl_execute();
     vel_ctrl_execute();
+    camera_ctrl_execute();
     delay(T_CTRL);
   }
 }
