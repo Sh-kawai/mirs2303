@@ -12,3 +12,5 @@ mg4_jetson/test/*
 mg4_jetson/__pycache__
 mg4_jetson/*/__pycache__
 mg4_jetson/photo-test-393509-a09fbab1df81.json
+
+.vscode/*
