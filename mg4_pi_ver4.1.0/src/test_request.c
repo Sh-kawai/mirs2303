@@ -47,7 +47,8 @@ int main(){
 			break;
 		case 3:
 			request_get_runmode(&state, &speed, &dist);
-			printf("state = %s\n",((state == STR) ? "STR" : (state == ROT) ? "ROT" : "STP"));
+			//printf("state = %s\n",((state == STR) ? "STR" : (state == ROT) ? "ROT" : "STP"));
+			printf("state = %d\n",state);
 			break;
 		case 4:
 			request_get_batt(&volt);
