@@ -11,14 +11,20 @@ void ros_send_odom(){
   double delta_l_m, delta_r_m;
   distance_ros_get(&d_curr_l, &d_curr_r); //[cm]
   
+  // 変化量(距離)を計算
   delta_l_m = (d_curr_l - d_prev_l) / 100.0;
   delta_r_m = (d_curr_r - d_prev_r) / 100.0;
+  // 前回の変位を記録
+  d_prev_l = d_curr_l;
+  d_prev_r = d_curr_r;
   
   // ΔlとΔrを送る(メートルに換算)
   Serial.print("rosodom");
-  Serial.print(delta_l_m);
+  //Serial.print(delta_l_m); // 変化量を送信
+  Serial.print(d_curr_l); // 変位を送信
   Serial.print(",,,");
-  Serial.print(delta_r_m);
+  //Serial.print(delta_r_m); // 変化量を送信
+  Serial.print(d_curr_r); // 変位を送信
   Serial.println();
 }
 
