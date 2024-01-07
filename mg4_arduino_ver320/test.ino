@@ -262,7 +262,8 @@ void test_enc_e(){
 
 void test_serial(double data1, double data2){
   char str[100], str_1[10], str_2[10];
-  sprintf(str, "dist_l = %s, dist_r = %s, dist_diff = %d\n",
+  command_data_t command_data;
+  sprintf(str, "data1 = %s, data2 = %s\n",
             dtostrf(data1, 6, 1, str_1),
             dtostrf(data2, 6, 1, str_2));
   Serial.print(str);

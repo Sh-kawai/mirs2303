@@ -13,7 +13,7 @@ void slave() {
       continue;
     }
     // ros slam
-    if(PIN_ROS == 1){
+    /*if(PIN_ROS == 1){
       if(!ros_flag){
         ros_flag =true;
         ros_reset();
@@ -25,11 +25,12 @@ void slave() {
       continue;
     } else {
       ros_flag = false;
-    }
+    }*/
     if (raspi_receive(&command_data) == 0) {
       Serial.println(command_data.val[0]);
       switch (command_data.val[0]) {
         case -1: // シリアル通信テスト
+          raspi_send(command_data);
           test_serial(command_data.val[1], command_data.val[2]);
           break;
         case 1: // 停止
