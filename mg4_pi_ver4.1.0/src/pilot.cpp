@@ -9,6 +9,8 @@
 
 int main(){
 	double volt;
+	run_state_t state;
+	int speed_curr, dist_curr;
 	Server Jetson(HOST, PORT);
 	
 	if(io_open() != 0) return -1;
@@ -21,8 +23,23 @@ int main(){
 	getchar();
 	
 	while(1){
-		// 処理を記述
-		request_set_runmode(STR, 25, 100);
+		// ライントレース
+		request_set_runmode(LINE, 25, 100);
+		usleep(10 * 1000);
+		while(1) {
+			request_get_runmode(&state, &speed_curr, &dist_curr);
+			if(state = STP) break;
+			usleep(100 * 1000);
+		}
+
+		// 撮影処理
+		// 昇降機構 書く
+		// サーボ 書く
+		// 撮影
+		Jetson.round_trip("p1");
+
+
+
 		break;
 	}
 	
