@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <unistd.h>
 #include "arduino.h"
 #include "request.h"
 
 int main(){
-	int mode, speed, dist, pit_y, yaw_z, pwm;
+	int mode, speed, dist, pit_y, yaw_z, pwm, height, time;
 	double volt;
 	//char buf[256];
 	run_state_t state;
@@ -66,10 +67,23 @@ int main(){
 		case 6:
 			printf("pwm? (0~255)\n");
 			scanf("%d", &pwm);
+			printf("time[s]?(under 0 pwm stop) \n");
+			scanf("%d", &time);
 			//state, height, pwm
 			//height=0: pwm値でずっと動作(2秒)
 			//pwm=0: 目標高さに制御
 			request_set_runmode(CAM, 0, pwm);
+			if(time > 0){
+				sleep(time);
+				request_set_runmode(CAM, 0, 0);
+			} else {
+				sleep(1);
+				while(1){
+					request_get_cammode(&state, &height, &pwm);
+					if(pwm == 0) break;
+					usleep(100 * 1000);
+				}
+			}
 			break;
 		case -1:
 			return 0;

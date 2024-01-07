@@ -1,4 +1,4 @@
-static double d_prev_l = 0.0;
+/*static double d_prev_l = 0.0;
 static double d_prev_r = 0.0;
 
 static double linear_x = 0.0;
@@ -41,10 +41,10 @@ void ros_serial_recv(){
       linear_x = 0.0;
       angular_z = 0.0;
     }
-    /*Serial.print("x:");
+    Serial.print("x:");
     Serial.print(linear_x);
     Serial.print(", z:");
-    Serial.println(angular_z);*/
+    Serial.println(angular_z);
   }
 }
 
@@ -69,4 +69,4 @@ void ros_recv_vel(){
 void ros_reset(){
   d_prev_l = d_prev_r = 0.0;
   encoder_ros_reset();
-}
+}*/

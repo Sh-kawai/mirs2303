@@ -11,6 +11,8 @@ int main(){
 	double volt;
 	run_state_t state;
 	int speed_curr, dist_curr;
+	int height_curr, pwm_curr;
+
 	Server Jetson(HOST, PORT);
 	
 	if(io_open() != 0) return -1;
@@ -28,12 +30,19 @@ int main(){
 		usleep(10 * 1000);
 		while(1) {
 			request_get_runmode(&state, &speed_curr, &dist_curr);
-			if(state = STP) break;
+			if(state == STP) break;
 			usleep(100 * 1000);
 		}
 
 		// 撮影処理
 		// 昇降機構 書く
+		request_set_runmode(CAM, 0, 255);
+		usleep(10 * 1000);
+		while(1) {
+			request_get_cammode(&state, &height_curr, &pwm_curr);
+			if(pwm_curr == 0) break;
+			usleep(100 * 1000);
+		}
 		// サーボ 書く
 		// 撮影
 		Jetson.round_trip("p1");

@@ -60,7 +60,9 @@ void slave() {
           break;
         case 7: // 昇降用モーター
           Serial.println("CAM");
-          camera_ctrl_set(command_data.val[1], command_data.val[2]);
+          // 引数heigh, pwm
+          // height=0ならpwm制御
+          camera_ctrl_set(0.0, command_data.val[2]);
           break;
         case 10:
           run_ctrl_get(&state, &speed, &dist);
@@ -77,6 +79,12 @@ void slave() {
           break;
         case 12:
           command_data.val[0] = (short)(io_get_batt() * 100.0);
+          raspi_send(command_data);
+          break;
+        case 13:
+          command_data.val[0] = LINE;
+          command_data.val[1] = (int)camera_get_height();
+          command_data.val[2] = (int)camera_get_pwm();
           raspi_send(command_data);
           break;
         default:

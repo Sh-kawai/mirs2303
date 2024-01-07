@@ -173,9 +173,9 @@ void test_servo_rot(){
     Serial.println(angle);
     test_servo_get();
     
-    angle += 10;
+    angle += 1;
     if(angle > 180) angle = 0;
-    delay(1000);
+    delay(100);
   }
 }
 
@@ -199,7 +199,8 @@ void test_camera_ctrl_motor(int p){
   int pwm = 0;
   char str[100], str_h[10];
   
-  _camera_ctrl_set_motor(p);
+  //_camera_ctrl_set_motor(p);
+  camera_ctrl_set(0.0, p);
 
   while(1){
     if(batt_check() == -1) break;
@@ -217,6 +218,7 @@ void test_camera_ctrl_motor(int p){
     count++;
     if(count > count_max) break;
   }
+  _camera_ctrl_set_motor(0);
 }
 
 void test_camera_ctrl_height(double h){
@@ -246,6 +248,47 @@ void test_camera_ctrl_height(double h){
   }
 }
 
+void test_camera_touch(){
+  int h, l;
+  char str[100];
+  while (1) {
+    io_get_camera(&h, &l);
+    sprintf(str, "high: %d, low: %d", h, l);
+    Serial.println(str);
+    delay(T_CTRL);
+  }
+}
+
+void test_camera_max(){
+  double height;
+  int count = 0;
+  int pwm_list[2] = {-255, 255};
+  char str[100], str_h[10];
+  for(int i=0; i<2; i++){
+    camera_ctrl_reset();
+    _camera_ctrl_set_motor(pwm_list[i]);
+    while(1){
+      if(batt_check() == -1) break;
+      camera_ctrl_execute();
+      pwm = camera_get_pwm();
+      height = camera_get_height();
+      if (count % 10 == 0) {
+        height = camera_get_height();
+        sprintf(str, "heihgt_curr = %s, pwm = %d\n",
+                dtostrf(height, 6, 1, str_h),
+                pwm);
+        Serial.print(str);
+      }
+      if(pwm == 0)break;
+      delay(T_CTRL);
+      count++;
+    }
+    delay(1000);
+  }
+  Serial.print("max_height: ");
+  Serial.println(dtostrf(camera_get_height(), 6, 1, str_h));
+}
+
 void test_enc_l(){
   while(1){
     _test_enc_l();
@@ -269,7 +312,7 @@ void test_serial(double data1, double data2){
   Serial.print(str);
 }
 
-void test_ros(){
+/*void test_ros(){
   while(1){
     //if(batt_check() == -1) break;
     ros_send_odom();
@@ -277,4 +320,4 @@ void test_ros(){
     vel_ctrl_execute();
     delay(T_CTRL);
   }
-}
+}*/

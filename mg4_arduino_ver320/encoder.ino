@@ -54,13 +54,15 @@ static void enc_change_l() {
   a_curr = digitalRead(PIN_ENC_A_L);
   b_curr = digitalRead(PIN_ENC_B_L);
 
-  /*// 正転 : [L, H]→(L, L)→[H, L]→(H, H)→[L, H]
+  /*
+  // 正転 : [L, H]→(L, L)→[H, L]→(H, H)→[L, H]
   if (a_prev ==  LOW && b_prev == HIGH && a_curr == HIGH && b_curr ==  LOW) count_l++;
   if (a_prev == HIGH && b_prev ==  LOW && a_curr ==  LOW && b_curr == HIGH) count_l++;
 
   // 逆転 : [L, L]→(L, H)→[H, H]→(H, L)→[L, L]
   if (a_prev ==  LOW && b_prev ==  LOW && a_curr == HIGH && b_curr == HIGH) count_l--;
-  if (a_prev == HIGH && b_prev == HIGH && a_curr ==  LOW && b_curr ==  LOW) count_l--;*/
+  if (a_prev == HIGH && b_prev == HIGH && a_curr ==  LOW && b_curr ==  LOW) count_l--;
+  */
 
   if (a_curr != b_curr){
     count_l++;
@@ -84,13 +86,15 @@ static void enc_change_r() {
   a_curr = digitalRead(PIN_ENC_A_R);
   b_curr = digitalRead(PIN_ENC_B_R);
 
-  /*// 正転 : [L, H]→(L, L)→[H, L]→(H, H)→[L, H]
+  /*
+  // 正転 : [L, H]→(L, L)→[H, L]→(H, H)→[L, H]
   if (a_prev ==  LOW && b_prev == HIGH && a_curr == HIGH && b_curr ==  LOW) count_r++;
   if (a_prev == HIGH && b_prev ==  LOW && a_curr ==  LOW && b_curr == HIGH) count_r++;
 
   // 逆転 : [L, L]→(L, H)→[H, H]→(H, L)→[L, L]
   if (a_prev ==  LOW && b_prev ==  LOW && a_curr == HIGH && b_curr == HIGH) count_r--;
-  if (a_prev == HIGH && b_prev == HIGH && a_curr ==  LOW && b_curr ==  LOW) count_r--;*/
+  if (a_prev == HIGH && b_prev == HIGH && a_curr ==  LOW && b_curr ==  LOW) count_r--;
+  */
 
   if (a_curr != b_curr){
     count_r++;

@@ -45,11 +45,11 @@ void vel_ctrl_execute() {
   if (vel_ref_r == 0.0) pwm_r = 0;
 
   motor_set(pwm_l, pwm_r);
-  Serial.print("r:");
+  /*Serial.print("r:");
   Serial.print(pwm_r);
   Serial.print("[cm/s], l:");
   Serial.print(pwm_l);
-  Serial.println("[cm/s]");
+  Serial.println("[cm/s]");*/
 
   dist_prev_l = dist_curr_l;
   dist_prev_r = dist_curr_r;

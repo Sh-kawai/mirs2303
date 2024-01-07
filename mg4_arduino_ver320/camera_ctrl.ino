@@ -3,8 +3,6 @@ static double h_err_prev = 0.0;
 static double h_err_sum = 0.0;
 static double pwm = 0.0;
 static double pwm_prev = 0.0;
-static int botton_state = 0;
-static int botton_high = 0;
 static double camera_high = 0;
 
 static volatile long count_e = 0;
@@ -18,17 +16,17 @@ void camera_ctrl_open(){
   pinMode(PIN_ENC_B_E, INPUT);
   digitalWrite(PIN_ENC_A_E, HIGH);
   digitalWrite(PIN_ENC_B_E, HIGH);
+  attachInterrupt(INTERRUPT_E, camera_enc_change, CHANGE);
   
   pinMode(PIN_DIR_E, OUTPUT);
   pinMode(PIN_PWM_E, OUTPUT);
   analogWrite(PIN_PWM_E, 0);
-  
-  attachInterrupt(INTERRUPT_E, camera_enc_change, CHANGE);
 }
 
 // 定期実行関数
 void camera_ctrl_execute(){
   double height_curr = camera_get_height();
+  int touch_high, touch_low;
   
   if(camera_ctrl_exec_height){
     // 高さ用PID
@@ -58,16 +56,14 @@ void camera_ctrl_execute(){
   
   camera_high = count_e * ELEV_PIT/ENC_RANGE_E;
   
-  botton_state = digitalRead(PIN_TOUCH_1);
-  botton_high = digitalRead(PIN_TOUCH_2);
-  if(botton_state == LOW){//タッチセンサに触れているとき
+  io_get_camera(&touch_high, &touch_low);
+  if(touch_high == LOW && pwm > 0){//タッチセンサに触れているとき
     pwm = 0;
-    if(botton_high == LOW){//最高点のとき
-      camera_high = HIGH_MAX;
-    }else{//最低点のとき
-      camera_high = 0;
-    }    
-  
+    camera_high = HIGH_MAX;
+  }
+  if(touch_low == LOW && pwm < 0){
+    pwm = 0;
+    camera_high = 0;
   }
   
 
@@ -141,6 +137,7 @@ static void camera_enc_change() {
   a_curr = digitalRead(PIN_ENC_A_E);
   b_curr = digitalRead(PIN_ENC_B_E);
 
+  /*
   // 正転 : [L, H]→(L, L)→[H, L]→(H, H)→[L, H]
   if (a_prev ==  LOW && b_prev == HIGH && a_curr == HIGH && b_curr ==  LOW) count_e++;
   if (a_prev == HIGH && b_prev ==  LOW && a_curr ==  LOW && b_curr == HIGH) count_e++;
@@ -148,6 +145,7 @@ static void camera_enc_change() {
   // 逆転 : [L, L]→(L, H)→[H, H]→(H, L)→[L, L]
   if (a_prev ==  LOW && b_prev ==  LOW && a_curr == HIGH && b_curr == HIGH) count_e--;
   if (a_prev == HIGH && b_prev == HIGH && a_curr ==  LOW && b_curr ==  LOW) count_e--;
+  */
 
   a_prev = a_curr;
   b_prev = b_curr;
@@ -155,11 +153,11 @@ static void camera_enc_change() {
   a_curr_e = a_curr;
   b_curr_e = b_curr;
   
-  /*if (digitalRead(PIN_ENC_A_E) != digitalRead(PIN_ENC_B_E))
+  if (digitalRead(PIN_ENC_A_E) != digitalRead(PIN_ENC_B_E))
     count_e++;//正転
   else {
     count_e--;//逆転
-  }*/
+  }
 }
 
 void _test_enc_e(){

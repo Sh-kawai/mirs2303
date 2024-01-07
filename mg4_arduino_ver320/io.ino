@@ -11,8 +11,8 @@ void io_open() {
   digitalWrite(PIN_SW, HIGH);
   digitalWrite(PIN_BATT, LOW);
   digitalWrite(PIN_ROS, LOW);
-  pinMode(PIN_TOUCH_1, INPUT_PULLUP);
-  pinMode(PIN_TOUCH_2, INPUT_PULLUP);
+  pinMode(PIN_CAM_H, INPUT_PULLUP);
+  pinMode(PIN_CAM_L, INPUT_PULLUP);
   
 }
 
@@ -41,4 +41,9 @@ void io_get_light(int *l0, int *l1, int *l2, int *l3){
 
 double io_get_batt() {
   return analogRead(PIN_BATT) * 5.0 / 1024.0 / V_RATIO;
+}
+
+void io_get_camera(int *high, int*low){
+  *high = digitalRead(PIN_CAM_H);
+  *low = digitalRead(PIN_CAM_L);
 }

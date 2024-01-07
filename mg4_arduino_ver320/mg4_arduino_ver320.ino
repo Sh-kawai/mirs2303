@@ -10,8 +10,8 @@ void setup() {
   io_open();
   encoder_open();
   motor_open();
-  //servo_open();
-  //camera_ctrl_open();
+  servo_open();
+  camera_ctrl_open();
   raspi_open();
 }
 
@@ -22,7 +22,7 @@ void loop() {
   */
 
   /* RasPi からの指令で動作させるとき、slave を有効にする。*/
-  //slave();
+  slave();
   
   /* --------------機能のテスト---------------------------------------------
     テスト関数 test_*() のいずれかを有効にする。
@@ -57,7 +57,7 @@ void loop() {
   //test_arc_move_sim(100);
   
   /*サーボモーターテスト*/
-  //test_servo(50, 50);
+  //test_servo(90, 90);
   //test_servo_rot();
   
   /*フォトリフレクタ*/
@@ -68,6 +68,8 @@ void loop() {
   //test_camera_ctrl_motor(255);
   /*高さ指定制御　引数:目標高さ[cm](0以上)*/
   //test_camera_ctrl_height(-10000.0);
+  //test_camera_max();
+  //test_camera_touch();
 
   /* バッテリー値の確認 */
   //test_batt();
@@ -77,5 +79,5 @@ void loop() {
   //test_decode();
 
   /* ros slam */
-  test_ros();
+  //test_ros();
 }
