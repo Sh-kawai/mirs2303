@@ -166,6 +166,7 @@ void test_servo_rot(){
   int y = 0;
   int z = 0;
   int angle = 0;
+  int angle_plas = 1;
   while(1){
     y = angle;
     z = angle;
@@ -173,8 +174,9 @@ void test_servo_rot(){
     Serial.println(angle);
     test_servo_get();
     
-    angle += 1;
-    if(angle > 180) angle = 0;
+    angle += angle_plas;
+    if(angle > 180) angle_plas = -1;
+    if(angle < 0) angle_plas = 1;
     delay(100);
   }
 }
