@@ -10,15 +10,20 @@ void ros_send_odom(){
   double d_curr_l, d_curr_r;
   double delta_l_m, delta_r_m;
   distance_ros_get(&d_curr_l, &d_curr_r); //[cm]
-  
+  /*
   delta_l_m = (d_curr_l - d_prev_l) / 100.0;
   delta_r_m = (d_curr_r - d_prev_r) / 100.0;
+  d_prev_l = d_curr_l;
+  d_prev_r = d_curr_r;
+  */
   
   // ΔlとΔrを送る(メートルに換算)
   Serial.print("rosodom");
-  Serial.print(delta_l_m);
+  //Serial.print(delta_l_m);
+  Serial.print(d_curr_l);
   Serial.print(",,,");
-  Serial.print(delta_r_m);
+  //Serial.print(delta_r_m);
+  Serial.print(d_curr_r);
   Serial.println();
 }
 
@@ -35,8 +40,8 @@ void ros_serial_recv(){
       String linear_x_str = receivedData.substring(rosNum, commandIndex);
       String angular_z_str = receivedData.substring(commandIndex + commandNum);
 
-      linear_x = linear_x_str.toDouble() / 1000.0;
-      angular_z = angular_z_str.toDouble() / 1000.0;
+      linear_x = linear_x_str.toDouble() / 100.0;
+      angular_z = angular_z_str.toDouble() / 100.0;
     } else {
       linear_x = 0.0;
       angular_z = 0.0;
