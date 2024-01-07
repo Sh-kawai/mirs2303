@@ -35,8 +35,8 @@ void ros_serial_recv(){
       String linear_x_str = receivedData.substring(rosNum, commandIndex);
       String angular_z_str = receivedData.substring(commandIndex + commandNum);
 
-      linear_x = linear_x_str.toDouble() / 1000.0;
-      angular_z = angular_z_str.toDouble() / 1000.0;
+      linear_x = linear_x_str.toDouble() / 100.0;
+      angular_z = angular_z_str.toDouble() / 100.0;
     } else {
       linear_x = 0.0;
       angular_z = 0.0;

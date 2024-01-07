@@ -25,7 +25,7 @@ typedef struct {
 /* ピン配置 */
 // mega interrupt pin(num)
 // 2(0) 3(1) 21(2) 20(3) 19(4) 18(5)
-#define INTERRUPT_R  3
+/*#define INTERRUPT_R  3
 #define INTERRUPT_L  2
 #define INTERRUPT_E  4
 
@@ -51,12 +51,12 @@ typedef struct {
 #define PIN_LIGHT_2 A2
 #define PIN_LIGHT_3 A3
 #define PIN_TOUCH_1 1
-#define PIN_TOUCH_2 1
+#define PIN_TOUCH_2 1*/
 
 #define PIN_ROS     1
 
 
-/*
+
 #define INTERRUPT_L  0
 #define INTERRUPT_R  1
 
@@ -71,7 +71,21 @@ typedef struct {
 #define PIN_SW      10
 #define PIN_LED     13
 #define PIN_BATT    19
-*/
+
+#define INTERRUPT_E  4
+#define PIN_ENC_A_E 1
+#define PIN_ENC_B_E 1
+#define PIN_DIR_E   1
+#define PIN_PWM_E    1
+#define PIN_SER_Y    1 // 縦 y軸
+#define PIN_SER_Z    1 // 横 z軸
+#define PIN_LIGHT_0 A0
+#define PIN_LIGHT_1 A1
+#define PIN_LIGHT_2 A2
+#define PIN_LIGHT_3 A3
+#define PIN_TOUCH_1 1
+#define PIN_TOUCH_2 1
+
 
 /* パラメータ */
 // 動作周期 [ms]

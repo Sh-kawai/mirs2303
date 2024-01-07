@@ -10,20 +10,19 @@ void setup() {
   io_open();
   encoder_open();
   motor_open();
-  servo_open();
-  camera_ctrl_open();
+  //servo_open();
+  //camera_ctrl_open();
   raspi_open();
 }
 
-void loop() {
- 
+void loop() { 
   /*
   いずれか一つの関数を有効にする。
   どの関数も無限ループになっている。しがたってこの loop 関数は実際にはループしない。
   */
 
   /* RasPi からの指令で動作させるとき、slave を有効にする。*/
-  slave();
+  //slave();
   
   /* --------------機能のテスト---------------------------------------------
     テスト関数 test_*() のいずれかを有効にする。
@@ -78,5 +77,5 @@ void loop() {
   //test_decode();
 
   /* ros slam */
-  //test_ros();
+  test_ros();
 }

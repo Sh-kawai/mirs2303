@@ -44,7 +44,7 @@ void test_vel_ctrl(double vel_l, double vel_r) {
   vel_ctrl_set(vel_l, vel_r);
 
   while (1) {
-    if(batt_check() == -1) break;
+    //if(batt_check() == -1) break;
     vel_ctrl_execute();
     if (i >= 10) {
       vel_ctrl_get(&vel_l, &vel_r);
