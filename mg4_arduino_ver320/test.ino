@@ -323,3 +323,31 @@ void test_serial(double data1, double data2){
     delay(T_CTRL);
   }
 }*/
+
+void test_lintrace(){
+  run_state_t state;
+  double speed, dist;
+  
+  for(int i=0; i<3; i++){
+    Serial.println(i);
+    state = LINE;
+    test_run_ctrl(state,  15, 1000);
+    delay(T_CTRL);
+    while(1){
+      run_ctrl_get(&state, &speed, &dist);
+      if(state == STP) break;
+      delay(T_CTRL);
+    }
+    delay(1000);
+    
+    state = ROT;
+    test_run_ctrl(state, 15, 180);
+    delay(T_CTRL);
+    while(1){
+      run_ctrl_get(&state, &speed, &dist);
+      if(state == STP) break;
+      delay(T_CTRL);
+    }
+    delay(1000);
+  }
+}

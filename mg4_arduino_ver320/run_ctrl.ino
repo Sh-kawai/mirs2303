@@ -51,23 +51,7 @@ void run_ctrl_execute() {
   switch (run_state) {
     case STP:
       vel_ctrl_set(0.0, 0.0);
-      /* 後に削除 */
-      delay(3000);
-      test_run_ctrl(ROT,-30, 178);
-      run_state = RETURN;
-      Serial.println(STP);
-      /* ここまで削除 */
       break;
-    /* 後に削除 */  
-    case RETURN:
-      test_run_ctrl(STR,5 , 20);
-      run_state = LINE;
-      delay(2000);
-      Serial.println(RETURN);
-      break;
-    /* ここまで削除 */
-      
-      
     case STR:
       //直線走行距離調整
       d_r *= K_STR_LR;

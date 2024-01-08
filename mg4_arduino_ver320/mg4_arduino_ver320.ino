@@ -51,6 +51,8 @@ void loop() {
   //test_run_ctrl(STR, 25, 100);
   //test_run_ctrl(ROT,-10, 180);
   //test_run_ctrl(LINE,  15, 700);
+  
+  //test_lintrace();
 
   /*円弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
   //test_arc_move(10, 100, 45 ,90);
@@ -65,7 +67,7 @@ void loop() {
 
   /*昇降用モータ*/
   /*pwm指定制御　引数:pwm値(int)*/
-  //test_camera_ctrl_motor(255);
+  test_camera_ctrl_motor(-255);
   /*高さ指定制御　引数:目標高さ[cm](0以上)*/
   //test_camera_ctrl_height(-10000.0);
   //test_camera_max();
