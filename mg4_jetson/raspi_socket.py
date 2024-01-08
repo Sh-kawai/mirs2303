@@ -26,8 +26,9 @@ u1_t:   全画像 アップロード(スレッド)
 u1_c:   全画像 アップロード チェック
 
 pu1:  一枚 撮影&アップロード(即時)
-pu2_s:  定期 撮影&アップロード(スレッド開始)
-pu2_f: 定期 撮影&アップロード終了(スレッド終了)
+pu1_click: 
+pu2_s:  定期 撮影&アップロード(スレッド開始) none
+pu2_f: 定期 撮影&アップロード終了(スレッド終了) none
 ##############################################
 """
 
@@ -117,6 +118,16 @@ def client(host=HOST, port=PORT):
       elif response == "pu1":
         if not get_img.cap_flag():
           save_path = get_img.get_img()
+          save_file = os.path.basename(save_path)
+          file_id = upload.upload(save_file, gdrive_main=_gdrive_main)
+          message = f"save picture:{save_path}\n"
+          message += f"upload id:{file_id} [gdrive_main={_gdrive_main}]"
+        else:
+          message = "other capture opened"
+      # pu1_click:  一枚 click撮影&アップロード(即時)
+      elif response == "pu1_click":
+        if not get_img.cap_flag():
+          save_path = get_img.get_click_img()
           save_file = os.path.basename(save_path)
           file_id = upload.upload(save_file, gdrive_main=_gdrive_main)
           message = f"save picture:{save_path}\n"
