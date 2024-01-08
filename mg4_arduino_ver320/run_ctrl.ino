@@ -51,7 +51,23 @@ void run_ctrl_execute() {
   switch (run_state) {
     case STP:
       vel_ctrl_set(0.0, 0.0);
+      /* 後に削除 */
+      delay(3000);
+      test_run_ctrl(ROT,-30, 178);
+      run_state = RETURN;
+      Serial.println(STP);
+      /* ここまで削除 */
       break;
+    /* 後に削除 */  
+    case RETURN:
+      test_run_ctrl(STR,5 , 20);
+      run_state = LINE;
+      delay(2000);
+      Serial.println(RETURN);
+      break;
+    /* ここまで削除 */
+      
+      
     case STR:
       //直線走行距離調整
       d_r *= K_STR_LR;
@@ -152,17 +168,21 @@ void run_ctrl_execute() {
       er_prev = er;
       ratio = 1;
       
-      if(light3 < WHITE){
+      if((light3 < WHITE||light0 < WHITE)&& sp_prev==4){
          vel_ref = sign * 4 *ratio;
          sp = 4;
-      }else if(vel_prev < 15){
+      }else if((light3 < WHITE||light0 < WHITE)&& sp_prev > 4){
+        sp = sp_prev - 0.4;
+        vel_ref = sign * sp * ratio;
+        
+      }else if(sp_prev < 15){
          sp = sp_prev + 0.2;
          vel_ref = sign * sp * ratio;
       }else{
         vel_ref = sign * speed_ref * ratio;
       }
-      Serial.print("vel_ref =");
-      Serial.println(vel_ref);
+      /*Serial.print("vel_ref =");
+      Serial.println(vel_ref);*/
       
       vel_prev = vel_ref;
       sp_prev = sp;
@@ -176,7 +196,7 @@ void run_ctrl_execute() {
         //test_run_ctrl(ROT,10, 90);
       //} else if (light1 != WHITE && light2 != WHITE){
       } else {
-        //左右の値が両方ともwhiteじゃないなら
+      //左右の値が両方ともwhiteじゃないなら
         vel_mod = Kl_p * er + Kl_d * (er - er_prev);
         vel_ctrl_set((vel_ref - vel_mod), (vel_ref + vel_mod));
       }

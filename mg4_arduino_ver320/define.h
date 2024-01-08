@@ -8,6 +8,7 @@ typedef enum {
   SER,
   CAM,
   ROS,
+  RETURN, // 後に削除
 } run_state_t;
 
 typedef struct {

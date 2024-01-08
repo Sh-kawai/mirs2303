@@ -48,8 +48,8 @@ void loop() {
     距離 > 0 ：前進、角度 < 0 ：後退　（速度は常に > 0）
     角度 > 0 ：反時計回り、角度 < 0 ：時計回り　（角速度は常に > 0）
   */
-  //test_run_ctrl(STR, 25, 1000);
-  //test_run_ctrl(ROT,-10, -30);
+  //test_run_ctrl(STR, 25, 100);
+  //test_run_ctrl(ROT,-10, 180);
   //test_run_ctrl(LINE,  15, 700);
 
   /*円弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
@@ -57,7 +57,7 @@ void loop() {
   //test_arc_move_sim(100);
   
   /*サーボモーターテスト*/
-  test_servo(90, 90);
+  //test_servo(90, 90);
   //test_servo_rot();
   
   /*フォトリフレクタ*/
