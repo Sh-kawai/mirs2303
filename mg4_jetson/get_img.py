@@ -232,7 +232,9 @@ def test_video():
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     output_file = os.path.join(JETSON_PATH, f"videos/test.mp4")
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'H264')
+    #*'mp4v'だとなぜか再生できない
+    #*'H264'ならエラー出るが再生できる
     print(fourcc)
     out = cv2.VideoWriter(output_file, fourcc, fps, (frame_width, frame_height))
 
