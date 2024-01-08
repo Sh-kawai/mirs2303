@@ -31,8 +31,13 @@ pu2_f: 定期 撮影&アップロード終了(スレッド終了)
 ##############################################
 """
 
+# グローバル変数
+_gdrive_main = False    
+
 # socket client
 def client(host=HOST, port=PORT):
+  global _gdrive_main
+  
   # エンコード
   letter_coding = "UTF-8"
   # オブジェクトの作成
@@ -56,16 +61,16 @@ def client(host=HOST, port=PORT):
       # p1:   一枚 撮影(即時)
       elif response == "p1":
         if not get_img.cap_flag():
-          save_path = get_img.save_img()
+          save_path = get_img.get_img()
           message = f"save picture:{save_path}"
         else:
           message = "other capture opened"
       # p2_s:   定期 撮影(スレッド開始)
       elif response == "p2_s":
         if not get_img.cap_flag():
-          start_flag = thread_ctrl.thread_start("p2",get_img.save_auto_img, kwargs={"show":True})
+          start_flag = thread_ctrl.thread_start("p2",get_img.get_auto_img, kwargs={"show":True})
           if start_flag:
-            message = "start thread save_suto_img()"
+            message = "start thread get_suto_img()"
           else:
             message = "already start thread save_suto_img()"
         else:
@@ -96,9 +101,9 @@ def client(host=HOST, port=PORT):
           message = "runnning save_movie()"
       # u1_t:   全画像 アップロード(スレッド)
       elif response == "u1_t":
-        thread_flag = thread_ctrl.auto_thread_run("u1", upload.main, {"gdrive_main":True})
+        thread_flag = thread_ctrl.auto_thread_run("u1", upload.main, {"gdrive_main":_gdrive_main})
         if thread_flag:
-          message = "auto-thread upload.main()"
+          message = f"auto-thread upload.main() [gdrive_main={_gdrive_main}]"
         else:
           message = "run other upload.main()"
       # u1_c:   全画像 アップロード チェック
@@ -110,8 +115,14 @@ def client(host=HOST, port=PORT):
           message = "running upload.main()"
       # pu1:  一枚 撮影&アップロード(即時)
       elif response == "pu1":
-        res = ""
-        pass
+        if not get_img.cap_flag():
+          save_path = get_img.get_img()
+          save_file = os.path.basename(save_path)
+          file_id = upload.upload(save_file, gdrive_main=_gdrive_main)
+          message = f"save picture:{save_path}\n"
+          message += f"upload id:{file_id} [gdrive_main={_gdrive_main}]"
+        else:
+          message = "other capture opened"
       # pu2_s:  定期 撮影&アップロード(スレッド開始)
       elif response == "pu2_s":
         start_flag = thread_ctrl.thread_start("pu2", None, None)
@@ -127,52 +138,18 @@ def client(host=HOST, port=PORT):
         else:
           message = "didn't run thread save_suto_img()"
     
-      """
-      try:
-        if response == "q":
-          break
-        elif response == "1": # get_img once
-          if not cap_open_state:
-            get_img.save_img()
-          else:
-            message = "already open capture\nDon't save_img()"
-        elif response == "2": # start get_auto_img
-          if not auto_run or not cap_open_state:
-            thread_get_auto_img = threading.Thread(target=get_img.save_auto_img, kwargs={"q_stop": q_stop, "show":True}, daemon=True)
-            thread_get_auto_img.start()
-            message = "Start get_auto_img()"
-          else:
-            message = "already start get_auto_img()"
-          auto_run = True
-          cap_open_state = True
-        elif response == "22": # stop get_auto_img
-          if auto_run:
-            # thread end process
-            q_stop.put(True)
-            thread_get_auto_img.join()
-            message = "Finish get_auto_img()"
-          else:
-            message = "don't run get_auto_img()"
-          auto_run = False
-          cap_open_state = False
-        elif response == "3": # upload for gdrive
-          upload.main(gdrive_main=True)
-        elif response == "4": # upload soon
-          pass
-      """
-    
     except FileNotFoundError as e:
       message = f"[jetson] FileNotFoundError: {e}"
       print(message)
       print('Send : %s' % message)
-      client.send(message.encode(letter_coding))
+      client.sendall(message.encode(letter_coding))
       client.close()
       exit()
     except Exception as e:
       message = f"[jetson] Cought an Exceptiion: {e}"
       print(message)
       print('Send : %s' % message)
-      client.send(message.encode(letter_coding))
+      client.sendall(message.encode(letter_coding))
       client.close()
       exit()
     
@@ -181,10 +158,11 @@ def client(host=HOST, port=PORT):
   
   message = "client close"
   print('Send : %s' % message)
-  client.send(message.encode(letter_coding))
+  client.sendall(message.encode(letter_coding))
   client.close()
 
 if __name__ == "__main__":
   host = "127.0.0.1"
   port = 8080
+  _gdrive_main = False # global
   client(host, port)

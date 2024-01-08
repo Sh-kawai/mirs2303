@@ -31,7 +31,18 @@ def thread_finish(label):
     fin_flag = False
     return fin_flag
 
+def thread_finish_all():
+  for label in active_q.keys():
+    thread = active_thread.pop(label)
+    q_stop = active_q.pop(label)
+    q_stop.append(True)
+    thread.join()
+  return
+
 def auto_thread_run(label, func, kwargs={}):
+  # thread check
+  auto_thread_check(label=label)
+  
   if label in active_thread:
     thread_flag = False
     return thread_flag
@@ -57,7 +68,7 @@ def auto_thread_check(label):
     fin_flag = True
     return fin_flag
 
-def test_print(q_stop):
+def _test_print(q_stop):
   num = 0
   while True:
     if len(q_stop) != 0:
@@ -67,7 +78,7 @@ def test_print(q_stop):
     num += 1
     time.sleep(1)
 
-def test_print_auto():
+def _test_print_auto():
   max = 20
   for num in range(max):
     print(num)
@@ -76,13 +87,13 @@ def test_print_auto():
 
 if __name__ == "__main__":
   print("thread_start")
-  thread_start("test", test_print)
+  thread_start("test", _test_print)
   input()
   thread_finish("test")
   print("thread_finish")
   
   print("auto_thread_run")
-  auto_thread_run("test_auto", test_print_auto)
+  auto_thread_run("test_auto", _test_print_auto)
   while True:
     inp = input()
     if auto_thread_check("test_auto"):

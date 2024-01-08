@@ -88,6 +88,8 @@ class Handler:
     with open(self.path, "w", newline="") as f:
       writer = csv.DictWriter(f, fieldnames=fieldnames)
       writer.writeheader()
+    
+    print("clean all csv file data")
 
 
 if __name__ == "__main__":
@@ -95,7 +97,9 @@ if __name__ == "__main__":
   vid_csv = Handler(path=VID_CSV_PATH)
   sch_csv = Handler(path=SCH_CSV_PATH)
   
-  pic_csv.write(time='1900-12-31_1_8', place="test", subject="test", class_name="test")
+  print(len(pic_csv.read_all()))
+  
+  """pic_csv.write(time='1900-12-31_1_8', place="test", subject="test", class_name="test")
   print(pic_csv.read(name='1900-12-31_1_8'))
   
   vid_csv.write(time='1900-12-31_1_8', place="test", subject="test", class_name="test")
@@ -104,4 +108,4 @@ if __name__ == "__main__":
   sch_csv.write(time='1900-12-31_1_8', place="test", subject="test", class_name="test")
   print(sch_csv.read(name='1900-12-31_1_8'))
   
-  print(sch_csv.read_all())
+  print(sch_csv.read_all())"""

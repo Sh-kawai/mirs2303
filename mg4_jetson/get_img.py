@@ -46,8 +46,54 @@ def cap_flag():
     return _camera_flag
 
 # 画像取得（即時)
-def save_img():
+def get_img():
     capture = cap_init()
+    save_path = _save_img(capture=capture)
+    cap_end(cap=capture)
+    return save_path
+
+# 定期撮影
+def get_auto_img(q_stop, q_save_e=None, show=False):
+    capture = cap_init()
+    
+    auto_time = 30
+    start_time = time.time()
+
+    while True:
+        # 1フレームの画像を取得
+        ret, frame = capture.read()
+
+        keyInp = cv2.waitKey(1)
+
+        if len(q_stop) != 0:
+            if q_stop.pop():
+                print("[get_auto_img] stop request")
+                break
+        
+        # qを押されたら停止
+        if keyInp & 0xFF == ord('q'):
+            print("KeyInput q: finish get_img()")
+            break
+
+        elapsed_time = time.time() - start_time
+        remaining_time = int(auto_time - elapsed_time)
+        if remaining_time <= 0:
+            res = _save_img(capture=capture)
+            if res and q_save_e != None:
+                print("save_img event")
+                q_save_e.put(res)
+            start_time = time.time()
+        
+        if show:
+            # 画像をウィンドウに表示
+            text = f"{remaining_time}"
+            cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+            cv2.imshow("frame", frame)
+    
+    # 解放
+    cap_end(capture)
+    
+def _save_img(capture):
     pic_csv = csv_handle.Handler(path=PIC_CSV_PATH)
     # 現在の時刻を取得
     current_time = datetime.now()
@@ -62,7 +108,7 @@ def save_img():
     if os.path.isfile(save_path):
         print(f"保存しました:{time_str}.png")
         print(f"保存先:{save_path}")
-    
+        
         # add csv data
         now_sch = schedule.now_schedule()
         place = now_sch["place"]
@@ -70,7 +116,7 @@ def save_img():
         class_name = now_sch["class"]
         pic_csv.write(time=time_str, place=place, subject=subject, class_name=class_name)
         print(f"csv recode:{time_str}, {place}, {subject}")
-    
+        
         return save_path
     
     return None
@@ -112,46 +158,6 @@ def get_train_img():
         cv2.imshow("frame", frame)
     
     cap_end(cap=capture)
-
-# 定期撮影
-def save_auto_img(q_stop, q_save_e=None, show=False):
-    capture = cap_init()
-    
-    auto_time = 30
-    start_time = time.time()
-
-    while True:
-        # 1フレームの画像を取得
-        ret, frame = capture.read()
-
-        keyInp = cv2.waitKey(1)
-
-        if len(q_stop) != 0:
-            if q_stop.pop():
-                print("[get_auto_img] stop request")
-                break
-        
-        # qを押されたら停止
-        if keyInp & 0xFF == ord('q'):
-            print("KeyInput q: finish get_img()")
-            break
-
-        elapsed_time = time.time() - start_time
-        remaining_time = int(auto_time - elapsed_time)
-        if remaining_time <= 0:
-            res = save_img(capture=capture)
-            if res and not q_save_e:
-                q_save_e.put(res)
-            start_time = time.time()
-        
-        if show:
-            # 画像をウィンドウに表示
-            text = f"{remaining_time}"
-            cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
-            cv2.imshow("frame", frame)
-    
-    # 解放
-    cap_end(capture)
 
 # 動画撮影
 def save_movie(fps=30, rec_time=30):

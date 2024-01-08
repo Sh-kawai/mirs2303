@@ -109,12 +109,13 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
 
       # 認識の結果を描画する
       id, score = user if result else ("unknown", 0.0)
+      #id, score = user
       text = "{0} ({1:.2f})".format(id, score)
       position = (box[0], box[1] - 10)
       font = cv2.FONT_HERSHEY_SIMPLEX
       scale = 0.6
       cv2.putText(image, text, position, font, scale, color, thickness, cv2.LINE_AA)
-      if id is not "unknown":
+      if id != "unknown":
         print(id, score)
     cv2.namedWindow("faceCV_realtime", cv2.WINDOW_GUI_NORMAL)
     cv2.putText(image, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
@@ -140,6 +141,6 @@ def recognition(capture, dictionary, face_detector, face_recognizer):
   
 if __name__ == "__main__":
   path = os.path.join(JETSON_PATH, "test/d4顔認証試験.mp4")
-  cap, dict, detector, recognizer = init(path)
+  cap, dict, detector, recognizer = init()
   recognition(cap, dict, detector, recognizer)
   
