@@ -171,8 +171,6 @@ def save_movie(fps=30, rec_time=30):
 
     print("Recording for {} seconds...".format(rec_time))
     
-    current_time = datetime.now()
-    time_str = current_time.strftime('%Y-%m-%d_%H-%M-%S')  # 時刻のフォーマットを指定
     now_sch = schedule.now_schedule()
     place = now_sch["place"]
     subject = now_sch["subject"]
@@ -205,7 +203,64 @@ def save_movie(fps=30, rec_time=30):
     print("Recording completed. Video saved as", output_file)
     return output_file
 
+def check_cam():
+    cap = cap_init()
+    while True:
+        # 1フレームの画像を取得
+        ret, frame = cap.read()
+        
+        keyInp = cv2.waitKey(1)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+        cv2.imshow("frame", frame)
+    cap_end(cap=cap)
+
+def test_video():
+    cap = cap_init()
+    
+    fps = 30
+    rec_time = 10
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    output_file = os.path.join(JETSON_PATH, f"videos/test.mp4")
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    print(fourcc)
+    out = cv2.VideoWriter(output_file, fourcc, fps, (frame_width, frame_height))
+
+    start_time = time.time()
+
+    while (time.time() - start_time) < rec_time:
+        ret, frame = cap.read()
+        frame_cp = frame
+
+        if not ret:
+            print("Error: Failed to capture frame.")
+            break
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+        
+        out.write(frame)
+        
+        # 表示用
+        text = f"{int(time.time() - start_time)}/{rec_time} recoding..."
+        cv2.putText(frame_cp, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+        cv2.imshow("Frame", frame_cp)
+        
+        #time.sleep(0.033)
+
+    out.release()
+    cap_end(cap=cap)
+
+    print("Recording completed. Video saved as", output_file)
+    return output_file
+
 if __name__ == "__main__":
     #save_img()
-    save_movie()
+    #save_movie()
     #get_train_img()
+    #check_cam()
+    test_video()

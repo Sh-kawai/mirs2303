@@ -80,7 +80,7 @@ def client(host=HOST, port=PORT):
       # v1_t:   一動画 撮影(即時 30秒)(スレッド)
       elif response == "v1_t":
         if not get_img.cap_flag():
-          thread_flag = thread_ctrl.auto_thread_run("v1", get_img.save_movie)
+          thread_flag = thread_ctrl.auto_thread_run("v1", get_img.save_movie, kwargs={"rec_time": 60})
           if thread_flag:
             message = "auto-thread save_movie()"
           else:
