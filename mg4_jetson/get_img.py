@@ -52,6 +52,26 @@ def get_img():
     cap_end(cap=capture)
     return save_path
 
+def get_click_img():
+    cap = cap_init()
+    while True:
+        ret, frame = cap.read()
+
+        keyInp = cv2.waitKey(1)
+
+        cv2.imshow("test", frame)
+
+        if keyInp == 13:
+            save_path = _save_img(capture=cap)
+            break
+
+        if keyInp & 0xFF == ord('q'):
+            print("KeyInput q: finish get_img()")
+            break
+        
+    cap_end(cap=cap)
+    return save_path
+
 # 定期撮影
 def get_auto_img(q_stop, q_save_e=None, show=False):
     capture = cap_init()
