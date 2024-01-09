@@ -5,7 +5,7 @@ static Servo sv_z; // 横 z軸
 void servo_open(){
   sv_y.attach(PIN_SER_Y);
   sv_z.attach(PIN_SER_Z);
-  servo_set(90, 90);
+  servo_set(0, 0);
 }
 
 void servo_set(int pit_y, int yaw_z){
