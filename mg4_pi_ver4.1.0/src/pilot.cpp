@@ -25,7 +25,7 @@ int main(){
 	getchar();
 	
 	while(1){
-		// ライントレース
+		// ライントレースなど走行
 		request_set_runmode(LINE, 25, 100);
 		usleep(10 * 1000);
 		while(1) {
@@ -36,7 +36,8 @@ int main(){
 
 		// 撮影処理
 		// 昇降機構 書く
-		request_set_runmode(CAM, 0, 255);
+		int pwm = 255; //max
+		request_set_runmode(CAM, 0, pwm);
 		usleep(10 * 1000);
 		while(1) {
 			request_get_cammode(&state, &height_curr, &pwm_curr);
@@ -44,7 +45,10 @@ int main(){
 			usleep(100 * 1000);
 		}
 		// サーボ 書く
-		// 撮影
+		int angle = 90;
+		request_set_runmode(SER, angle, angle);
+
+		// 撮影( or 撮影からアップロード)
 		Jetson.round_trip("p1");
 
 

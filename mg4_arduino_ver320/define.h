@@ -134,4 +134,4 @@ typedef struct {
 #define HIGH_MAX 30
 
 // battery min
-#define BATT_MIN  3.0
+#define BATT_MIN  0.5

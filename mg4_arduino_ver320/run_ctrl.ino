@@ -11,8 +11,8 @@ static double er  = 0.0 , er_d = 0.0 ;
 static double er_sum  = 0.0;
 static double er_prev  = 0.0;
 static double sp=0;
-static double sp_prev=0;
-static double vel_prev = 10;
+//static double sp_prev=0;
+//static double vel_prev = 10;
 
 void run_ctrl_execute() {
   // 直進制御において減速を開始する距離 [cm]
@@ -28,11 +28,6 @@ void run_ctrl_execute() {
 
   // 回転制御における左右のタイヤの距離差の補正ゲイン
   const double Kr = 0.0;
-
-  // ライントレース用PIDゲイン
-  const double Kl_p = 0.3;
-  const double Kl_i = 0.0;
-  const double Kl_d = 0.8;
 
   int sign;
   double d_l, d_r, v_l, v_r, ratio, vel_ref, vel_mod;
@@ -143,38 +138,63 @@ void run_ctrl_execute() {
       
       break;
     case LINE: // ライントレース
+      // ライントレース用PIDゲイン
+      const double Kl_p = 0.3;
+      const double Kl_i = 0.0;
+      const double Kl_d = 0.8;
       int gray, light0, light1, light2, light3;
       
-
-      gray = (BLACK + WHITE)/2;
       io_get_light(&light0, &light1, &light2, &light3);
-      er = light1 - light2;
+
+      bool flag = true;
+      if(flag){
+        // 両側ver
+        er = light1 - light2;
+        // 両方BLACKの時だけ左のみライントレース
+        /*if(light1 >= BLACK && light2 >= BLACK){
+        gray = (BLACK + WHITE)/2;
+        er = light2 - gray;
+      }*/
+      }
+      else {
+        // 片側ver(左)
+        gray = (BLACK + WHITE)/2;
+        er = light2 - gray;
+      }
+
       er_prev = er;
       ratio = 1;
+
+      vel_ref = sign * speed_ref * ratio;
+
+      // 最高速度
+      double vel_max = 5.0;
+      if(vel_ref > vel_max) vel_ref = vel_max;
       
+      /* 長瀬 */
+      /*
+      // 前のフォトリフが白ならspを4
       if((light3 < WHITE||light0 < WHITE)&& sp_prev==4){
          vel_ref = sign * 4 *ratio;
          sp = 4;
       }else if((light3 < WHITE||light0 < WHITE)&& sp_prev > 4){
         sp = sp_prev - 0.4;
         vel_ref = sign * sp * ratio;
-        
+      // 白じゃないなら15より速く
       }else if(sp_prev < 15){
          sp = sp_prev + 0.2;
          vel_ref = sign * sp * ratio;
       }else{
+        // raspi指定の速度
         vel_ref = sign * speed_ref * ratio;
       }
-      /*Serial.print("vel_ref =");
-      Serial.println(vel_ref);*/
-      
       vel_prev = vel_ref;
       sp_prev = sp;
-      
-      
+      */
 
       dist_curr  = (d_l + d_r) / 2.0;
-      if ((dist_ref - dist_curr) < 0 || (light1 <= WHITE && light2 <= WHITE)){
+      // 指定距離 or 白線検知 なら ストップ
+      if ((dist_ref - dist_curr) < 0 || (light1 <= WHITE && light2 <= WHITE && light3 <= WHITE)){
         run_state = STP;
         vel_ctrl_set(0.0, 0.0);
         //test_run_ctrl(ROT,10, 90);
