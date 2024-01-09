@@ -21,5 +21,5 @@ SHEET_TEST_NAME = "テストデータ"
 SERVICE_KEY_FILE = os.path.join(JETSON_PATH, "photo-test-393509-a09fbab1df81.json")
 
 # socket
-HOST = "192.168.1.2" #HOST = "172.25.19.3"
+HOST = "192.168.1.2" #HOST = "172.25.19.3" or "localhost"
 PORT = 8080
