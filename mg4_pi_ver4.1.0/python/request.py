@@ -16,6 +16,15 @@ def get_runmode():
 
     return data[0], data[1], data[2]
 
+def get_cammode():
+    command_data = [13, 0, 0]
+    arduino.recv_clear()
+    arduino.send(command_data)
+    time.sleep(0.05)
+    data = arduino.recv()
+    
+    return data[0], data[1], data[2]
+
 def get_dist():
     command_data = [11, 0, 0]
     arduino.recv_clear()

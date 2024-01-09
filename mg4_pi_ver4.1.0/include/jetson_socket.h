@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 
 //#define HOST "172.25.19.3"
+//#define HOST "localhost"
 #define HOST "192.168.1.2"
 #define PORT 8080
 #define MAX_BUFFER_SIZE 1024

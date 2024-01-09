@@ -47,7 +47,8 @@ int main(){
 		// サーボ 書く
 		int angle = 90;
 		request_set_runmode(SER, angle, angle);
-
+		sleep(1);
+		
 		// 撮影( or 撮影からアップロード)
 		Jetson.round_trip("p1");
 
