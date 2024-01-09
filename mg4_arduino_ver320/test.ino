@@ -162,11 +162,11 @@ void test_servo_get(){
   Serial.print(str);
 }
 
-void test_servo_rot(){
+void test_servo_rot(int min, int max, int speed){
   int y = 0;
   int z = 0;
-  int angle = 0;
-  int angle_plas = 1;
+  int angle = min;
+  int angle_plas = speed;
   while(1){
     y = angle;
     z = angle;
@@ -175,8 +175,8 @@ void test_servo_rot(){
     test_servo_get();
     
     angle += angle_plas;
-    if(angle > 180) angle_plas = -1;
-    if(angle < 0) angle_plas = 1;
+    if(angle > max) angle_plas = -1;
+    if(angle < min) angle_plas = 1;
     delay(100);
   }
 }
