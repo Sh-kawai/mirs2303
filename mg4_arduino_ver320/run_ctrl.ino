@@ -11,8 +11,8 @@ static double er  = 0.0 , er_d = 0.0 ;
 static double er_sum  = 0.0;
 static double er_prev  = 0.0;
 static double sp=0;
-//static double sp_prev=0;
-//static double vel_prev = 10;
+static double sp_prev=0;
+static double vel_prev = 10;
 
 void run_ctrl_execute() {
   // 直進制御において減速を開始する距離 [cm]
@@ -139,27 +139,29 @@ void run_ctrl_execute() {
       break;
     case LINE: // ライントレース
       // ライントレース用PIDゲイン
-      const double Kl_p = 0.3;
-      const double Kl_i = 0.0;
-      const double Kl_d = 0.8;
-      int gray, light0, light1, light2, light3;
+      const double Kl_p = 0.3; //0.3
+      const double Kl_i = 0.3; //0.0
+      const double Kl_d = 1.0; //0.8
+      int gray, sep_line, stop_line, light0, light1, light2, light3;
       
       io_get_light(&light0, &light1, &light2, &light3);
-
-      bool flag = true;
+      gray = (BLACK + WHITE)/2;
+      sep_line = BLACK - gray/4.0;
+      stop_line = WHITE;
+      
+      bool flag = false;
       if(flag){
         // 両側ver
         er = light1 - light2;
         // 両方BLACKの時だけ左のみライントレース
-        /*if(light1 >= BLACK && light2 >= BLACK){
-        gray = (BLACK + WHITE)/2;
-        er = light2 - gray;
-      }*/
+        if(light1 >= BLACK && light2 >= BLACK){
+          gray = (BLACK + WHITE)/2;
+          er = gray - light1;
+        }
       }
       else {
         // 片側ver(左)
-        gray = (BLACK + WHITE)/2;
-        er = light2 - gray;
+        er = gray - light1;
       }
 
       er_prev = er;
@@ -168,8 +170,9 @@ void run_ctrl_execute() {
       vel_ref = sign * speed_ref * ratio;
 
       // 最高速度
-      double vel_max = 5.0;
+      double vel_max = 10.0;
       if(vel_ref > vel_max) vel_ref = vel_max;
+      
       
       /* 長瀬 */
       /*
@@ -194,7 +197,7 @@ void run_ctrl_execute() {
 
       dist_curr  = (d_l + d_r) / 2.0;
       // 指定距離 or 白線検知 なら ストップ
-      if ((dist_ref - dist_curr) < 0 || (light1 <= WHITE && light2 <= WHITE && light3 <= WHITE)){
+      if ((dist_ref - dist_curr) < 0 || (light1 <= stop_line && light2 <= stop_line)){
         run_state = STP;
         vel_ctrl_set(0.0, 0.0);
         //test_run_ctrl(ROT,10, 90);
@@ -202,6 +205,7 @@ void run_ctrl_execute() {
       } else {
       //左右の値が両方ともwhiteじゃないなら
         vel_mod = Kl_p * er + Kl_d * (er - er_prev);
+        Serial.println(vel_mod);
         vel_ctrl_set((vel_ref - vel_mod), (vel_ref + vel_mod));
       }
 

@@ -48,27 +48,27 @@ void loop() {
     距離 > 0 ：前進、角度 < 0 ：後退　（速度は常に > 0）
     角度 > 0 ：反時計回り、角度 < 0 ：時計回り　（角速度は常に > 0）
   */
-  //test_run_ctrl(STR, 25, 100);
+  //test_run_ctrl(STR, 7, -100);
   //test_run_ctrl(ROT,-10, 180);
-  //test_run_ctrl(LINE,  15, 700);
+  //test_run_ctrl(LINE, 10, 500);
   
-  //test_lintrace();
+  //test_lintrace(10);
 
   /*円弧運動テスト 引数：直進距離[cm]、直進速度[cm/s]、回転角度[rad]、回転速度[deg/s] */
   //test_arc_move(10, 100, 45 ,90);
   //test_arc_move_sim(100);
   
   /*サーボモーターテスト*/
-  //test_servo(90, 90);
+  //test_servo(0, 0);
   /* 引数: 最小角度[度], 最大角度[度, 角速度 */
-  //test_servo_rot(0, 180, 1);
+  test_servo_rot(0, 40, 1);
   
   /*フォトリフレクタ*/
   //test_get_light();
 
   /*昇降用モータ*/
   /*pwm指定制御　引数:pwm値(int)*/
-  test_camera_ctrl_motor(-255);
+  //test_camera_ctrl_motor(-255);
   /*高さ指定制御　引数:目標高さ[cm](0以上)*/
   //test_camera_ctrl_height(-10000.0);
   //test_camera_max();

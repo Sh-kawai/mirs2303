@@ -47,8 +47,8 @@ typedef struct {
 #define PIN_SW      10
 #define PIN_LED     13
 #define PIN_BATT    A5
-#define PIN_LIGHT_0 A0
-#define PIN_LIGHT_1 A1
+#define PIN_LIGHT_0 A1 //A!とA0逆にした
+#define PIN_LIGHT_1 A0
 #define PIN_LIGHT_2 A2
 #define PIN_LIGHT_3 A3
 #define PIN_CAM_H   15

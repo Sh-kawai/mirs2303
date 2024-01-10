@@ -39,6 +39,10 @@ void vel_ctrl_execute() {
   // PID制御
   pwm_l = Kp * err_curr_l + Ki * err_sum_l + Kd * (err_curr_l - err_prev_l);
   pwm_r = Kp * err_curr_r + Ki * err_sum_r + Kd * (err_curr_r - err_prev_r);
+  
+  double sum_max = 250;
+  if(err_sum_l > sum_max) err_sum_l = sum_max;
+  if(err_sum_r > sum_max) err_sum_r = sum_max;
 
   // 速度指令値 = 0 なら強制的に停止
   if (vel_ref_l == 0.0) pwm_l = 0;
