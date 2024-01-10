@@ -4,26 +4,65 @@ void slave() {
   run_state_t state;
   command_data_t command_data;
 
+  bool ros_flag = false;
+
   while (1) {
+    // battery
+    if(batt_check() == -1){
+      delay(T_CTRL);
+      continue;
+    }
+    // ros slam
+    /*if(PIN_ROS == 1){
+      if(!ros_flag){
+        ros_flag =true;
+        ros_reset();
+      }
+      ros_send_odom();
+      ros_recv_vel();
+      vel_ctrl_execute();
+      delay(T_CTRL);
+      continue;
+    } else {
+      ros_flag = false;
+    }*/
     if (raspi_receive(&command_data) == 0) {
+      Serial.println(command_data.val[0]);
       switch (command_data.val[0]) {
+        case -1: // シリアル通信テスト
+          raspi_send(command_data);
+          test_serial(command_data.val[1], command_data.val[2]);
+          break;
         case 1: // 停止
           run_ctrl_set(STP, 0, 0);
           break;
         case 2: //　直進運動
+          Serial.println("STR");
           run_ctrl_set(STR, command_data.val[1], command_data.val[2]);
           break;
         case 3: // 回転運動
+          Serial.println("ROT");
           run_ctrl_set(ROT, command_data.val[1], command_data.val[2]);
           break;
         case 4: // 円弧運動
+          Serial.println("ARC");
           dist = 1000.0;
           ang_dist = 1000.0;
           run_ctrl_set_arc(ARC, command_data.val[1], dist, command_data.val[2], ang_dist);
           break;
-        case 5: // 昇降用モーター
+        case 5: // ライントレース
+          Serial.println("LINE");
+          run_ctrl_set(LINE, command_data.val[1], command_data.val[2]);
           break;
         case 6: // サーボモーター
+          Serial.println("SER");
+          servo_set(command_data.val[1], command_data.val[2]);
+          break;
+        case 7: // 昇降用モーター
+          Serial.println("CAM");
+          // 引数heigh, pwm
+          // height=0ならpwm制御
+          camera_ctrl_set(0.0, command_data.val[2]);
           break;
         case 10:
           run_ctrl_get(&state, &speed, &dist);
@@ -42,12 +81,19 @@ void slave() {
           command_data.val[0] = (short)(io_get_batt() * 100.0);
           raspi_send(command_data);
           break;
+        case 13:
+          command_data.val[0] = LINE;
+          command_data.val[1] = (int)camera_get_height();
+          command_data.val[2] = (int)camera_get_pwm();
+          raspi_send(command_data);
+          break;
         default:
           break;
       }
     }
     run_ctrl_execute();
     vel_ctrl_execute();
+    camera_ctrl_execute();
     delay(T_CTRL);
   }
 }

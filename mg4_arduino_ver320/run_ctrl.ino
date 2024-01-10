@@ -10,6 +10,9 @@ static double ang_dist_curr = 0.0; // ARC
 static double er  = 0.0 , er_d = 0.0 ;
 static double er_sum  = 0.0;
 static double er_prev  = 0.0;
+static double sp=0;
+//static double sp_prev=0;
+//static double vel_prev = 10;
 
 void run_ctrl_execute() {
   // 直進制御において減速を開始する距離 [cm]
@@ -19,9 +22,9 @@ void run_ctrl_execute() {
   const double angle_vel_down = 0.0;
 
   // 直進制御における左右のタイヤの距離差の補正ゲイン
-  const double Ks_p = 5.5 ; // 40.0
-  const double Ks_i =  0.6 ; // 0.2  1.0  
-  const double Ks_d = 7.0 ; // 50.0  20.0  5.0
+  const double Ks_p = 0.0 ; // 40.0            5.5
+  const double Ks_i = 0.0 ; // 0.2  1.0        0.6
+  const double Ks_d = 0.0 ; // 50.0  20.0  5.0 7.0
 
   // 回転制御における左右のタイヤの距離差の補正ゲイン
   const double Kr = 0.0;
@@ -121,21 +124,108 @@ void run_ctrl_execute() {
         run_state = STP;
         vel_ctrl_set(0.0, 0.0);
       } else {
-        // 直線目標速度(&減速の実行)
+        // 直線目標速度設定(&減速の実行)
         vel_ref = sign * speed_ref * ratio; //[cm/s]
-        // 回転目標速度(左:-,右:+)(&減速の実行)
+        // 回転目標速度設定(左:-,右:+)(&減速の実行)
         vel_diff_ref = sign * ang_vel_ref * ratio * D_TIRE / 2.0 * PI / 180; // [rad/s]
 
+        //誤差の補正
+
         vel_ctrl_set((vel_ref - vel_diff_ref), (vel_ref + vel_diff_ref));
-        Serial.print("vel_l:" + String(vel_ref - vel_diff_ref) + ", vel_r:" + String(vel_ref + vel_diff_ref));
-        Serial.println(", vel_rel:" + String(vel_ref) + ", vel_diff_ref:" + String(vel_diff_ref));
+        //Serial.print("vel_l:" + String(vel_ref - vel_diff_ref) + ", vel_r:" + String(vel_ref + vel_diff_ref));
+        //Serial.println(", vel_rel:" + String(vel_ref) + ", vel_diff_ref:" + String(vel_diff_ref));
       }
       
+      break;
+    case LINE: // ライントレース
+      // ライントレース用PIDゲイン
+      const double Kl_p = 0.3;
+      const double Kl_i = 0.0;
+      const double Kl_d = 0.8;
+      int gray, light0, light1, light2, light3;
+      
+      io_get_light(&light0, &light1, &light2, &light3);
+
+      bool flag = true;
+      if(flag){
+        // 両側ver
+        er = light1 - light2;
+        // 両方BLACKの時だけ左のみライントレース
+        /*if(light1 >= BLACK && light2 >= BLACK){
+        gray = (BLACK + WHITE)/2;
+        er = light2 - gray;
+      }*/
+      }
+      else {
+        // 片側ver(左)
+        gray = (BLACK + WHITE)/2;
+        er = light2 - gray;
+      }
+
+      er_prev = er;
+      ratio = 1;
+
+      vel_ref = sign * speed_ref * ratio;
+
+      // 最高速度
+      double vel_max = 5.0;
+      if(vel_ref > vel_max) vel_ref = vel_max;
+      
+      /* 長瀬 */
+      /*
+      // 前のフォトリフが白ならspを4
+      if((light3 < WHITE||light0 < WHITE)&& sp_prev==4){
+         vel_ref = sign * 4 *ratio;
+         sp = 4;
+      }else if((light3 < WHITE||light0 < WHITE)&& sp_prev > 4){
+        sp = sp_prev - 0.4;
+        vel_ref = sign * sp * ratio;
+      // 白じゃないなら15より速く
+      }else if(sp_prev < 15){
+         sp = sp_prev + 0.2;
+         vel_ref = sign * sp * ratio;
+      }else{
+        // raspi指定の速度
+        vel_ref = sign * speed_ref * ratio;
+      }
+      vel_prev = vel_ref;
+      sp_prev = sp;
+      */
+
+      dist_curr  = (d_l + d_r) / 2.0;
+      // 指定距離 or 白線検知 なら ストップ
+      if ((dist_ref - dist_curr) < 0 || (light1 <= WHITE && light2 <= WHITE && light3 <= WHITE)){
+        run_state = STP;
+        vel_ctrl_set(0.0, 0.0);
+        //test_run_ctrl(ROT,10, 90);
+      //} else if (light1 != WHITE && light2 != WHITE){
+      } else {
+      //左右の値が両方ともwhiteじゃないなら
+        vel_mod = Kl_p * er + Kl_d * (er - er_prev);
+        vel_ctrl_set((vel_ref - vel_mod), (vel_ref + vel_mod));
+      }
+
       break;
   }
 }
 
 void run_ctrl_set(run_state_t state, double speed, double dist) {
+  if(run_state == state && speed_ref == abs(speed)){
+    dist_ref = dist + dist_curr;
+  } else if(run_state == state && dist_ref == dist){
+    speed_ref = abs(speed);
+  } else {
+    run_state = state;
+    speed_ref = abs(speed);
+    dist_ref = dist;
+    ang_vel_ref = 0.0;
+    ang_dist_ref = 0.0;
+    vel_ctrl_reset();
+    er = 0;
+    er_prev = 0;
+    er_sum = 0;
+  }
+  /*
   run_state = state;
   speed_ref = abs(speed);
   dist_ref = dist;
@@ -145,6 +235,7 @@ void run_ctrl_set(run_state_t state, double speed, double dist) {
   er = 0;
   er_prev = 0;
   er_sum = 0;
+  */
 }
 
 void run_ctrl_set_arc(run_state_t state, double speed, double dist, double ang_vel, double ang_dist) {

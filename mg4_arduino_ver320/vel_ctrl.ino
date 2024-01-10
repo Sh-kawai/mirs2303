@@ -14,8 +14,8 @@ static long count = 1;
 
 void vel_ctrl_execute() {
   // PIDゲイン
-  const double Kp = 1.0; //0.5
-  const double Ki = 1.0; //0.7
+  const double Kp = 0.5; //0.5
+  const double Ki = 0.7; //0.7
   const double Kd = 0.0;
 
   int pwm_l, pwm_r;
@@ -45,6 +45,11 @@ void vel_ctrl_execute() {
   if (vel_ref_r == 0.0) pwm_r = 0;
 
   motor_set(pwm_l, pwm_r);
+  /*Serial.print("r:");
+  Serial.print(pwm_r);
+  Serial.print("[cm/s], l:");
+  Serial.print(pwm_l);
+  Serial.println("[cm/s]");*/
 
   dist_prev_l = dist_curr_l;
   dist_prev_r = dist_curr_r;
@@ -79,4 +84,3 @@ void vel_ctrl_reset() {
   motor_set(0, 0);
   encoder_reset();
 }
-
