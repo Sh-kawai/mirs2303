@@ -324,28 +324,51 @@ void test_serial(double data1, double data2){
   }
 }*/
 
-void test_lintrace(){
+void test_lintrace(int sp){
   run_state_t state;
   double speed, dist;
   
   for(int i=0; i<3; i++){
     Serial.println(i);
     state = LINE;
-    test_run_ctrl(state,  15, 1000);
-    delay(T_CTRL);
-    while(1){
+    run_ctrl_set(state, sp, 1000);
+    while (1) {
+      if(batt_check() == -1) break;
+      run_ctrl_execute();
+      vel_ctrl_execute();
       run_ctrl_get(&state, &speed, &dist);
-      if(state == STP) break;
+      int l[4];
+      io_get_light(&l[0], &l[1], &l[2], &l[3]);
+      for(int i=0; i<4; i++){
+        Serial.print(l[i]);
+        Serial.print(", ");
+      }
+      Serial.println();
+      if( state == STP ) break;
       delay(T_CTRL);
     }
     delay(1000);
     
     state = ROT;
-    test_run_ctrl(state, 15, 180);
-    delay(T_CTRL);
-    while(1){
+    run_ctrl_set(state, 15, 1000);
+    while (1) {
+      if(batt_check() == -1) break;
+      run_ctrl_execute();
+      vel_ctrl_execute();
       run_ctrl_get(&state, &speed, &dist);
-      if(state == STP) break;
+      if( state == STP ) break;
+      delay(T_CTRL);
+    }
+    delay(1000);
+    
+    state = STR;
+    run_ctrl_set(state, 15, 10);
+    while (1) {
+      if(batt_check() == -1) break;
+      run_ctrl_execute();
+      vel_ctrl_execute();
+      run_ctrl_get(&state, &speed, &dist);
+      if( state == STP ) break;
       delay(T_CTRL);
     }
     delay(1000);
