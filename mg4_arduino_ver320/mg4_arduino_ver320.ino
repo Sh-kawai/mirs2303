@@ -61,7 +61,7 @@ void loop() {
   /*サーボモーターテスト*/
   //test_servo(0, 0);
   /* 引数: 最小角度[度], 最大角度[度, 角速度 */
-  test_servo_rot(0, 40, 1);
+  //test_servo_rot(0, 60, 1);
   
   /*フォトリフレクタ*/
   //test_get_light();

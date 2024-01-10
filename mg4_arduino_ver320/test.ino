@@ -177,7 +177,7 @@ void test_servo_rot(int min, int max, int speed){
     angle += angle_plas;
     if(angle > max) angle_plas = -1;
     if(angle < min) angle_plas = 1;
-    delay(100);
+    delay(50);
   }
 }
 
