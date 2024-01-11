@@ -291,4 +291,6 @@ if __name__ == "__main__":
     #save_movie()
     #get_train_img()
     #check_cam()
-    test_video()
+    #test_video()
+    while True:
+        get_click_img()
