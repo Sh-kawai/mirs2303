@@ -2,9 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 # ピンの設定
-PIN_SW_F = 40
-#PIN_SW_L = 26
-#PIN_SW_R = 8
+PIN_SW_F = 7
 
 def open(pin=PIN_SW_F):
     try:
@@ -33,6 +31,6 @@ if __name__ == "__main__":
         try:
             while True:
                 print(get())
-                time.sleep(1)  # 1秒ごとにスイッチの状態を読み取る
+                time.sleep(0.1)  # 1秒ごとにスイッチの状態を読み取る
         finally:
             close()  # プログラム終了時にGPIOをクリーンアップ

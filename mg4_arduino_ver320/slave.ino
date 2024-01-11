@@ -82,7 +82,7 @@ void slave() {
           raspi_send(command_data);
           break;
         case 13:
-          command_data.val[0] = LINE;
+          command_data.val[0] = CAM;
           command_data.val[1] = (int)camera_get_height();
           command_data.val[2] = (int)camera_get_pwm();
           raspi_send(command_data);
