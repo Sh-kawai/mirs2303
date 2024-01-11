@@ -34,12 +34,9 @@ def execute_command(hostname, username, password, command):
 
 def bringup_jetson():
     command_to_execute = "/home/mirs2303/mirs2303/mg4_jetson/bringup.bash"
-    threading.Thread(target=execute_command, kwargs={"command": command_to_execute, "hostname":JETSON_IP, "username":JETSON_USER, "password":JETSON_PASS})
-    #execute_command(JETSON_IP, JETSON_USER, JETSON_PASS, command_to_execute)
+    thread = threading.Thread(target=execute_command, kwargs={"command": command_to_execute, "hostname":JETSON_IP, "username":JETSON_USER, "password":JETSON_PASS}, daemon=True)
+    thread.start()
 
 # SSH接続とコマンド実行
 if __name__ == "__main__":
-    # JetsonのIPアドレス、ユーザー名、パスワードを設定
-
-    # 実行するコマンドを設定
     bringup_jetson()
