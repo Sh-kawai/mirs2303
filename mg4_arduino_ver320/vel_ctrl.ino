@@ -42,7 +42,9 @@ void vel_ctrl_execute() {
   
   double sum_max = 250;
   if(err_sum_l > sum_max) err_sum_l = sum_max;
+  else if(err_sum_l < -sum_max) err_sum_l = -sum_max;
   if(err_sum_r > sum_max) err_sum_r = sum_max;
+  else if(err_sum_r < -sum_max) err_sum_r = -sum_max;
 
   // 速度指令値 = 0 なら強制的に停止
   if (vel_ref_l == 0.0) pwm_l = 0;

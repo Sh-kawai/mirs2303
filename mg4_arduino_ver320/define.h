@@ -8,7 +8,6 @@ typedef enum {
   SER,
   CAM,
   ROS,
-  RETURN, // 後に削除
 } run_state_t;
 
 typedef struct {
@@ -47,10 +46,8 @@ typedef struct {
 #define PIN_SW      10
 #define PIN_LED     13
 #define PIN_BATT    A5
-#define PIN_LIGHT_0 A1 //A!とA0逆にした
-#define PIN_LIGHT_1 A0
-#define PIN_LIGHT_2 A2
-#define PIN_LIGHT_3 A3
+#define PIN_LIGHT_L A0
+#define PIN_LIGHT_R A2
 #define PIN_CAM_H   15
 #define PIN_CAM_L   14
 
@@ -101,7 +98,7 @@ typedef struct {
 
 // タイヤ間隔 [cm] 25.0
 //#define D_TIRE    32.0
-#define D_TIRE    32.0
+#define D_TIRE    30.4
 
 // エンコーダ分解能 (A相立上り/立下りを利用するため2倍)
 #define ENC_RANGE (13*2) 
@@ -122,7 +119,7 @@ typedef struct {
 
 // ライントレース白黒
 #define BLACK  1010
-#define WHITE   960
+#define WHITE   970
 
 // 昇降用モーター
 // ねじピッチ(隣り合うねじ山の幅)

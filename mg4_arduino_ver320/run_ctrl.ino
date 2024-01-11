@@ -7,9 +7,9 @@ static double ang_vel_ref = 0.0; // ARC
 static double ang_vel_curr = 0.0; // ARC
 static double ang_dist_ref = 0.0; // ARC
 static double ang_dist_curr = 0.0; // ARC
-static double er  = 0.0 , er_d = 0.0 ;
-static double er_sum  = 0.0;
-static double er_prev  = 0.0;
+static double er = 0.0, er_d = 0.0 ;
+static double er_sum = 0.0;
+static double er_prev = 0.0;
 static double sp=0;
 static double sp_prev=0;
 static double vel_prev = 10;
@@ -140,26 +140,26 @@ void run_ctrl_execute() {
     case LINE: // ライントレース
       // ライントレース用PIDゲイン
       const double Kl_p = 0.3; //0.3
-      const double Kl_i = 0.3; //0.0
-      const double Kl_d = 1.0; //0.8
-      int gray, sep_line, stop_line, light0, light1, light2, light3;
+      //const double Kl_i = 0.3; //0.0
+      const double Kl_d = 0.5SS; //0.8
+      double vel_max = 15.0;
+      int gray, sep_line, stop_line, light1, light2;
       
-      io_get_light(&light0, &light1, &light2, &light3);
+      io_get_light(&light1, &light2);
       gray = (BLACK + WHITE)/2;
-      sep_line = BLACK - gray/4.0;
-      stop_line = WHITE;
+      sep_line = BLACK - gray/35.0;
+      stop_line = WHITE + gray/35.0;
       
-      bool flag = false;
+      bool flag = true;
       if(flag){
         // 両側ver
         er = light1 - light2;
         // 両方BLACKの時だけ左のみライントレース
-        if(light1 >= BLACK && light2 >= BLACK){
+        /*if(light1 >= BLACK && light2 >= BLACK){
           gray = (BLACK + WHITE)/2;
           er = gray - light1;
-        }
-      }
-      else {
+        }*/
+      } else {
         // 片側ver(左)
         er = gray - light1;
       }
@@ -170,7 +170,7 @@ void run_ctrl_execute() {
       vel_ref = sign * speed_ref * ratio;
 
       // 最高速度
-      double vel_max = 10.0;
+      
       if(vel_ref > vel_max) vel_ref = vel_max;
       
       
