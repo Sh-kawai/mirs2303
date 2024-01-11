@@ -1,5 +1,5 @@
 int batt_check(){
-  //return 0;
+  return 0;
   double batt = io_get_batt();
   if(batt >= BATT_MIN){
     return 0;
