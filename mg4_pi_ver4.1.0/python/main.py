@@ -3,12 +3,18 @@ import time
 import arduino_serial as arduino
 import request
 import jetson_socket as jetson
+import io
+import uss
 from define import *
 
 def main():
     if not arduino.open():
         return
     if not jetson.open():
+        return
+    if not io.open():
+        return
+    if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
         return
 
     # スケジュール確認

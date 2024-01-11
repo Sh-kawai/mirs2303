@@ -32,7 +32,7 @@ if __name__ == "__main__":
     if open():
         try:
             while True:
-                get()
+                print(get())
                 time.sleep(1)  # 1秒ごとにスイッチの状態を読み取る
         finally:
             close()  # プログラム終了時にGPIOをクリーンアップ
