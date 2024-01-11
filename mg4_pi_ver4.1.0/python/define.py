@@ -11,3 +11,8 @@ ROS = 7
 # socket
 HOST = "192.168.1.2" #HOST = "172.25.19.3"
 PORT = 8080
+
+# ssh
+JETSON_IP = "192.168.1.3"
+JETSON_USER = "mirs2303"
+JETSON_PASS = "muraifamily3150"
