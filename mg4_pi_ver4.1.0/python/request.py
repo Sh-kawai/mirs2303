@@ -1,10 +1,11 @@
 import time
 import arduino_serial as arduino
+from define import *
 
 def set_runmode(state, speed, dist):
     speed = int(speed)
     dist = int(dist)
-    command_data = [state, speed, dist]
+    command_data = [state + 1, speed, dist]
     arduino.send(command_data)
 
 def get_runmode():

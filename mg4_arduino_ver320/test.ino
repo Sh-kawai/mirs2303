@@ -71,7 +71,7 @@ void test_run_ctrl(run_state_t state, double speed, double dist) {
   run_ctrl_set(state, speed, dist);
 
   while (1) {
-    if(batt_check() == -1) break;
+    //if(batt_check() == -1) break;
     run_ctrl_execute();
     vel_ctrl_execute();
     if (i >= 10) {
@@ -177,15 +177,15 @@ void test_servo_rot(int min, int max, int speed){
     angle += angle_plas;
     if(angle > max) angle_plas = -1;
     if(angle < min) angle_plas = 1;
-    delay(100);
+    delay(50);
   }
 }
 
 void test_get_light(){
   int l[4];
   while(1){
-    io_get_light(&l[0], &l[1], &l[2], &l[3]);
-    for(int i=0; i<4; i++){
+    io_get_light(&l[0], &l[1]);
+    for(int i=0; i<2; i++){
       Serial.print(l[i]);
       Serial.print(", ");
     }
@@ -328,18 +328,18 @@ void test_lintrace(int sp){
   run_state_t state;
   double speed, dist;
   
-  for(int i=0; i<3; i++){
+  for(int i=0; i<6; i++){
     Serial.println(i);
     state = LINE;
     run_ctrl_set(state, sp, 1000);
     while (1) {
-      if(batt_check() == -1) break;
+      //if(batt_check() == -1) break;
       run_ctrl_execute();
       vel_ctrl_execute();
       run_ctrl_get(&state, &speed, &dist);
       int l[4];
-      io_get_light(&l[0], &l[1], &l[2], &l[3]);
-      for(int i=0; i<4; i++){
+      io_get_light(&l[0], &l[1]);
+      for(int i=0; i<2; i++){
         Serial.print(l[i]);
         Serial.print(", ");
       }
@@ -350,9 +350,9 @@ void test_lintrace(int sp){
     delay(1000);
     
     state = ROT;
-    run_ctrl_set(state, 15, 1000);
+    run_ctrl_set(state, 60, 180);
     while (1) {
-      if(batt_check() == -1) break;
+      //if(batt_check() == -1) break;
       run_ctrl_execute();
       vel_ctrl_execute();
       run_ctrl_get(&state, &speed, &dist);
@@ -360,17 +360,9 @@ void test_lintrace(int sp){
       delay(T_CTRL);
     }
     delay(1000);
-    
-    state = STR;
-    run_ctrl_set(state, 15, 10);
-    while (1) {
-      if(batt_check() == -1) break;
-      run_ctrl_execute();
-      vel_ctrl_execute();
-      run_ctrl_get(&state, &speed, &dist);
-      if( state == STP ) break;
-      delay(T_CTRL);
-    }
-    delay(1000);
+  }
+  
+  while(1){
+    delay(T_CTRL);
   }
 }

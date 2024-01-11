@@ -108,6 +108,8 @@ if __name__ == "__main__":
             data = input().split()
             if len(data) == 3:
                 for i, d in enumerate(data):
+                    if i == 0:
+                      d = int(d) + 1
                     data[i] = int(d)
                 recv_clear()
                 send(data)
