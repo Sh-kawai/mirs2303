@@ -1,8 +1,9 @@
 import paramiko
+import threading
 
 from define import *
 
-def execute_command_on_jetson(hostname, username, password, command):
+def execute_command(hostname, username, password, command):
     # SSHセッションの開始
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -13,6 +14,7 @@ def execute_command_on_jetson(hostname, username, password, command):
 
         # コマンドの実行
         stdin, stdout, stderr = ssh.exec_command(command)
+        print(command)
 
         # 実行結果の取得
         output = stdout.read().decode("utf-8")
@@ -30,10 +32,14 @@ def execute_command_on_jetson(hostname, username, password, command):
         # SSHセッションの終了
         ssh.close()
 
+def bringup_jetson():
+    command_to_execute = "/home/mirs2303/mirs2303/mg4_jetson/bringup.bash"
+    threading.Thread(target=execute_command, kwargs={"command": command_to_execute, "hostname":JETSON_IP, "username":JETSON_USER, "password":JETSON_PASS})
+    #execute_command(JETSON_IP, JETSON_USER, JETSON_PASS, command_to_execute)
+
 # SSH接続とコマンド実行
 if __name__ == "__main__":
     # JetsonのIPアドレス、ユーザー名、パスワードを設定
 
     # 実行するコマンドを設定
-    command_to_execute = "cd cals -l"
-    execute_command_on_jetson(JETSON_IP, JETSON_USER, JETSON_PASS, command_to_execute)
+    bringup_jetson()

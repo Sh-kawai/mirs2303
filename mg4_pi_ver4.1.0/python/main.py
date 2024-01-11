@@ -5,17 +5,23 @@ import request
 import jetson_socket as jetson
 import io
 import uss
+import ssh
 from define import *
 
 def main():
-    if not arduino.open():
-        return
+    #ssh.bringup_jetson()
     if not jetson.open():
+        return
+    if not arduino.open():
         return
     if not io.open():
         return
     if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
         return
+
+    while True:
+        time.sleep(1)
+        print("aaa")
 
     # スケジュール確認
 

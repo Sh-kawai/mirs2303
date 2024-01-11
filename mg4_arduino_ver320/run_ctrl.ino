@@ -141,7 +141,7 @@ void run_ctrl_execute() {
       // ライントレース用PIDゲイン
       const double Kl_p = 0.3; //0.3
       //const double Kl_i = 0.3; //0.0
-      const double Kl_d = 0.5SS; //0.8
+      const double Kl_d = 1.0; //0.8
       double vel_max = 15.0;
       int gray, sep_line, stop_line, light1, light2;
       
