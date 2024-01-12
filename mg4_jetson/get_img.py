@@ -7,6 +7,7 @@ import csv_handle
 import schedule
 from define import *
 
+
 _camera_flag = False
 
 # カメラオープン
