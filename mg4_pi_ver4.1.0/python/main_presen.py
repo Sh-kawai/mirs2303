@@ -52,9 +52,13 @@ def main():
     # スケジュール確認
 
     # 教室移動 & 撮影位置移動
-    run_to_stop(LINE, 20, 1000)
+    #run_to_stop(LINE, 20, 1000)
+    run_to_stop(STR, 15 100)
     #linetrace(20, 1000)
     
+    run_to_stop(ROT, 30 360)
+    
+    return
     #3 昇降
     pwm = 255
     cam_to_stop(pwm)
