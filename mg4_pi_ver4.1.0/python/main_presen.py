@@ -44,8 +44,8 @@ def main():
         return
     if not arduino.open():
         return
-    if not io.open():
-        return
+    #if not io.open():
+    #    return
     if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
         return
 
@@ -66,10 +66,7 @@ def main():
     time.sleep(1)
     
     # 写真撮影
-    jetson.send(["pu1_click_t", gdrive_main])
-    # 写真撮影後
-    while not jetson.send(["pu1_click_c"]):
-        time.sleep(0.1)
+    jetson.send(["pu1_click", gdrive_main])
     print("写真を撮影しました。")
     
     print("継続するには何らかを入力してください。")
@@ -86,7 +83,7 @@ def main():
 
     arduino.close()
     jetson.close()
-    io.close()
+    #io.close()
     
 
 if __name__ == "__main__":

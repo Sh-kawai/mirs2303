@@ -15,7 +15,7 @@ def get_runmode():
     time.sleep(0.05)
     data = arduino.recv()
 
-    return data[0], data[1], data[2]
+    return data[0] - 1, data[1], data[2]
 
 def get_cammode():
     command_data = [13, 0, 0]
