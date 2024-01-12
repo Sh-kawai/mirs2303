@@ -98,7 +98,7 @@ typedef struct {
 
 // タイヤ間隔 [cm] 25.0
 //#define D_TIRE    32.0
-#define D_TIRE    30.4
+#define D_TIRE    30.5
 
 // エンコーダ分解能 (A相立上り/立下りを利用するため2倍)
 #define ENC_RANGE (13*2) 
@@ -119,7 +119,7 @@ typedef struct {
 
 // ライントレース白黒
 #define BLACK  1010
-#define WHITE   970
+#define WHITE   960
 
 // 昇降用モーター
 // ねじピッチ(隣り合うねじ山の幅)

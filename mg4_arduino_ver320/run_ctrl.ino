@@ -148,7 +148,8 @@ void run_ctrl_execute() {
       io_get_light(&light1, &light2);
       gray = (BLACK + WHITE)/2;
       sep_line = BLACK - gray/35.0;
-      stop_line = WHITE + gray/35.0;
+      //stop_line = WHITE + gray/35.0;
+      stop_line = WHITE;
       
       bool flag = true;
       if(flag){

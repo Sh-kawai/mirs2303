@@ -348,6 +348,7 @@ void test_lintrace(int sp){
       delay(T_CTRL);
     }
     delay(1000);
+    break;
     
     state = ROT;
     run_ctrl_set(state, 60, 180);

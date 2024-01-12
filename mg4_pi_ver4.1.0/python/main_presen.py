@@ -56,17 +56,19 @@ def main():
 
     # スケジュール確認
 
-    print("inout")
+    print("key_wait run straight and rotation left")
     input()
 
     # 教室移動 & 撮影位置移動
     #run_to_stop(LINE, 20, 1000)
-    run_to_stop(STR, 15, 100)
+    run_to_stop(STR, 15, 350)
     #linetrace(20, 1000)
     time.sleep(1)
     
-    run_to_stop(ROT, 30, 180)
+    run_to_stop(ROT, 30, 90)
     time.sleep(1)
+
+    print("key_wait up camera and serbo")
 
     cam_to_stop(255)
     time.sleep(1)
@@ -77,46 +79,18 @@ def main():
     jetson.send({"key":"pu1_click", "gdrive_main":False})
     time.sleep(1)
 
-    run_to_stop(STR, 15, 100)
+    print("key_wait rotation and straight return")
+    run_to_stop(ROT, 30, 90)
     time.sleep(1)
 
-    run_to_stop(ROT, 30, 180)
+    run_to_stop(STR, 15, 300)
     time.sleep(1)
-
-    request.set_runmode(SER, 30, 30)
-    time.sleep(1)
-    
-    return
-
-    #3 昇降
-    pwm = 255
-    cam_to_stop(pwm)
-    
-    # サーボモータ
-    # 35度くらいが水平
-    angle = 90
-    request.set_runmode(SER, angle, angle)
-    time.sleep(1)
-    
-    # 写真撮影
-    jetson.send(["pu1_click", gdrive_main])
-    print("写真を撮影しました。")
-    
-    print("継続するには何らかを入力してください。")
-    input()
-    
-    run_to_stop(ROT, 60, 180)
-    # ラインに角度を合わせる
-    request.set_runmode(LINE, 0, 1000)
-    time.sleep(1)
-    
-    # 帰還
-    run_to_stop(LINE, 20, 1000)
-    #linetrace(20, 1000)
 
     arduino.close()
     jetson.close()
     #io.close()
+
+    return
     
 
 if __name__ == "__main__":
