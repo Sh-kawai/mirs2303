@@ -1,26 +1,19 @@
 import socket
-import paramiko
+import threading
+import subprocess 
+import pickle
 
 import raspi_socket
 from define import *
 
-def ssh_remote():
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    
-    # client side setting ip address
-    IP = HOST
-    USER = "pi"
-    PASS = "raspberry"
-    client.connect(IP, username=USER, password=PASS)
-    
-    EXEC_CMD = "cd ~/mirs2303/mirs2303/mg4_pi_ver4.1.0; ./main"
-    
-    stdin, stdout, stderr = client.exec_command(EXEC_CMD)
-    
-    print(stdout)
+def client_open():
+    #subprocess.run(["cd", f"{JETSON_PATH}"])
+    subprocess.run(["python", "c:/Users/kawai/OneDrive - 独立行政法人 国立高等専門学校機構/4年/MIRS/プログラム/開発プログラム/mg4_jetson/raspi_socket.py"])
 
 def server(host=HOST, port=PORT):
+    client_thread = threading.Thread(target=client_open, daemon=True)
+    client_thread.start()
+    
     serversock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serversock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -44,21 +37,39 @@ def server(host=HOST, port=PORT):
     
     while True:
         
+        s_msg_dist = {}
         print("[please input send code]")
-        s_msg = input()
+        print("key")
+        key = input()
+        s_msg_dist["key"] = key
+        if "u" in key:
+            print("gdrive_main (T or F)")
+            _g = input()
+            if _g == "t" or _g == "T":
+                s_msg_dist["gdrive_main"] = True
+            else:
+                s_msg_dist["gdrive_main"] = False                
+        if "v" in key:
+            print("rec_time[s]")
+            rec_time = int(input())
+            s_msg_dist["rec_time"] = rec_time
+                
+        
+        s_data = pickle.dumps(s_msg_dist)
         
         print(raspi_socket.S_EXPLAIN)
 
-        print("[server] Send : %s" % s_msg)
-        clientsock.sendall(s_msg.encode())
+        print(f"[server] Send : {s_msg_dist}")
+        #clientsock.sendall(s_msg.encode())
+        clientsock.sendall(s_data)
         print("[server] waiting client response...")
 
         rcvmsg = clientsock.recv(1024).decode()
         for i, msg in enumerate(rcvmsg.split("\n")):
             print(f"[server] Recv{i} : {msg}")
 
-        if s_msg == "q" or rcvmsg == "client close":
-            break        
+        if "q" in s_msg_dist or rcvmsg == "client close":
+            break 
 
     clientsock.close()
     serversock.close()
