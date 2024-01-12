@@ -1,4 +1,5 @@
 import socket
+import pickle
 from define import *
 
 serversock = None
@@ -30,7 +31,8 @@ def open(host=HOST, port=PORT):
 
 def send(s_msgs):
     global clientsock
-    clientsock.sendall(s_msgs.encode())
+    send_data = pickle.dumps(s_msgs)
+    clientsock.sendall(send_data)
     rcvmsg = clientsock.recv(1024).decode()
     return rcvmsg
 
