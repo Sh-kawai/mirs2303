@@ -4,7 +4,7 @@ import arduino_serial as arduino
 import request
 import jetson_socket as jetson
 import io
-import uss
+#import uss
 import ssh
 from define import *
 
@@ -13,6 +13,7 @@ def run_to_stop(state, speed, dist):
     if state in state_list:
         request.set_runmode(state, speed, dist)
         time.sleep(0.01)
+        print(f"set state {state}")
         while True:
             state, speed, dist = request.get_runmode()
             if state == STP:
@@ -24,8 +25,11 @@ def run_to_stop(state, speed, dist):
 def cam_to_stop(pwm):
     request.set_runmode(CAM, 0, pwm)
     time.sleep(0.01)
+    print("set state CAM")
     while True:
-        state, height, pwm = request.get_runmode()
+        state, height, pwm = request.get_cammode()
+        print(pwm)
+        time.sleep(0.5)
         if pwm == 0:
             return 0
 
@@ -40,25 +44,50 @@ def linetrace(speed=20, dist=1000):
 
 def main():
     #ssh.bringup_jetson()
+    
     if not jetson.open():
         return
     if not arduino.open():
         return
     #if not io.open():
     #    return
-    if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
-        return
+    #if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
+    #    return
 
     # スケジュール確認
 
+    print("inout")
+    input()
+
     # 教室移動 & 撮影位置移動
     #run_to_stop(LINE, 20, 1000)
-    run_to_stop(STR, 15 100)
+    run_to_stop(STR, 15, 100)
     #linetrace(20, 1000)
+    time.sleep(1)
     
-    run_to_stop(ROT, 30 360)
+    run_to_stop(ROT, 30, 180)
+    time.sleep(1)
+
+    cam_to_stop(255)
+    time.sleep(1)
+
+    request.set_runmode(SER, 45, 45)
+    time.sleep(1)
+
+    jetson.send({"key":"pu1_click", "gdrive_main":False})
+    time.sleep(1)
+
+    run_to_stop(STR, 15, 100)
+    time.sleep(1)
+
+    run_to_stop(ROT, 30, 180)
+    time.sleep(1)
+
+    request.set_runmode(SER, 30, 30)
+    time.sleep(1)
     
     return
+
     #3 昇降
     pwm = 255
     cam_to_stop(pwm)

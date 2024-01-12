@@ -366,3 +366,15 @@ void test_lintrace(int sp){
     delay(T_CTRL);
   }
 }
+
+void test_io_cam(){
+  int u, d;
+  while(1){
+    io_get_camera(&u, &d);
+    Serial.print("up:");
+    Serial.print(u);
+    Serial.print(", down:");
+    Serial.println(d);
+    delay(T_CTRL);
+    }
+}

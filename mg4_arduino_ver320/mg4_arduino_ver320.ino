@@ -74,6 +74,8 @@ void loop() {
   //test_camera_max();
   //test_camera_touch();
 
+  //test_io_cam();
+
   /* バッテリー値の確認 */
   //test_batt();
 
