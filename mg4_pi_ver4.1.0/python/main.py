@@ -19,10 +19,6 @@ def main():
     if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
         return
 
-    while True:
-        time.sleep(1)
-        print("aaa")
-
     # スケジュール確認
 
     # 教室移動 & 撮影位置移動
