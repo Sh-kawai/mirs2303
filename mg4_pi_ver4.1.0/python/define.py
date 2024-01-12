@@ -15,5 +15,6 @@ PORT = 8080
 
 # ssh
 #JETSON_IP = "192.168.1.3"
+JETSON_IP = "localhost"
 JETSON_USER = "mirs2303"
 JETSON_PASS = "muraifamily3150"

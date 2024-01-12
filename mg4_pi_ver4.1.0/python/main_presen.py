@@ -1,4 +1,5 @@
 import time
+import subprocess
 
 import arduino_serial as arduino
 import request
@@ -44,7 +45,7 @@ def linetrace(speed=20, dist=1000):
 
 def main():
     #ssh.bringup_jetson()
-    
+    subprocess.run(["/home/mirs2303/mirs2303/mg4_jetson/bringup.bash"])
     if not jetson.open():
         return
     if not arduino.open():
@@ -69,6 +70,7 @@ def main():
     time.sleep(1)
 
     print("key_wait up camera and serbo")
+    input()
 
     cam_to_stop(255)
     time.sleep(1)
@@ -76,10 +78,12 @@ def main():
     request.set_runmode(SER, 45, 45)
     time.sleep(1)
 
-    jetson.send({"key":"pu1_click", "gdrive_main":False})
+    jetson.send({"key":"pu1_click", "gdrive_main":gdrive_main})
     time.sleep(1)
 
     print("key_wait rotation and straight return")
+    input()
+
     run_to_stop(ROT, 30, 90)
     time.sleep(1)
 
