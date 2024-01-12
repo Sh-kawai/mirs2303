@@ -1,4 +1,5 @@
 import socket
+import pickle
 
 import upload
 import get_img
@@ -26,19 +27,18 @@ u1_t:   全画像 アップロード(スレッド)
 u1_c:   全画像 アップロード チェック
 
 pu1:  一枚 撮影&アップロード(即時)
-pu1_click: 
-pu2_s:  定期 撮影&アップロード(スレッド開始) none
-pu2_f: 定期 撮影&アップロード終了(スレッド終了) none
+pu1_click: 一枚 クリック 撮影&アップロード(即時)
+-- pu2_s:  定期 撮影&アップロード(スレッド開始)
+-- pu2_f: 定期 撮影&アップロード終了(スレッド終了)
+
+**option**
+v: rec_time [sec]
+u: gdrive_main [T or F]
 ##############################################
 """
 
-# グローバル変数
-_gdrive_main = False    
-
 # socket client
 def client(host=HOST, port=PORT):
-  global _gdrive_main
-  
   # エンコード
   letter_coding = "UTF-8"
   # オブジェクトの作成
@@ -49,25 +49,27 @@ def client(host=HOST, port=PORT):
   
   while True:
     print("Waiting server response...")
-    response = client.recv(4096).decode()
-    print('Received: %s' % response)
+    #response = client.recv(4096).decode()
+    response = client.recv(4096)
+    recv_data = pickle.loads(response)
+    print(f'Received: {recv_data}')
 
     message = "client wait"
     
     try:
       
-      if response == "q":
+      if recv_data["key"] == "q":
         message = "client close"
         break
       # p1:   一枚 撮影(即時)
-      elif response == "p1":
+      elif recv_data["key"] == "p1":
         if not get_img.cap_flag():
           save_path = get_img.get_img()
           message = f"save picture:{save_path}"
         else:
           message = "other capture opened"
       # p2_s:   定期 撮影(スレッド開始)
-      elif response == "p2_s":
+      elif recv_data["key"] == "p2_s":
         if not get_img.cap_flag():
           start_flag = thread_ctrl.thread_start("p2",get_img.get_auto_img, kwargs={"show":True})
           if start_flag:
@@ -77,16 +79,17 @@ def client(host=HOST, port=PORT):
         else:
           message = "other capture opened"
       # p2_f:  定期 撮影終了(スレッド終了)
-      elif response == "p2_f":
+      elif recv_data["key"] == "p2_f":
         fin_flag = thread_ctrl.thread_finish("p2")
         if fin_flag:
           message = "finish thread save_suto_img()"
         else:
           message = "didn't run thread save_suto_img()"
       # v1_t:   一動画 撮影(即時 30秒)(スレッド)
-      elif response == "v1_t":
+      elif recv_data["key"] == "v1_t":
         if not get_img.cap_flag():
-          thread_flag = thread_ctrl.auto_thread_run("v1", get_img.save_movie, kwargs={"rec_time": 60})
+          rec_time = recv_data["rec_time"]
+          thread_flag = thread_ctrl.auto_thread_run("v1", get_img.save_movie, kwargs={"rec_time": rec_time})
           if thread_flag:
             message = "auto-thread save_movie()"
           else:
@@ -94,60 +97,65 @@ def client(host=HOST, port=PORT):
         else:
           message = "didn't run thread save_suto_img()"
       # v1_c:   一動画 撮影 終了チェック
-      elif response == "v1_c":
+      elif recv_data["key"] == "v1_c":
         check_flag = thread_ctrl.auto_thread_check("v1")
         if check_flag:
           message = "finish save_movie()"
         else:
           message = "runnning save_movie()"
       # u1_t:   全画像 アップロード(スレッド)
-      elif response == "u1_t":
-        thread_flag = thread_ctrl.auto_thread_run("u1", upload.main, {"gdrive_main":_gdrive_main})
+      elif recv_data["key"] == "u1_t":
+        gdrive_main = recv_data["gdrive_main"]
+        thread_flag = thread_ctrl.auto_thread_run("u1", upload.main, {"gdrive_main":gdrive_main})
         if thread_flag:
-          message = f"auto-thread upload.main() [gdrive_main={_gdrive_main}]"
+          message = f"auto-thread upload.main() [gdrive_main={gdrive_main}]"
         else:
-          message = "run other upload.main()"
+          message = f"run other upload.main() [gdrive_main={gdrive_main}]"
       # u1_c:   全画像 アップロード チェック
-      elif response == "u1_c":
+      elif recv_data["key"] == "u1_c":
         check_flag = thread_ctrl.auto_thread_check("u1")
         if check_flag:
           message = "finish upload.main()"
         else:
           message = "running upload.main()"
       # pu1:  一枚 撮影&アップロード(即時)
-      elif response == "pu1":
+      elif recv_data["key"] == "pu1":
         if not get_img.cap_flag():
+          gdrive_main = recv_data["gdrive_main"]
           save_path = get_img.get_img()
           save_file = os.path.basename(save_path)
-          file_id = upload.upload(save_file, gdrive_main=_gdrive_main)
+          file_id = upload.upload(save_file, gdrive_main=gdrive_main)
           message = f"save picture:{save_path}\n"
-          message += f"upload id:{file_id} [gdrive_main={_gdrive_main}]"
+          message += f"upload id:{file_id} [gdrive_main={gdrive_main}]"
         else:
           message = "other capture opened"
       # pu1_click:  一枚 click撮影&アップロード(即時)
-      elif response == "pu1_click":
+      elif recv_data["key"] == "pu1_click":
         if not get_img.cap_flag():
+          gdrive_main = recv_data["gdrive_main"]
           save_path = get_img.get_click_img()
           save_file = os.path.basename(save_path)
-          file_id = upload.upload(save_file, gdrive_main=_gdrive_main)
+          file_id = upload.upload(save_file, gdrive_main=gdrive_main)
           message = f"save picture:{save_path}\n"
-          message += f"upload id:{file_id} [gdrive_main={_gdrive_main}]"
+          message += f"upload id:{file_id} [gdrive_main={gdrive_main}]"
         else:
           message = "other capture opened"
+      """
       # pu2_s:  定期 撮影&アップロード(スレッド開始)
-      elif response == "pu2_s":
+      elif recv_data["key"] == "pu2_s":
         start_flag = thread_ctrl.thread_start("pu2", None, None)
         if start_flag:
           message = "start thread ()"
         else:
           message = "already start thread ()"
       # pu2_F: 定期 撮影&アップロード終了(スレッド終了)
-      elif response == "pu2_f":
+      elif recv_data["key"] == "pu2_f":
         fin_flag = thread_ctrl.thread_finish("pu2")
         if fin_flag:
           message = "finish thread save_suto_img()"
         else:
           message = "didn't run thread save_suto_img()"
+      """
     
     except FileNotFoundError as e:
       message = f"[jetson] FileNotFoundError: {e}"
@@ -175,5 +183,4 @@ def client(host=HOST, port=PORT):
 if __name__ == "__main__":
   host = "127.0.0.1"
   port = 8080
-  _gdrive_main = False # global
   client(host, port)
