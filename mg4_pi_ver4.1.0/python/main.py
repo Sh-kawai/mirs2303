@@ -3,12 +3,20 @@ import time
 import arduino_serial as arduino
 import request
 import jetson_socket as jetson
+import io
+import uss
+import ssh
 from define import *
 
 def main():
+    #ssh.bringup_jetson()
+    if not jetson.open():
+        return
     if not arduino.open():
         return
-    if not jetson.open():
+    if not io.open():
+        return
+    if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
         return
 
     # スケジュール確認

@@ -1,6 +1,8 @@
 import serial
 import time
 
+from define import *
+
 # シリアルポートの設定
 serial_port = None
 
@@ -104,10 +106,12 @@ if __name__ == "__main__":
     if serial_port:
         # Arduinoとの通信処理
         while True:
-            print("データ入力")
+            print(f"STP:{STP}, STR:{STR}, ROT:{ROT}, ARC:{ARC}, LINE:{LINE}, SER:{SER}, CAM:{CAM}, ROS:{ROS}")
             data = input().split()
             if len(data) == 3:
                 for i, d in enumerate(data):
+                    if i == 0:
+                      d = int(d) + 1
                     data[i] = int(d)
                 recv_clear()
                 send(data)
