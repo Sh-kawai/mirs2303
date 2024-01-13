@@ -5,7 +5,7 @@ import arduino_serial as arduino
 import request
 import jetson_socket as jetson
 import io
-import uss
+#import uss
 import ssh
 from define import *
 
@@ -48,7 +48,7 @@ def main():
 
     # スケジュール確認
 
-    print("key_wait run")
+    print("key_wait run main")
     input()
 
     # susumu
@@ -62,37 +62,54 @@ def main():
     request.set_runmode(CAM, 0, 0)
     time.sleep(1)
     
-    angle = 90
+    angle = 45
     request.set_runmode(SER, angle, angle)
     time.sleep(1)
     
     print("key_wait photo")
-    input()
 
     # 写真撮影
     jetson.send({"key":"pu1", "gdrive_main":gdrive_main})
     time.sleep(1)
 
+    run_to_stop(ROT, 60, -90)
+    time.sleep(1)
+
+    jetson.send({"key":"pu1", "gdrive_main":gdrive_main})
+    time.sleep(1)
+
+    run_to_stop(ROT, 60, -45)
+    time.sleep(1)
+
+    jetson.send({"key":"pu1", "gdrive_main":gdrive_main})
+    time.sleep(1)
+
+
+
     #**********************************
 
     print("key_wait return")
-    input()
 
-    run_to_stop(ROT, 60, 180)
+    run_to_stop(ROT, 60, -45)
     time.sleep(1)
 
     # kikann
+    request.set_runmode(LINE, 0, 100)
+    time.sleep(3)
     run_to_stop(LINE, 15, 1000)
     time.sleep(1)
 
     run_to_stop(ROT, 60, 180)
     time.sleep(1)
 
-    cam_to_stop(-255)
+    request.set_runmode(CAM, 0, -255)
+    time.sleep(5)
+    request.set_runmode(CAM, 0, 0)
+    time.sleep(1)
 
     arduino.close()
     jetson.close()
 
 if __name__ == "__main__":
-    gdrive_main = False
+    gdrive_main = True
     main()
