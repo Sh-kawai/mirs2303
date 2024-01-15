@@ -1,7 +1,7 @@
 //Servoオブジェクト
 static Servo sv_y; // 縦 y軸
 static Servo sv_z; // 横 z軸
-static const int min_ang = 60;
+static const int min_ang = 70;
 
 void servo_open(){
   sv_y.attach(PIN_SER_Y);
