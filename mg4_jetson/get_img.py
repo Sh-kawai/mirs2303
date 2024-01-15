@@ -5,7 +5,6 @@ import time
 
 import csv_handle
 import schedule
-import upload
 from define import *
 
 
@@ -295,4 +294,5 @@ if __name__ == "__main__":
     #check_cam()
     #test_video()
     while True:
-        get_click_img()
+        #get_click_img()
+        check_cam()

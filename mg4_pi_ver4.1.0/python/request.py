@@ -43,8 +43,17 @@ def get_batt():
 
     return arduino.recv()[0] / 100.0
 
+def get_light():
+    command_data = [14, 0 ,0]
+    arduino.recv_clear()
+    arduino.send(command_data)
+    time.sleep(0.05)
+    data = arduino.recv()
+
+    return data[0] - 1, data[1], data[2]
+
 if __name__ == "__main__":
     if arduino.open():
-        print(get_runmode())
+        print(get_light())
 
         arduino.close()
