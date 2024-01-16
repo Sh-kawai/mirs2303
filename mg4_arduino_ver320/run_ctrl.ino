@@ -13,6 +13,7 @@ static double er_prev = 0.0;
 static double sp=0;
 static double sp_prev=0;
 static double vel_prev = 10;
+static int white_num = 0;
 
 void run_ctrl_execute() {
   // 直進制御において減速を開始する距離 [cm]
@@ -139,17 +140,14 @@ void run_ctrl_execute() {
       break;
     case LINE: // ライントレース
       // ライントレース用PIDゲイン
-      const double Kl_p = 0.3; //0.3
+      const double Kl_p = 0.45; //0.3
       //const double Kl_i = 0.3; //0.0
-      const double Kl_d = 1.0; //0.8
+      const double Kl_d = 0.6; //1.0
       double vel_max = 15.0;
       int gray, sep_line, stop_line, light1, light2;
       
       io_get_light(&light1, &light2);
-      gray = (BLACK + WHITE)/2;
-      sep_line = BLACK - gray/35.0;
-      //stop_line = WHITE + gray/35.0;
-      stop_line = WHITE;
+      //stop_line = WHITE;
       
       bool flag = true;
       if(flag){
@@ -198,7 +196,14 @@ void run_ctrl_execute() {
 
       dist_curr  = (d_l + d_r) / 2.0;
       // 指定距離 or 白線検知 なら ストップ
-      if ((dist_ref - dist_curr) < 0 || (light1 <= stop_line && light2 <= stop_line)){
+      if(run_line_state(light1, light2) == 0){
+        white_num++;
+      } else {
+        white_num = 0;
+      }
+      Serial.print(white_num);
+      Serial.print(", ");
+      if ((dist_ref - dist_curr) < 0 || white_num >= 3){
         run_state = STP;
         vel_ctrl_set(0.0, 0.0);
         //test_run_ctrl(ROT,10, 90);
@@ -206,7 +211,7 @@ void run_ctrl_execute() {
       } else {
       //左右の値が両方ともwhiteじゃないなら
         vel_mod = Kl_p * er + Kl_d * (er - er_prev);
-        Serial.println(vel_mod);
+        //Serial.println(vel_mod);
         vel_ctrl_set((vel_ref - vel_mod), (vel_ref + vel_mod));
       }
 
@@ -261,4 +266,16 @@ void run_ctrl_get_arc(run_state_t *state, double *speed, double *dist, double *a
   *dist = dist_curr;
   *ang_vel = ang_vel_curr;
   *ang_dist = ang_dist_curr;
+}
+
+int run_line_state(int light1, int light2){
+  int gray, sep_line, stop_line;
+  gray = (BLACK + WHITE)/2;
+  sep_line = BLACK - gray/35.0;
+  stop_line = WHITE + gray/35.0;
+  if (light1 <= stop_line && light2 <= stop_line){
+    return 0;
+  } else {
+    return -1;
+  }
 }

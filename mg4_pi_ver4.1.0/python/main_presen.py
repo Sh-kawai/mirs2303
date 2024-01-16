@@ -57,7 +57,9 @@ def main():
 
     # スケジュール確認
 
-    print("key_wait run straight and rotation left")
+    request.set_runmode(SER, 30, 30)
+
+    print("key_wait run main_presen")
     input()
 
     # 教室移動 & 撮影位置移動
@@ -69,10 +71,9 @@ def main():
     run_to_stop(ROT, 30, 90)
     time.sleep(1)
 
-    print("key_wait up camera and serbo")
-    input()
-
-    cam_to_stop(255)
+    request.set_runmode(CAM, 0, 255)
+    time.sleep(3)
+    request.set_runmode(CAM, 0, 0)
     time.sleep(1)
 
     request.set_runmode(SER, 45, 45)
@@ -81,14 +82,8 @@ def main():
     jetson.send({"key":"pu1_click", "gdrive_main":gdrive_main})
     time.sleep(1)
 
-    print("key_wait rotation and straight return")
+    print("key_wait finish")
     input()
-
-    run_to_stop(ROT, 30, 90)
-    time.sleep(1)
-
-    run_to_stop(STR, 15, 300)
-    time.sleep(1)
 
     arduino.close()
     jetson.close()
@@ -98,5 +93,6 @@ def main():
     
 
 if __name__ == "__main__":
-    gdrive_main = False
+    gdrive_main = True
+    print("gdrive_main", gdrive_main)
     main()
