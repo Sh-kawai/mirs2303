@@ -29,10 +29,14 @@ def cam_to_stop(pwm):
     print("set state CAM")
     while True:
         state, height, pwm = request.get_cammode()
-        print(pwm)
         time.sleep(0.5)
         if pwm == 0:
             return 0
+
+def cam_to_stop_time(pwm, time_):
+    request.set_runmode(CAM, 0, pwm)
+    time.sleep(time_)
+    request.set_runmode(CAM, 0, 0)
 
 def main():
     #ssh.bringup_jetson()
@@ -49,32 +53,47 @@ def main():
     line_speed = 20
     rot_speed = 60
     wait_time = 1
+    break_flag = False
+
+    cam_to_stop_time(255, 10)
+    cam_to_stop(255)
 
     # susumu
     for i in range(2):
+        break_flag = False
+        rot_flag = pow(-1, i)
         while True:
-            run_to_stop(LINE, line_speed, 300)
+            print(f"{i} LINE")
+            run_to_stop(LINE, line_speed, 100)
             time.sleep(wait_time)
             
             state = request.get_light()[0]
-            print(state)
+            print(f"{i} LINE_STATE {state}")
+
             if state == STP:
+                break_flag = True
+
+            print(f"{i} ROT")
+            run_to_stop(ROT, rot_speed, -90 * rot_flag)
+            time.sleep(wait_time)
+            
+            print(f"{i} PHOTO")
+            jetson.send({"key":"p1"})
+            time.sleep(wait_time)
+
+            print(f"{i} CAM")
+            cam_to_stop_time(-255, 5)
+            
+            print(f"{i} PHOTO")
+            jetson.send({"key":"p1"})
+            time.sleep(wait_time)
+
+            print(f"{i} ROT")
+            run_to_stop(ROT, rot_speed, 90 * rot_flag)
+            time.sleep(wait_time)
+
+            if break_flag:
                 break
-
-            run_to_stop(ROT, rot_speed, 90)
-            time.sleep(wait_time)
-                    
-            jetson.send({"key":"p1"})
-            time.sleep(wait_time)
-
-            run_to_stop(ROT, rot_speed, -180)
-            time.sleep(wait_time)
-                    
-            jetson.send({"key":"p1"})
-            time.sleep(wait_time)
-
-            run_to_stop(ROT, rot_speed, 90)
-            time.sleep(wait_time)
         
         print("white line stop")
         run_to_stop(ROT, rot_speed, 180)
