@@ -87,11 +87,7 @@ def now_schedule():
   return res
 
 if __name__ == "__main__":
-<<<<<<< HEAD
   #set_schedule(2024, 1, 16, 3, 4, "Dlab", "工学基礎3" ,"D4")
-=======
-  #set_schedule(2024, 1, 13, 1, 8, "体育館", "MIRS2023発表会" ,"d4")
->>>>>>> 5fc56a57fefa47c140b08d029cc739fba5ac080b
   print(get_schedule())
   print(now_schedule())
   print(now_schedule()["class"])
