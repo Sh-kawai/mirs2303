@@ -1,10 +1,11 @@
 import time
+import subprocess
 
 import arduino_serial as arduino
 import request
 import jetson_socket as jetson
 import io
-import uss
+#import uss
 import ssh
 from define import *
 
@@ -13,6 +14,7 @@ def run_to_stop(state, speed, dist):
     if state in state_list:
         request.set_runmode(state, speed, dist)
         time.sleep(0.01)
+        print(f"set state {state}")
         while True:
             state, speed, dist = request.get_runmode()
             if state == STP:
@@ -24,8 +26,11 @@ def run_to_stop(state, speed, dist):
 def cam_to_stop(pwm):
     request.set_runmode(CAM, 0, pwm)
     time.sleep(0.01)
+    print("set state CAM")
     while True:
-        state, height, pwm = request.get_runmode()
+        state, height, pwm = request.get_cammode()
+        print(pwm)
+        time.sleep(0.5)
         if pwm == 0:
             return 0
 
@@ -40,52 +45,54 @@ def linetrace(speed=20, dist=1000):
 
 def main():
     #ssh.bringup_jetson()
+    subprocess.run(["/home/mirs2303/mirs2303/mg4_jetson/bringup.bash"])
     if not jetson.open():
         return
     if not arduino.open():
         return
     #if not io.open():
     #    return
-    if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
-        return
+    #if not uss.open(uss.ADDRESS_L) or not uss.open(uss.ADDRESS_R):
+    #    return
 
     # スケジュール確認
 
-    # 教室移動 & 撮影位置移動
-    run_to_stop(LINE, 20, 1000)
-    #linetrace(20, 1000)
-    
-    #3 昇降
-    pwm = 255
-    cam_to_stop(pwm)
-    
-    # サーボモータ
-    # 35度くらいが水平
-    angle = 90
-    request.set_runmode(SER, angle, angle)
-    time.sleep(1)
-    
-    # 写真撮影
-    jetson.send(["pu1_click", gdrive_main])
-    print("写真を撮影しました。")
-    
-    print("継続するには何らかを入力してください。")
+    request.set_runmode(SER, 30, 30)
+
+    print("key_wait run main_presen")
     input()
-    
-    run_to_stop(ROT, 60, 180)
-    # ラインに角度を合わせる
-    request.set_runmode(LINE, 0, 1000)
+
+    # 教室移動 & 撮影位置移動
+    #run_to_stop(LINE, 20, 1000)
+    run_to_stop(STR, 15, 350)
+    #linetrace(20, 1000)
     time.sleep(1)
     
-    # 帰還
-    run_to_stop(LINE, 20, 1000)
-    #linetrace(20, 1000)
+    run_to_stop(ROT, 30, 90)
+    time.sleep(1)
+
+    request.set_runmode(CAM, 0, 255)
+    time.sleep(3)
+    request.set_runmode(CAM, 0, 0)
+    time.sleep(1)
+
+    request.set_runmode(SER, 45, 45)
+    time.sleep(1)
+
+    jetson.send({"key":"pu1_click", "gdrive_main":gdrive_main})
+    time.sleep(1)
+
+    print("key_wait finish")
+    input()
 
     arduino.close()
     jetson.close()
     #io.close()
+
+    return
     
 
 if __name__ == "__main__":
-    gdrive_main = False
+    gdrive_main = True
+    print("gdrive_main", gdrive_main)
     main()

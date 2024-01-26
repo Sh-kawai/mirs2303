@@ -66,7 +66,7 @@ void slave() {
           break;
         case 10:
           run_ctrl_get(&state, &speed, &dist);
-          command_data.val[0] = ((state == STR) ? 2 : (state == ROT) ? 3 : 1);
+          command_data.val[0] = (state + 1);
           command_data.val[1] = (short)speed;
           command_data.val[2] = (short)dist;
           raspi_send(command_data);
@@ -85,6 +85,19 @@ void slave() {
           command_data.val[0] = CAM;
           command_data.val[1] = (int)camera_get_height();
           command_data.val[2] = (int)camera_get_pwm();
+          raspi_send(command_data);
+          break;
+        case 14:
+          int left, right;
+          io_get_light(&left, &right);
+          if (run_line_state(left, right) == 0){
+            state = STP;
+          } else {
+            state = LINE;
+          }
+          command_data.val[0] = state + 1;
+          command_data.val[1] = left;
+          command_data.val[2] = right;
           raspi_send(command_data);
           break;
         default:

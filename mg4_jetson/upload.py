@@ -78,4 +78,4 @@ def main(debug=False, gdrive_main=False):
 
 if __name__ == "__main__":
   #get_img.get_img()
-  main(debug=False, gdrive_main=False)
+  main(debug=False, gdrive_main=True)

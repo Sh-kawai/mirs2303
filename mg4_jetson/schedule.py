@@ -55,6 +55,7 @@ def now_schedule():
     place = sch["place"]
     subject = sch["subject"]
     class_name = sch["class"]
+    print(date, now_date)
     if date == str(now_date):
       start_str = get_start_time(start)
       finish_str = get_finish_time(finish)
@@ -62,6 +63,8 @@ def now_schedule():
       # "HH:MM:SS"
       start_time = datetime.strptime(start_str, "%H:%M:%S").time()
       finish_time = datetime.strptime(finish_str, "%H:%M:%S").time()
+
+      print(start_time, now_time, finish_time)
       
       if start_time < now_time and now_time < finish_time:
         res = {
@@ -84,7 +87,7 @@ def now_schedule():
   return res
 
 if __name__ == "__main__":
-  set_schedule(1800, 12, 23, 1, 8, "test", "test" ,"d4")
+  #set_schedule(2024, 1, 16, 3, 4, "Dlab", "工学基礎3" ,"D4")
   print(get_schedule())
   print(now_schedule())
   print(now_schedule()["class"])
