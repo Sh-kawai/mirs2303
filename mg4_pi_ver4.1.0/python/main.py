@@ -55,9 +55,9 @@ def main():
     wait_time = 1
     break_flag = False
 
-    cam_to_stop_time(255, 10)
-    cam_to_stop(255)
-    request.set_runmode(SER, 35, 35)
+    cam_to_stop_time(-255, 10)
+    cam_to_stop(-255)
+    request.set_runmode(SER, 30, 30)
 
     # susumu
     for i in range(2):
@@ -74,9 +74,9 @@ def main():
             if state == STP:
                 break_flag = True
 
-            #print(f"{i} ROT")
-            #run_to_stop(ROT, rot_speed, -90 * rot_flag)
-            #time.sleep(wait_time)
+            print(f"{i} ROT")
+            run_to_stop(ROT, rot_speed, -90 * rot_flag)
+            time.sleep(wait_time)
             
             print(f"{i} PHOTO")
             jetson.send({"key":"p1"})
@@ -93,7 +93,7 @@ def main():
             time.sleep(wait_time)
 
             print(f"{i} ROT")
-            run_to_stop(ROT, rot_speed, 180 * rot_flag)
+            run_to_stop(ROT, rot_speed, -90 * rot_flag)
             time.sleep(wait_time)
 
             if break_flag:
